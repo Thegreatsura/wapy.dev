@@ -86,6 +86,14 @@ export const FilterPanel = ({
     );
   };
 
+  const getCategoryName = (category) => {
+    return '_uncategorized' === category ? t('categories.uncategorized') : category;
+  }
+
+  const getPaymentMethodName = (paymentMethod) => {
+    return '_unspecified' === paymentMethod ? t('paymentMethods.unspecified') : paymentMethod;
+  }
+
   useEffect(() => {
     const result = filteredSubscriptions.filter(sub => {
       const nextPayment = SubscriptionGetNextFuturePaymentDate(sub);
@@ -95,11 +103,11 @@ export const FilterPanel = ({
       return (
           sub.categories?.length
           ? sub.categories.some(cat => selectedCategories[cat.name].status)
-          : selectedCategories[t('categories.uncategorized')].status
+          : selectedCategories['_uncategorized'].status
         ) && (
           sub.paymentMethods?.length
           ? sub.paymentMethods.some(pm => selectedPaymentMethods[pm.name].status)
-          : selectedPaymentMethods[t('paymentMethods.unspecified')].status
+          : selectedPaymentMethods['_unspecified'].status
         ) && (
           enabledFilter && disabledFilter ||
           (enabledFilter && sub.enabled) ||
@@ -303,12 +311,12 @@ export const FilterPanel = ({
                         onPressedChange={() => toggleCategory(category)}
                         variant='outline'
                         className='text-xs gap-2 px-2 py-1 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                        title={t('categories.filterBy', { category })}
+                        title={t('categories.filterBy', { category: getCategoryName(category) })}
                       >
                         <span className='size-2 rounded-full' style={{
                           backgroundColor: selectedCategories[category].color,
                         }} />
-                        {category}
+                        {getCategoryName(category)}
                       </Toggle>
                     ))}
                 </div>
@@ -348,10 +356,10 @@ export const FilterPanel = ({
                         onPressedChange={() => togglePaymentMethod(paymentMethod)}
                         variant='outline'
                         className='text-xs gap-2 px-2 py-1 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                        title={t('paymentMethods.filterBy', { method: paymentMethod })}
+                        title={t('paymentMethods.filterBy', { method: getPaymentMethodName(paymentMethod) })}
                       >
                         <LogoIcon icon={selectedPaymentMethods[paymentMethod].icon ? JSON.parse(selectedPaymentMethods[paymentMethod].icon) : false} placeholder className='size-4' />
-                        {paymentMethod}
+                        {getPaymentMethodName(paymentMethod)}
                       </Toggle>
                     ))}
                 </div>

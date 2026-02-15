@@ -840,8 +840,8 @@
       "card": {
         "timezone": "{timezone} Saat Dilimi",
         "paymentDate": {
-          "past": "<date></date> tarihinde ödenmeliydi.",
-          "future": "<date></date> tarihinde ödenecek."
+          "past": "<date></date> ödenmeliydi.",
+          "future": "<date></date> ödenecek."
         },
         "markAsPaid": {
           "question": "Bunu ödediniz mi? <action>Ödendi olarak işaretle</action> veya <options>diğer seçeneklere</options> bakın.",
