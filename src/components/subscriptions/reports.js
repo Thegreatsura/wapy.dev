@@ -61,10 +61,10 @@ const SubscriptionCard = ({ subscription, currency, withDate = true, withPayment
         </div>
         <div className='flex grow sm:flex-row sm:items-center sm:justify-between flex-col gap-1 overflow-hidden'>
           <div className='flex flex-col gap-1 overflow-hidden'>
-            <div className='text-sm font-medium break-words overflow-hidden text-ellipsis'>
+            <div className='text-sm font-medium wrap-break-word overflow-hidden text-ellipsis'>
               <Link href={`/view/${subscription.id}`}>{subscription.name}</Link>
             </div>
-            <div className='block sm:hidden text-sm font-medium shrink-0 tabular-nums overflow-hidden text-ellipsis tabular-nums'>
+            <div className='block sm:hidden text-sm font-medium shrink-0 tabular-nums overflow-hidden text-ellipsis'>
               {formatPrice(subscription.amount, currency)}
             </div>
             {withDate && (
@@ -88,7 +88,7 @@ const SubscriptionCard = ({ subscription, currency, withDate = true, withPayment
               </div>
             )}
           </div>
-          <div className='hidden sm:block text-sm font-medium shrink-0 tabular-nums overflow-hidden text-ellipsis tabular-nums'>
+          <div className='hidden sm:block text-sm font-medium shrink-0 tabular-nums overflow-hidden text-ellipsis'>
             {formatPrice(subscription.amount, currency)}
           </div>
         </div>
@@ -99,6 +99,7 @@ const SubscriptionCard = ({ subscription, currency, withDate = true, withPayment
 
 const OverviewRow = ({ title, description, costs = {total: {}}, categories }) => {
   const t = useTranslations('components.reports.modal');
+  const tFilters = useTranslations('components.filters');
   const tCommon = useTranslations('common');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -152,7 +153,7 @@ const OverviewRow = ({ title, description, costs = {total: {}}, categories }) =>
 
                 <div className='flex grow sm:flex-row sm:items-center sm:justify-between flex-col gap-1 overflow-hidden'>
                   <div className='text-sm overflow-hidden text-ellipsis'>
-                    {category}
+                    {'_uncategorized' === category ? tFilters('categories.uncategorized') : category}
                   </div>
 
                   <div className='text-sm text-muted-foreground sm:text-foreground text-left sm:text-right'>
@@ -177,7 +178,7 @@ const OverviewRow = ({ title, description, costs = {total: {}}, categories }) =>
       <ResponsiveDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <ResponsiveDialogContent className='gap-0 p-4 sm:p-6'>
           <ResponsiveDialogHeader className='text-left p-0 py-4 sm:py-4'>
-            <div className='flex items-start gap-2 break-words overflow-hidden'>
+            <div className='flex items-start gap-2 wrap-break-word overflow-hidden'>
               <div
                 className='size-4 rounded-full shrink-0'
                 style={{ backgroundColor: selectedCategory?.color }}
@@ -222,6 +223,7 @@ const OverviewRow = ({ title, description, costs = {total: {}}, categories }) =>
 
 const OverviewRowPaymentMethod = ({ title, description, costs = {total: {}}, paymentMethods }) => {
   const t = useTranslations('components.reports.modal');
+  const tFilters = useTranslations('components.filters');
   const tCommon = useTranslations('common');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -271,7 +273,7 @@ const OverviewRowPaymentMethod = ({ title, description, costs = {total: {}}, pay
 
                 <div className='flex grow sm:flex-row sm:items-center sm:justify-between flex-col gap-1 overflow-hidden'>
                   <div className='text-sm overflow-hidden text-ellipsis'>
-                    {paymentMethod}
+                    {'_unspecified' === paymentMethod ? tFilters('paymentMethods.unspecified') : paymentMethod}
                   </div>
 
                   <div className='text-sm text-muted-foreground sm:text-foreground text-left sm:text-right'>
@@ -296,7 +298,7 @@ const OverviewRowPaymentMethod = ({ title, description, costs = {total: {}}, pay
       <ResponsiveDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <ResponsiveDialogContent className='gap-0 p-4 sm:p-6'>
           <ResponsiveDialogHeader className='text-left p-0 py-4 sm:py-4'>
-            <div className='flex items-center gap-2 break-words overflow-hidden'>
+            <div className='flex items-center gap-2 wrap-break-word overflow-hidden'>
               <LogoIcon icon={selectedPaymentMethod?.icon ? JSON.parse(selectedPaymentMethod?.icon) : false} placeholder className='size-6' />
               <ResponsiveDialogTitle className='overflow-hidden text-ellipsis'>
                 {selectedPaymentMethod?.name}
@@ -512,7 +514,7 @@ export function SubscriptionReports({ subscriptions }) {
         }
         acc[period].total[sub.currency] += amount;
 
-        const categories = sub.categories.length > 0 ? sub.categories : [{ name: tFilters('categories.uncategorized') }];
+        const categories = sub.categories.length > 0 ? sub.categories : [{ name: '_uncategorized' }];
         categories.forEach(category => {
           if (!acc[period].categories[category.name]) {
             acc[period].categories[category.name] = {};
@@ -538,7 +540,7 @@ export function SubscriptionReports({ subscriptions }) {
           });
         });
 
-        const paymentMethods = sub.paymentMethods.length > 0 ? sub.paymentMethods : [{ name: tFilters('paymentMethods.unspecified') }];
+        const paymentMethods = sub.paymentMethods.length > 0 ? sub.paymentMethods : [{ name: '_unspecified' }];
         paymentMethods.forEach(paymentMethod => {
           if (!acc[period].paymentMethods[paymentMethod.name]) {
             acc[period].paymentMethods[paymentMethod.name] = {};
@@ -569,7 +571,7 @@ export function SubscriptionReports({ subscriptions }) {
     }, {});
 
     const categories = activeSubscriptions.reduce((acc, sub) => {
-      const categoriesToAdd = sub.categories.length > 0 ? sub.categories : [{ name: tFilters('categories.uncategorized') }];
+      const categoriesToAdd = sub.categories.length > 0 ? sub.categories : [{ name: '_uncategorized' }];
       categoriesToAdd.forEach(category => {
         if (!acc[category.name]) {
           acc[category.name] = category;
@@ -579,7 +581,7 @@ export function SubscriptionReports({ subscriptions }) {
     }, {});
 
     const paymentMethods = activeSubscriptions.reduce((acc, sub) => {
-      const paymentMethodsToAdd = sub.paymentMethods.length > 0 ? sub.paymentMethods : [{ name: tFilters('paymentMethods.unspecified') }];
+      const paymentMethodsToAdd = sub.paymentMethods.length > 0 ? sub.paymentMethods : [{ name: '_unspecified' }];
       paymentMethodsToAdd.forEach(paymentMethod => {
         if (!acc[paymentMethod.name]) {
           acc[paymentMethod.name] = paymentMethod;

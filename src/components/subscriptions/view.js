@@ -536,7 +536,7 @@ export function SubscriptionView({ subscription, externalServices }) {
                             })}
                           </span>
                         </PopoverTrigger>
-                        <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl break-words px-4 py-2 leading-6'>
+                        <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl wrap-break-word px-4 py-2 leading-6'>
                           <div>
                             {t.rich('latestPayments.popover.paidStatus', {
                               status: () => <span className='font-semibold'>{status.label}</span>

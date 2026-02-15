@@ -72,12 +72,12 @@ export function SubscriptionList({ subscriptions, externalServices }) {
             categories={{
               ...subscriptions.flatMap(sub => sub.categories?.map(cat => ({name: cat.name, color: cat.color})) || [])
                 .reduce((acc, category) => ({...acc, [category.name]: {status: true, color: category.color}}), {}),
-              ...(subscriptions.some(sub => !sub.categories?.length) ? {[tFilters('categories.uncategorized')]: {status: true}} : {})
+              ...(subscriptions.some(sub => !sub.categories?.length) ? {['_uncategorized']: {status: true}} : {})
             }}
             paymentMethods={{
               ...subscriptions.flatMap(sub => sub.paymentMethods?.map(cat => ({name: cat.name, icon: cat.icon})) || [])
                 .reduce((acc, paymentMethod) => ({...acc, [paymentMethod.name]: {status: true, icon: paymentMethod.icon}}), {}),
-              ...(subscriptions.some(sub => !sub.paymentMethods?.length) ? {[tFilters('paymentMethods.unspecified')]: {status: true}} : {})
+              ...(subscriptions.some(sub => !sub.paymentMethods?.length) ? {['_unspecified']: {status: true}} : {})
             }}
             currencies={Array.from(new Set(subscriptions.map(sub => sub.currency)))}
             filteredSubscriptions={searchFilteredSubscriptions}
