@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Card,
   CardContent,
@@ -12,40 +13,24 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
-import Cookies from 'js-cookie';
-
-const COOKIE_PREFERENCES_KEY = 'cookie-preferences-v1';
-
-const defaultPreferences= {
-  essential: true,
-  functional: true,
-  analytics: false,
-};
+import {
+  isCookiePreferencesSet,
+  getCookiePreferences,
+  saveCookiePreferences,
+} from '@/lib/cookies';
 
 export function CookieConsent() {
+  const t = useTranslations('components.cookieConsent');
   const [showConsent, setShowConsent] = useState(false);
-  const [preferences, setPreferences] = useState(defaultPreferences);
+  const [preferences, setPreferences] = useState(getCookiePreferences());
 
   useEffect(() => {
-    // Check if user has already set preferences
-    const savedPreferences = Cookies.get(COOKIE_PREFERENCES_KEY);
-    if (!savedPreferences) {
-      setShowConsent(true);
-    } else {
-      setPreferences(JSON.parse(savedPreferences));
-    }
+    setShowConsent(!isCookiePreferencesSet());
   }, []);
 
   const savePreferences = (prefs) => {
-    Cookies.set(COOKIE_PREFERENCES_KEY, JSON.stringify(prefs), { expires: 365 });
-    setPreferences(prefs);
-    setShowConsent(false);
-
-    // Clear non-essential cookies if they're declined
-    if (!prefs.functional) {
-      Cookies.remove('theme');
-      Cookies.remove('locale');
-    }
+    saveCookiePreferences(prefs);
+    setShowConsent(!isCookiePreferencesSet());
   };
 
   const acceptAll = () => {
@@ -65,9 +50,9 @@ export function CookieConsent() {
   return (
     <Card className='fixed bottom-4 left-4 right-4 mx-auto max-w-xl z-50'>
       <CardHeader>
-        <CardTitle>Cookie Preferences</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Please select which cookies you want to accept. Essential cookies cannot be disabled as they are required for the website to function.
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
@@ -75,14 +60,14 @@ export function CookieConsent() {
           <Checkbox
             checked={preferences.essential}
             disabled={true}
-            title='Essential Cookies'
+            title={t('essential.title')}
           />
           <div className='grid gap-1.5 leading-none'>
             <label className='font-medium'>
-              Essential Cookies
+              {t('essential.title')}
             </label>
             <p className='text-sm text-muted-foreground'>
-              Required for the website to function (authentication, security).
+              {t('essential.description')}
             </p>
           </div>
         </div>
@@ -95,14 +80,14 @@ export function CookieConsent() {
             onCheckedChange={(checked) =>
               setPreferences(prev => ({ ...prev, functional: checked === true }))
             }
-            title='Functional Cookies'
+            title={t('functional.title')}
           />
           <div className='grid gap-1.5 leading-none'>
             <label className='font-medium'>
-              Functional Cookies
+              {t('functional.title')}
             </label>
             <p className='text-sm text-muted-foreground'>
-              Enhance your experience (theme, language preferences).
+              {t('functional.description')}
             </p>
           </div>
         </div>
@@ -115,24 +100,24 @@ export function CookieConsent() {
             onCheckedChange={(checked) =>
               setPreferences(prev => ({ ...prev, analytics: checked === true }))
             }
-            title='Analytics Cookies'
+            title={t('analytics.title')}
           />
           <div className='grid gap-1.5 leading-none'>
             <label className='font-medium'>
-              Analytics Cookies
+              {t('analytics.title')}
             </label>
             <p className='text-sm text-muted-foreground'>
-              Help us understand how visitors interact with our website.
+              {t('analytics.description')}
             </p>
           </div>
         </div>
       </CardContent>
       <CardFooter className='flex justify-end gap-2'>
         <Button variant='outline' onClick={saveCustomPreferences}>
-          Save Preferences
+          {t('buttons.savePreferences')}
         </Button>
         <Button onClick={acceptAll}>
-          Accept All
+          {t('buttons.acceptAll')}
         </Button>
       </CardFooter>
     </Card>

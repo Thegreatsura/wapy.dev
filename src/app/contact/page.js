@@ -1,8 +1,5 @@
+import { getTranslations } from 'next-intl/server';
 import { ContactForm } from '@/app/contact/form';
-
-export const metadata = {
-  title: 'Contact Us',
-};
 
 export default function PageContact() {
   return (
@@ -10,4 +7,12 @@ export default function PageContact() {
       <ContactForm />
     </div>
   );
+}
+
+export async function generateMetadata() {
+  const t = await getTranslations('common');
+
+  return {
+    title: t('contact'),
+  };
 }

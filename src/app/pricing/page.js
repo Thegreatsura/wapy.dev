@@ -1,17 +1,20 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import { PricingTable } from '@/components/pricing-table';
 
 const PagePricing = async () => {
+  const t = await getTranslations('pages.pricing');
+
   return (
     <div className='flex flex-col grow items-center justify-center w-full max-w-4xl gap-4'>
       <section className='flex flex-col gap-8'>
         <div className='flex flex-col gap-4 text-center'>
           <h1 className='font-bold text-4xl sm:text-5xl'>
-            Simple, transparent pricing
+            {t('title')}
           </h1>
           <p className='text-muted-foreground text-xl max-w-2xl mx-auto'>
-            Track and manage all your subscriptions with powerful features at an affordable price
+            {t('description')}
           </p>
         </div>
 
@@ -24,7 +27,8 @@ const PagePricing = async () => {
 export default PagePricing;
 
 export async function generateMetadata() {
+  const t = await getTranslations('common');
   return {
-    title: 'Pricing',
+    title: t('pricing'),
   };
 };

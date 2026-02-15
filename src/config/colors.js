@@ -1,4 +1,4 @@
-export const Colors = {
+export const DefaultColors = {
   green: '#4CAF50',
   purple: '#9C27B0',
   orange: '#FF9800',
@@ -10,7 +10,8 @@ export const Colors = {
   deepOrange: '#FF5722',
   indigo: '#3F51B5',
   teal: '#009688',
-  pink: '#E91E63',
+  pink: '#FF4081',
+  pink2: '#E91E63',
   blue: '#2196F3',
   amber: '#FFC107',
   lime: '#CDDC39',

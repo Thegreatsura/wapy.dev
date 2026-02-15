@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Moon, Sun, Monitor } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -13,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export function ModeToggle() {
+  const t = useTranslations('components.modeToggle');
   const { theme, setTheme } = useTheme();
   const [realTheme, setRealTheme] = useState('');
 
@@ -24,13 +26,13 @@ export function ModeToggle() {
     <>
       <div className='hidden md:block'>
         <div className='flex gap-1 rounded-xl bg-gray-600/5 p-1 ring-1 ring-gray-600/5 light:ring-inset dark:bg-black/30 dark:ring-white/5'>
-          <Button variant='ghost' title='Dark' className={ cn('p-0 size-5 [&_svg]:size-3 text-gray-400', {'[&_svg]:size-3.5 text-gray': realTheme === 'dark'})} onClick={ () => setTheme('dark') }>
+          <Button variant='ghost' title={t('dark')} className={ cn('p-0 size-5 [&_svg]:size-3 text-gray-400', {'[&_svg]:size-3.5 text-gray': realTheme === 'dark'})} onClick={ () => setTheme('dark') }>
             <Moon />
           </Button>
-          <Button variant='ghost' title='Light' className={ cn('p-0 size-5 [&_svg]:size-3 text-gray-400', {'[&_svg]:size-3.5 text-gray': realTheme === 'light'})} onClick={ () => setTheme('light') }>
+          <Button variant='ghost' title={t('light')} className={ cn('p-0 size-5 [&_svg]:size-3 text-gray-400', {'[&_svg]:size-3.5 text-gray': realTheme === 'light'})} onClick={ () => setTheme('light') }>
             <Sun />
           </Button>
-          <Button variant='ghost' title='System' className={ cn('p-0 size-5 [&_svg]:size-3 text-gray-400', {'[&_svg]:size-3.5 text-gray': realTheme === 'system'})} onClick={ () => setTheme('system') }>
+          <Button variant='ghost' title={t('system')} className={ cn('p-0 size-5 [&_svg]:size-3 text-gray-400', {'[&_svg]:size-3.5 text-gray': realTheme === 'system'})} onClick={ () => setTheme('system') }>
             <Monitor />
           </Button>
         </div>
@@ -40,18 +42,18 @@ export function ModeToggle() {
         <Button variant='ghost' size='icon' className='md:hidden'>
           <Sun className='h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
           <Moon className='absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
-          <span className='sr-only'>Toggle theme</span>
+          <span className='sr-only'>{t('toggleTheme')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
         <DropdownMenuItem onClick={() => setTheme('light')}>
-          <Sun /> Light
+          <Sun /> {t('light')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>
-          <Moon /> Dark
+          <Moon /> {t('dark')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('system')}>
-          <Monitor /> System
+          <Monitor /> {t('system')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

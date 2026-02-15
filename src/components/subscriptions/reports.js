@@ -1,8 +1,9 @@
 'use client';
 
 import { useMemo, Fragment, useState } from 'react';
+import { useTranslations, useFormatter } from 'next-intl';
 import Link from 'next/link';
-import { format, compareAsc } from 'date-fns';
+import { compareAsc } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import {
   Card,
@@ -47,6 +48,9 @@ const PricePrinter = ({ cost, isPlus }) => {
 };
 
 const SubscriptionCard = ({ subscription, currency, withDate = true, withPaymentsCount = false }) => {
+  const t = useTranslations('components.reports.subscription');
+  const formatter = useFormatter();
+
   return (
     <div className='group p-3 transition-colors hover:bg-muted/50 hover:rounded-lg'>
       <div className='flex flex-row items-start sm:items-center gap-2'>
@@ -66,13 +70,21 @@ const SubscriptionCard = ({ subscription, currency, withDate = true, withPayment
             {withDate && (
               <div className='flex items-center gap-1 text-xs text-muted-foreground'>
                 <Icons.calendar className='size-3.5 inline shrink-0' />
-                <span className='overflow-hidden text-ellipsis'>{format(subscription.date, 'dd MMMM yyyy, HH:mm')}</span>
+                <span className='overflow-hidden text-ellipsis'>{formatter.dateTime(subscription.date, {
+                  day: '2-digit',
+                  month: 'long',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</span>
               </div>
             )}
             {withPaymentsCount && subscription?.paymentsCount > 1 && subscription?.price > 0 && (
               <div className='flex items-center gap-1 text-xs text-muted-foreground'>
                 <Icons.wallet className='size-3.5 inline shrink-0' />
-                <span className='overflow-hidden text-ellipsis'>{formatPrice(subscription?.price, currency)} will be paid {subscription?.paymentsCount} times</span>
+                <span className='overflow-hidden text-ellipsis'>
+                  {t('willBePaid', { price: formatPrice(subscription?.price, currency), count: subscription?.paymentsCount })}
+                </span>
               </div>
             )}
           </div>
@@ -86,6 +98,8 @@ const SubscriptionCard = ({ subscription, currency, withDate = true, withPayment
 };
 
 const OverviewRow = ({ title, description, costs = {total: {}}, categories }) => {
+  const t = useTranslations('components.reports.modal');
+  const tCommon = useTranslations('common');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -174,7 +188,7 @@ const OverviewRow = ({ title, description, costs = {total: {}}, categories }) =>
               </ResponsiveDialogTitle>
             </div>
             <ResponsiveDialogDescription>
-              {title} payments in this category
+              {t('category.description', { period: title })}
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
           <ResponsiveDialogBody className='max-h-[60vh] overflow-y-auto px-0'>
@@ -191,13 +205,13 @@ const OverviewRow = ({ title, description, costs = {total: {}}, categories }) =>
               </div>
             ) : (
               <div className='p-4 text-center text-muted-foreground'>
-                No subscriptions found in this category
+                {t('category.noSubscriptions')}
               </div>
             )}
           </ResponsiveDialogBody>
           <ResponsiveDialogFooter className='p-0 pt-4 sm:pt-4'>
             <Button variant='outline' onClick={() => setIsModalOpen(false)}>
-              Close
+              {tCommon('close')}
             </Button>
           </ResponsiveDialogFooter>
         </ResponsiveDialogContent>
@@ -207,6 +221,8 @@ const OverviewRow = ({ title, description, costs = {total: {}}, categories }) =>
 };
 
 const OverviewRowPaymentMethod = ({ title, description, costs = {total: {}}, paymentMethods }) => {
+  const t = useTranslations('components.reports.modal');
+  const tCommon = useTranslations('common');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -287,7 +303,7 @@ const OverviewRowPaymentMethod = ({ title, description, costs = {total: {}}, pay
               </ResponsiveDialogTitle>
             </div>
             <ResponsiveDialogDescription>
-              {title} payments via this payment method
+              {t('paymentMethod.description', { period: title })}
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
           <ResponsiveDialogBody className='max-h-[60vh] overflow-y-auto px-0'>
@@ -304,13 +320,13 @@ const OverviewRowPaymentMethod = ({ title, description, costs = {total: {}}, pay
               </div>
             ) : (
               <div className='p-4 text-center text-muted-foreground'>
-                No subscriptions found via this payment method
+                {t('paymentMethod.noSubscriptions')}
               </div>
             )}
           </ResponsiveDialogBody>
           <ResponsiveDialogFooter className='p-0 pt-4 sm:pt-4'>
             <Button variant='outline' onClick={() => setIsModalOpen(false)}>
-              Close
+              {tCommon('close')}
             </Button>
           </ResponsiveDialogFooter>
         </ResponsiveDialogContent>
@@ -320,13 +336,15 @@ const OverviewRowPaymentMethod = ({ title, description, costs = {total: {}}, pay
 };
 
 const MostExpensiveSubscription = ({ title, mostExpensive }) => {
+  const t = useTranslations('components.list');
+
   return (
     <div className='flex flex-col gap-2 p-2'>
       <div className='text-sm font-medium'>{title}</div>
       <div className='flex flex-col gap-2'>
         {Object.values(mostExpensive || {}).length === 0 ? (
           <div className='text-sm text-muted-foreground'>
-            No subscriptions.
+            {t('noSubscription')}
           </div>
         ) : Object.entries(mostExpensive || {}).map(([currency, data]) => (
           <SubscriptionCard
@@ -343,13 +361,14 @@ const MostExpensiveSubscription = ({ title, mostExpensive }) => {
 };
 
 const UpcomingPayments = ({ upcoming }) => {
+  const t = useTranslations('components.reports.upcomingPayments');
   const hasThisMonth = upcoming?.thisMonth && Object.values(upcoming.thisMonth).length > 0;
   const hasNextMonth = upcoming?.nextMonth && Object.values(upcoming.nextMonth).length > 0;
 
   if (!hasThisMonth && !hasNextMonth) {
     return (
       <div className='text-sm text-muted-foreground'>
-        No upcoming payments in one month.
+        {t('noPayments')}
       </div>
     );
   }
@@ -371,13 +390,15 @@ const UpcomingPayments = ({ upcoming }) => {
   return (
     <div className='flex flex-col gap-2'>
       {hasThisMonth && renderPayments(upcoming.thisMonth)}
-      {hasThisMonth && hasNextMonth && <Divider text='Next Month' />}
+      {hasThisMonth && hasNextMonth && <Divider text={t('nextMonth')} />}
       {hasNextMonth && renderPayments(upcoming.nextMonth)}
     </div>
   );
 };
 
 export function SubscriptionReports({ subscriptions }) {
+  const t = useTranslations('components.reports');
+  const tFilters = useTranslations('components.filters');
   const stats = useMemo(() => {
     const activeSubscriptions = subscriptions.filter(sub => sub.enabled);
     const inactiveSubscriptions = subscriptions.filter(sub => !sub.enabled);
@@ -491,7 +512,7 @@ export function SubscriptionReports({ subscriptions }) {
         }
         acc[period].total[sub.currency] += amount;
 
-        const categories = sub.categories.length > 0 ? sub.categories : [{ name: 'Uncategorized' }];
+        const categories = sub.categories.length > 0 ? sub.categories : [{ name: tFilters('categories.uncategorized') }];
         categories.forEach(category => {
           if (!acc[period].categories[category.name]) {
             acc[period].categories[category.name] = {};
@@ -517,7 +538,7 @@ export function SubscriptionReports({ subscriptions }) {
           });
         });
 
-        const paymentMethods = sub.paymentMethods.length > 0 ? sub.paymentMethods : [{ name: 'Unspecified' }];
+        const paymentMethods = sub.paymentMethods.length > 0 ? sub.paymentMethods : [{ name: tFilters('paymentMethods.unspecified') }];
         paymentMethods.forEach(paymentMethod => {
           if (!acc[period].paymentMethods[paymentMethod.name]) {
             acc[period].paymentMethods[paymentMethod.name] = {};
@@ -548,7 +569,7 @@ export function SubscriptionReports({ subscriptions }) {
     }, {});
 
     const categories = activeSubscriptions.reduce((acc, sub) => {
-      const categoriesToAdd = sub.categories.length > 0 ? sub.categories : [{ name: 'Uncategorized' }];
+      const categoriesToAdd = sub.categories.length > 0 ? sub.categories : [{ name: tFilters('categories.uncategorized') }];
       categoriesToAdd.forEach(category => {
         if (!acc[category.name]) {
           acc[category.name] = category;
@@ -558,7 +579,7 @@ export function SubscriptionReports({ subscriptions }) {
     }, {});
 
     const paymentMethods = activeSubscriptions.reduce((acc, sub) => {
-      const paymentMethodsToAdd = sub.paymentMethods.length > 0 ? sub.paymentMethods : [{ name: 'Unspecified' }];
+      const paymentMethodsToAdd = sub.paymentMethods.length > 0 ? sub.paymentMethods : [{ name: tFilters('paymentMethods.unspecified') }];
       paymentMethodsToAdd.forEach(paymentMethod => {
         if (!acc[paymentMethod.name]) {
           acc[paymentMethod.name] = paymentMethod;
@@ -581,34 +602,43 @@ export function SubscriptionReports({ subscriptions }) {
     <div className='flex flex-col gap-4 w-full items-center text-left'>
       <Card className='w-full'>
         <CardHeader>
-          <CardTitle>Overview</CardTitle>
+          <CardTitle>{t('overview.title')}</CardTitle>
         </CardHeader>
         <CardContent className='flex flex-col items-start gap-2'>
           <div className='flex flex-row gap-2 items-center'>
             <div className='size-3 rounded-full bg-blue-500'></div>
-            <div className='text-lg font-semibold'>{stats.total}</div>
-            <div className='text-sm font-medium'>total subscriptions</div>
+            <div className='flex items-baseline gap-2 text-sm font-medium'>
+              {t.rich('overview.total', {
+                count: () => <span className='text-lg font-semibold'>{stats.total}</span>
+              })}
+            </div>
           </div>
           <div className='flex flex-row gap-2 items-center'>
             <div className='size-3 rounded-full bg-green-500'></div>
-            <div className='text-lg font-semibold'>{stats.active}</div>
-            <div className='text-sm font-medium'>active subscriptions</div>
+            <div className='flex items-baseline gap-2 text-sm font-medium'>
+              {t.rich('overview.active', {
+                count: () => <span className='text-lg font-semibold'>{stats.active}</span>
+              })}
+            </div>
           </div>
           <div className='flex flex-row gap-2 items-center'>
             <div className='size-3 rounded-full bg-red-500'></div>
-            <div className='text-lg font-semibold'>{stats.inactive}</div>
-            <div className='text-sm font-medium'>inactive subscriptions</div>
+            <div className='flex items-baseline gap-2 text-sm font-medium'>
+              {t.rich('overview.inactive', {
+                count: () => <span className='text-lg font-semibold'>{stats.inactive}</span>
+              })}
+            </div>
           </div>
         </CardContent>
       </Card>
       <Card className='w-full'>
         <CardHeader>
-          <CardTitle>Cost Averages</CardTitle>
-          <CardDescription>Monthly and yearly subscription cost averages</CardDescription>
+          <CardTitle>{t('costAverages.title')}</CardTitle>
+          <CardDescription>{t('costAverages.description')}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-4'>
           <div className='flex flex-col justify-between gap-2 text-sm'>
-            <div className='whitespace-nowrap font-medium'>Monthly Average</div>
+            <div className='whitespace-nowrap font-medium'>{t('costAverages.monthly')}</div>
             <div className='flex flex-wrap items-center gap-1 font-semibold text-base'>
               {Object.entries(stats.costs.inOneYear?.total || {}).map(([currency, cost], index) => (
                 <PricePrinter
@@ -620,7 +650,7 @@ export function SubscriptionReports({ subscriptions }) {
             </div>
           </div>
           <div className='flex flex-col justify-between gap-2 text-sm'>
-            <div className='whitespace-nowrap font-medium'>Yearly Average</div>
+            <div className='whitespace-nowrap font-medium'>{t('costAverages.yearly')}</div>
             <div className='flex flex-wrap items-center gap-1 font-semibold text-base'>
               {Object.entries(stats.costs.inOneYear?.total || {}).map(([currency, cost], index) => (
                 <PricePrinter
@@ -635,80 +665,80 @@ export function SubscriptionReports({ subscriptions }) {
       </Card>
       <Card className='w-full'>
         <CardHeader>
-          <CardTitle>Monthly Cost Overview</CardTitle>
-          <CardDescription>Track your monthly subscription costs</CardDescription>
+          <CardTitle>{t('monthlyCost.title')}</CardTitle>
+          <CardDescription>{t('monthlyCost.description')}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-2'>
           <Tabs defaultValue='categories' orientation='vertical'>
             <TabsList>
-              <TabsTrigger value='categories' title='By Categories'>
+              <TabsTrigger value='categories' title={t('tabs.byCategories')}>
                 <Icons.categories className='size-4' />
-                <span className='hidden sm:inline'>By Categories</span>
+                <span className='hidden sm:inline'>{t('tabs.byCategories')}</span>
               </TabsTrigger>
-              <TabsTrigger value='payment-methods' title='By Payment Methods'>
+              <TabsTrigger value='payment-methods' title={t('tabs.byPaymentMethods')}>
                 <Icons.paymentMethods className='size-4' />
-                <span className='hidden sm:inline'>By Payment Methods</span>
+                <span className='hidden sm:inline'>{t('tabs.byPaymentMethods')}</span>
               </TabsTrigger>
             </TabsList>
             <TabsContent value='categories'>
-              <OverviewRow title='This Month' description='Until end of month' costs={stats.costs.thisMonth} categories={stats.categories} />
+              <OverviewRow title={t('periods.thisMonth.title')} description={t('periods.thisMonth.description')} costs={stats.costs.thisMonth} categories={stats.categories} />
               <Separator />
-              <OverviewRow title='Next Month' description='Upcoming month only' costs={stats.costs.nextMonth} categories={stats.categories} />
+              <OverviewRow title={t('periods.nextMonth.title')} description={t('periods.nextMonth.description')} costs={stats.costs.nextMonth} categories={stats.categories} />
               <Separator />
-              <OverviewRow title='Next 30 Days' description='Rolling period' costs={stats.costs.inOneMonth} categories={stats.categories} />
+              <OverviewRow title={t('periods.next30Days.title')} description={t('periods.next30Days.description')} costs={stats.costs.inOneMonth} categories={stats.categories} />
             </TabsContent>
             <TabsContent value='payment-methods'>
-              <OverviewRowPaymentMethod title='This Month' description='Until end of month' costs={stats.costs.thisMonth} paymentMethods={stats.paymentMethods} />
+              <OverviewRowPaymentMethod title={t('periods.thisMonth.title')} description={t('periods.thisMonth.description')} costs={stats.costs.thisMonth} paymentMethods={stats.paymentMethods} />
               <Separator />
-              <OverviewRowPaymentMethod title='Next Month' description='Upcoming month only' costs={stats.costs.nextMonth} paymentMethods={stats.paymentMethods} />
+              <OverviewRowPaymentMethod title={t('periods.nextMonth.title')} description={t('periods.nextMonth.description')} costs={stats.costs.nextMonth} paymentMethods={stats.paymentMethods} />
               <Separator />
-              <OverviewRowPaymentMethod title='Next 30 Days' description='Rolling period' costs={stats.costs.inOneMonth} paymentMethods={stats.paymentMethods} />
+              <OverviewRowPaymentMethod title={t('periods.next30Days.title')} description={t('periods.next30Days.description')} costs={stats.costs.inOneMonth} paymentMethods={stats.paymentMethods} />
             </TabsContent>
           </Tabs>
           <Separator />
-          <MostExpensiveSubscription title='Most Expensive Monthly Subscription' mostExpensive={stats.costs.mostExpensive?.monthly} />
+          <MostExpensiveSubscription title={t('mostExpensive.monthly')} mostExpensive={stats.costs.mostExpensive?.monthly} />
         </CardContent>
       </Card>
       <Card className='w-full'>
         <CardHeader>
-          <CardTitle>Yearly Cost Overview</CardTitle>
-          <CardDescription>Track your yearly subscription costs</CardDescription>
+          <CardTitle>{t('yearlyCost.title')}</CardTitle>
+          <CardDescription>{t('yearlyCost.description')}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-2'>
           <Tabs defaultValue='categories' orientation='vertical'>
             <TabsList>
-              <TabsTrigger value='categories' title='By Categories'>
+              <TabsTrigger value='categories' title={t('tabs.byCategories')}>
                 <Icons.categories className='size-4' />
-                <span className='hidden sm:inline'>By Categories</span>
+                <span className='hidden sm:inline'>{t('tabs.byCategories')}</span>
               </TabsTrigger>
-              <TabsTrigger value='payment-methods' title='By Payment Methods'>
+              <TabsTrigger value='payment-methods' title={t('tabs.byPaymentMethods')}>
                 <Icons.paymentMethods className='size-4' />
-                <span className='hidden sm:inline'>By Payment Methods</span>
+                <span className='hidden sm:inline'>{t('tabs.byPaymentMethods')}</span>
               </TabsTrigger>
             </TabsList>
             <TabsContent value='categories'>
-              <OverviewRow title='This Year' description='Until end of year' costs={stats.costs.thisYear} categories={stats.categories} />
+              <OverviewRow title={t('periods.thisYear.title')} description={t('periods.thisYear.description')} costs={stats.costs.thisYear} categories={stats.categories} />
               <Separator />
-              <OverviewRow title='Next Year' description='Next calendar year' costs={stats.costs.nextYear} categories={stats.categories} />
+              <OverviewRow title={t('periods.nextYear.title')} description={t('periods.nextYear.description')} costs={stats.costs.nextYear} categories={stats.categories} />
               <Separator />
-              <OverviewRow title='Next 365 Days' description='Rolling period' costs={stats.costs.inOneYear} categories={stats.categories} />
+              <OverviewRow title={t('periods.next365Days.title')} description={t('periods.next365Days.description')} costs={stats.costs.inOneYear} categories={stats.categories} />
             </TabsContent>
             <TabsContent value='payment-methods'>
-              <OverviewRowPaymentMethod title='This Year' description='Until end of year' costs={stats.costs.thisYear} paymentMethods={stats.paymentMethods} />
+              <OverviewRowPaymentMethod title={t('periods.thisYear.title')} description={t('periods.thisYear.description')} costs={stats.costs.thisYear} paymentMethods={stats.paymentMethods} />
               <Separator />
-              <OverviewRowPaymentMethod title='Next Year' description='Next calendar year' costs={stats.costs.nextYear} paymentMethods={stats.paymentMethods} />
+              <OverviewRowPaymentMethod title={t('periods.nextYear.title')} description={t('periods.nextYear.description')} costs={stats.costs.nextYear} paymentMethods={stats.paymentMethods} />
               <Separator />
-              <OverviewRowPaymentMethod title='Next 365 Days' description='Rolling period' costs={stats.costs.inOneYear} paymentMethods={stats.paymentMethods} />
+              <OverviewRowPaymentMethod title={t('periods.next365Days.title')} description={t('periods.next365Days.description')} costs={stats.costs.inOneYear} paymentMethods={stats.paymentMethods} />
             </TabsContent>
           </Tabs>
           <Separator />
-          <MostExpensiveSubscription title='Most Expensive Yearly Subscription' mostExpensive={stats.costs.mostExpensive?.yearly} />
+          <MostExpensiveSubscription title={t('mostExpensive.yearly')} mostExpensive={stats.costs.mostExpensive?.yearly} />
         </CardContent>
       </Card>
       <Card className='w-full'>
         <CardHeader>
-          <CardTitle>Upcoming Payments</CardTitle>
-          <CardDescription>Track your upcoming payments</CardDescription>
+          <CardTitle>{t('upcomingPayments.title')}</CardTitle>
+          <CardDescription>{t('upcomingPayments.description')}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-2'>
           <UpcomingPayments upcoming={stats.costs.inOneMonth?.payments} />

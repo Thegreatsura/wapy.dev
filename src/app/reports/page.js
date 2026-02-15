@@ -1,5 +1,6 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import { withAuth } from '@/lib/with-auth';
 import { prisma } from '@/lib/prisma';
 import { SubscriptionReports } from '@/components/subscriptions/reports';
@@ -52,7 +53,8 @@ const PageReports = async () => {
 export default withAuth(PageReports);
 
 export async function generateMetadata() {
+  const t = await getTranslations('pages.reports.meta');
   return {
-    title: 'Subscription Report',
+    title: t('title'),
   };
 };

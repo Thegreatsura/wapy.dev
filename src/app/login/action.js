@@ -24,7 +24,7 @@ export const signInAction = async (data) => {
     } );
   } catch (error) {
     if (error.type === 'AccessDenied') {
-      return { error: 'Access Denied' };
+      return { error: error.type };
     }
     return null;
   }
@@ -54,7 +54,7 @@ export const signInOTPAction = async (data) => {
     }
   } catch (error) {
     if (error.type === 'AccessDenied') {
-      return { error: 'Access Denied' };
+      return { error: error.type };
     }
   }
 

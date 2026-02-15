@@ -1,0 +1,1287 @@
+{
+  "common": {
+    "add": "Lisää",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "edit": "Muokkaa",
+    "delete": "Poista",
+    "confirm": "Vahvista",
+    "view": "Näytä",
+    "close": "Sulje",
+    "contact": "Ota yhteyttä",
+    "signIn": "Kirjaudu sisään",
+    "pricing": "Hinnoittelu",
+    "refundPolicy": "Palautuskäytäntö",
+    "termsOfService": "Käyttöehdot",
+    "privacyPolicy": "Tietosuojakäytäntö"
+  },
+  "notifications": {
+    "trial": {
+      "reminder": {
+        "title": "{siteName} Kokeilujakson muistutus",
+        "message": "{siteName} kokeilujaksosi päättyy pian. Tilaa nyt jatkaaksesi kaikkien ominaisuuksien käyttöä."
+      },
+      "expired": {
+        "title": "{siteName} Kokeilujakso päättynyt",
+        "message": "{siteName} kokeilujaksosi on päättynyt. Tilaa nyt jatkaaksesi kaikkien ominaisuuksien käyttöä."
+      }
+    },
+    "subscription": {
+      "reminder": {
+        "title": "{siteName} Maksumuistutus",
+        "message": "Muistutamme, että {siteName} tilauksesi päättyy pian."
+      },
+      "payment": {
+        "title": {
+          "due": "Maksu erääntynyt: {name}",
+          "reminder": "Maksumuistutus: {name}",
+          "upcoming": "Tuleva maksu: {name}"
+        },
+        "message": {
+          "due": "{name} tilausmaksusi ({price}) erääntyy nyt!",
+          "reminder": "{name} tilausmaksusi ({price}) on myöhässä!",
+          "upcoming": "{name} tilausmaksusi ({price}) {dueText}!"
+        },
+        "markAsPaid": "Merkitse maksetuksi",
+        "dismiss": "Hylkää"
+      }
+    },
+    "externalServices": {
+      "header": "{siteName} Tilausmuistutus",
+      "footer": "Lähettäjä: {siteName}",
+      "visitDashboard": "Siirry hallintapaneeliin",
+      "paymentQuestion": "Oletko suorittanut maksun?",
+      "viewDetails": "Näytä tiedot"
+    }
+  },
+  "header": {
+    "signOut": "Kirjaudu ulos",
+    "subscriptions": "Tilaukset",
+    "reports": "Raportit",
+    "settings": "Asetukset",
+    "account": "Tili"
+  },
+  "footer": {
+    "madeBy": "Tehnyt ♥:lla <author>{name}</author>.",
+    "github": "Github",
+    "menu": "Valikko"
+  },
+  "languages": {
+    "selectLanguage": "Valitse kieli",
+    "invalid": "Virheellinen kieli",
+    "failed": "Kielen vaihtaminen epäonnistui",
+    "notAvailableTitle": "Kielivalinta ei käytettävissä",
+    "notAvailableMessage": "Kieliasetuksia ei voi muuttaa, koska toiminnalliset evästeet on poistettu käytöstä etkä ole kirjautunut sisään. Vaihda kieli joko:",
+    "enableCookies": "Ota toiminnalliset evästeet käyttöön"
+  },
+  "home": {
+    "visitor": {
+      "hero": {
+        "badge": "Haluatko hallita kulujasi?",
+        "title": "Älykäs tilausten hallinta helposti",
+        "subtitle": "{appName} auttaa sinua seuraamaan tilauksia, valvomaan toistuvia kuluja ja saamaan maksumuistutuksia yhdessä tehokkaassa ja selkeässä hallintapaneelissa.",
+        "tagline": "Saat ilmoituksia etkä koskaan unohda maksua.",
+        "imageAlt": "Pääkuva"
+      },
+      "features": {
+        "title": "Tehokkaat ominaisuudet",
+        "subtitle": "Kaikki mitä tarvitset tilausten tehokkaaseen hallintaan",
+        "billingCycles": {
+          "title": "Joustavat laskutusjaksot",
+          "description": "Tuki kuukausittaisille, vuosittaisille ja mukautetuille laskutusjaksoille"
+        },
+        "notifications": {
+          "title": "Älykkäät ilmoitukset",
+          "description": "Saat oikea-aikaiset muistutukset maksuista ja kokeilujaksojen päättymisestä"
+        },
+        "reports": {
+          "title": "Raportit ja analytiikka",
+          "description": "Seuraa kulutustasi yksityiskohtaisilla raporteilla ja oivalluksilla"
+        },
+        "currencies": {
+          "title": "Useita valuuttoja",
+          "description": "Tuki useille valuutoille reaaliaikaisella kustannusseurannalla"
+        },
+        "timezone": {
+          "title": "Aikavyöhyketuki",
+          "description": "Seuraa tilauksia eri aikavyöhykkeillä automaattisilla päivämäärämuunnoksilla"
+        },
+        "categories": {
+          "title": "Kategorioiden hallinta",
+          "description": "Järjestä tilaukset mukautetuilla kategorioilla ja värikoodauksella"
+        }
+      },
+      "howItWorks": {
+        "title": "Näin Wapy toimii",
+        "subtitle": "Aloita minuuteissa",
+        "step1": {
+          "title": "Rekisteröidy ja kirjaudu",
+          "description": "Luo tili tai kirjaudu sisään aloittaaksesi kulujesi seurannan"
+        },
+        "step2": {
+          "title": "Määritä ilmoitukset",
+          "description": "Mukauta hälytykset tulevista maksuista ja kokeilujaksojen päättymispäivistä sähköpostilla, push-ilmoituksilla ja webhook-ilmoituksilla"
+        },
+        "step3": {
+          "title": "Seuraa ja optimoi",
+          "description": "Valvo kulutustottumuksia ja saat oivalluksia tarpeettomien tilauskulujen vähentämiseksi"
+        }
+      }
+    }
+  },
+  "pages": {
+    "notFound": {
+      "meta": {
+        "title": "Sivua ei löytynyt",
+        "description": "Etsimääsi sivua ei ole olemassa."
+      },
+      "title": "404",
+      "backToHome": "Takaisin etusivulle"
+    },
+    "contact": {
+      "description": "Onko sinulla kysyttävää tai haluatko ottaa yhteyttä? Täytä alla oleva lomake, niin palaamme asiaan mahdollisimman pian.",
+      "form": {
+        "name": {
+          "label": "Nimi",
+          "placeholder": "Nimesi",
+          "error": "Nimen on oltava vähintään 2 merkkiä"
+        },
+        "email": {
+          "label": "Sähköposti",
+          "placeholder": "sinun@sahkoposti.fi",
+          "error": "Virheellinen sähköpostiosoite"
+        },
+        "message": {
+          "label": "Viesti",
+          "placeholder": "Kerro, miten voimme auttaa...",
+          "error": "Viestin on oltava vähintään 10 merkkiä"
+        },
+        "submit": "Lähetä viesti",
+        "submitting": "Lähetetään..."
+      },
+      "success": {
+        "title": "Kiitos!",
+        "message1": "Viestisi on lähetetty onnistuneesti.",
+        "message2": "Palaamme asiaan..."
+      },
+      "toast": {
+        "success": "Viestisi on lähetetty onnistuneesti.",
+        "error": "Viestin lähettäminen epäonnistui! Yritä myöhemmin uudelleen.",
+        "spam": "Tapahtui virhe. Yritä myöhemmin uudelleen."
+      }
+    },
+    "account": {
+      "meta": {
+        "title": "Tiliasetukset",
+        "description": "Hallitse tiliasetuksiasi ja mieltymyksiäsi."
+      },
+      "defaultSettings": {
+        "title": "Oletusasetukset",
+        "description": "Määritä oletusasetukset uusille tilauksille",
+        "timezone": {
+          "label": "Aikavyöhyke",
+          "success": "Aikavyöhyke päivitetty onnistuneesti.",
+          "error": "Aikavyöhykkeen päivittäminen epäonnistui!"
+        },
+        "currency": {
+          "label": "Valuutta",
+          "success": "Valuutta päivitetty onnistuneesti.",
+          "error": "Valuutan päivittäminen epäonnistui!"
+        }
+      },
+      "notifications": {
+        "success": "Ilmoitusasetukset tallennettu.",
+        "error": "Ilmoitusasetusten tallentaminen epäonnistui!",
+        "saveButton": "Tallenna muutokset",
+        "saveButtonTitle": "Tallenna ilmoitusasetukset"
+      },
+      "profile": {
+        "success": "Nimesi on päivitetty onnistuneesti.",
+        "error": "Nimen päivittäminen epäonnistui!",
+        "namePlaceholder": "Syötä nimesi",
+        "addNamePrompt": "Lisää nimesi",
+        "memberSince": "Jäsen alkaen {date}"
+      },
+      "categories": {
+        "title": "Kategoriat",
+        "description": "Hallitse kategorioitasi",
+        "default": {
+          "load": "Lataa oletuskategoriat",
+          "success": "Oletuskategoriat ladattu onnistuneesti.",
+          "error": "Oletuskategorioiden luominen epäonnistui!"
+        },
+        "save": {
+          "success": "Kategoria tallennettu onnistuneesti.",
+          "error": "Kategorian tallentaminen epäonnistui!"
+        },
+        "addButtonTitle": "Lisää uusi kategoria",
+        "selectColor": "Valitse väri",
+        "namePlaceholder": "Kategorian nimi",
+        "delete": {
+          "title": "Poista kategoria",
+          "description": "Haluatko varmasti poistaa tämän kategorian? Tätä toimintoa ei voi peruuttaa.",
+          "success": "Kategoria poistettu onnistuneesti.",
+          "error": "Kategorian poistaminen epäonnistui!"
+        },
+        "invalid": "Virheelliset kategoriatiedot",
+        "edit": "Muokkaa kategoriaa"
+      },
+      "paymentMethods": {
+        "title": "Maksutavat",
+        "description": "Hallitse maksutapojasi",
+        "add": "Lisää uusi maksutapa",
+        "edit": "Muokkaa maksutapaa",
+        "invalid": "Virheelliset maksutapatiedot",
+        "placeholder": "Maksutavan nimi",
+        "load": {
+          "title": "Lataa oletusmaksutavat",
+          "success": "Oletusmaksutavat ladattu onnistuneesti.",
+          "error": "Oletusmaksutapojen luominen epäonnistui!"
+        },
+        "save": {
+          "success": "Maksutapa tallennettu onnistuneesti.",
+          "error": "Maksutavan tallentaminen epäonnistui!"
+        },
+        "delete": {
+          "title": "Poista maksutapa",
+          "description": "Haluatko varmasti poistaa tämän maksutavan? Tätä toimintoa ei voi peruuttaa.",
+          "success": "Maksutapa poistettu onnistuneesti.",
+          "error": "Maksutavan poistaminen epäonnistui!"
+        }
+      },
+      "subscriptionStatus": {
+        "title": "Tilauksen tila",
+        "description": "Tilauksesi tila",
+        "trial": {
+          "active": "Kokeilujaksosi päättyy <date></date>.",
+          "notification": {
+            "multipleDays": "Ilmoitamme sinulle <highlight>1 päivä ennen</highlight> kokeilujaksosi päättymistä.",
+            "lastDay": "Ilmoitamme sinulle <highlight>kun</highlight> kokeilujaksosi päättyy."
+          },
+          "ended": "Kokeilujaksosi on päättynyt!",
+          "subscribe": "Haluatko jatkaa kanssamme?"
+        },
+        "subscription": {
+          "active": {
+            "scheduled": {
+              "pause": "Tilauksesi on <status>keskeytetty</status> ja päättyy <date></date>.",
+              "cancel": "Tilauksesi on <status>peruutettu</status> ja päättyy <date></date>."
+            },
+            "nextPayment": "Seuraava maksusi on <date></date>.",
+            "notification": "Ilmoitamme sinulle ennen tilauksesi päättymistä."
+          },
+          "paused": {
+            "message": "Tilauksesi on tällä hetkellä keskeytetty.",
+            "button": "Jatka tilausta"
+          },
+          "cancelled": {
+            "message": "Tilauksesi on peruutettu.",
+            "button": "Aktivoi tilaus uudelleen"
+          },
+          "pastDue": {
+            "message": "Maksusi on myöhässä. Päivitä maksutapasi."
+          },
+          "cancel": {
+            "button": "Peruuta tilaus",
+            "dialog": {
+              "title": "Haluatko varmasti peruuttaa?",
+              "description": "Tämä toiminto peruuttaa tilauksesi nykyisen laskutuskauden lopussa. Sinulla on käyttöoikeus siihen asti."
+            },
+            "confirmButton": "Vahvista peruutus"
+          }
+        },
+        "fullAccess": {
+          "message": "Onnittelut! Sinulla on täysi pääsy kaikkiin ominaisuuksiin."
+        },
+        "blocked": {
+          "message": "Outoa! Pääsysi palveluun on estetty."
+        }
+      },
+      "externalServices": {
+        "title": "Ulkoiset palvelut",
+        "description": "Määritä integraatiot ulkoisiin palveluihin",
+        "testNotification": {
+          "title": "{siteName} Testi-ilmoitus",
+          "message": "Tämä on {service}-testiviesti palvelusta {siteName}. {service}-integraatiosi on määritetty oikein."
+        },
+        "ntfy": {
+          "title": "ntfy",
+          "description": "Vastaanota ilmoituksia ntfy:n kautta.",
+          "toast": {
+            "disable": {
+              "success": "ntfy-integraatio poistettu käytöstä.",
+              "error": "ntfy-integraation poistaminen käytöstä epäonnistui!"
+            },
+            "save": {
+              "success": "ntfy-asetukset tallennettu onnistuneesti.",
+              "error": "ntfy-asetusten tallentaminen epäonnistui!"
+            },
+            "test": {
+              "success": "ntfy-testi-ilmoitus lähetetty.",
+              "error": "ntfy-testi-ilmoituksen lähettäminen epäonnistui!"
+            },
+            "notEnabled": "ntfy-integraatio ei ole käytössä.",
+            "invalidParams": "Virheelliset parametrit! ntfy-asetuksia ei voi tallentaa.",
+            "testInvalidParams": "Virheelliset parametrit! Testi-ilmoitusta ei voi lähettää."
+          },
+          "fields": {
+            "serverUrl": {
+              "label": "Palvelimen URL",
+              "placeholder": "ntfy.sh tai oma palvelin"
+            },
+            "topic": {
+              "label": "Aiheen nimi"
+            },
+            "token": {
+              "label": "Käyttöoikeustunnus (valinnainen)",
+              "placeholder": "Käyttöoikeustunnus"
+            }
+          },
+          "buttons": {
+            "save": "Tallenna ntfy",
+            "test": "Testaa ntfy"
+          }
+        },
+        "webhook": {
+          "title": "Webhook",
+          "description": "Vastaanota ilmoituksia webhookin kautta.",
+          "toast": {
+            "disable": {
+              "success": "Webhook-integraatio poistettu käytöstä.",
+              "error": "Webhook-integraation poistaminen käytöstä epäonnistui!"
+            },
+            "save": {
+              "success": "Webhook-asetukset tallennettu onnistuneesti.",
+              "error": "Webhook-asetusten tallentaminen epäonnistui!"
+            },
+            "test": {
+              "success": "Webhook-testi-ilmoitus lähetetty.",
+              "error": "Webhook-testi-ilmoituksen lähettäminen epäonnistui!"
+            },
+            "notEnabled": "Webhook-integraatio ei ole käytössä.",
+            "invalidParams": "Virheelliset parametrit! Webhook-asetuksia ei voi tallentaa.",
+            "testInvalidParams": "Virheelliset parametrit! Testi-ilmoitusta ei voi lähettää."
+          },
+          "fields": {
+            "url": {
+              "label": "Palvelimen URL",
+              "placeholder": "Webhook-palvelimen URL"
+            }
+          },
+          "buttons": {
+            "save": "Tallenna webhook",
+            "test": "Testaa webhook"
+          }
+        },
+        "discord": {
+          "title": "Discord",
+          "description": "Vastaanota ilmoituksia Discordin kautta.",
+          "toast": {
+            "disable": {
+              "success": "Discord-integraatio poistettu käytöstä.",
+              "error": "Discord-integraation poistaminen käytöstä epäonnistui!"
+            },
+            "save": {
+              "success": "Discord-asetukset tallennettu onnistuneesti.",
+              "error": "Discord-asetusten tallentaminen epäonnistui!"
+            },
+            "test": {
+              "success": "Discord-testi-ilmoitus lähetetty.",
+              "error": "Discord-testi-ilmoituksen lähettäminen epäonnistui!"
+            },
+            "notEnabled": "Discord-integraatio ei ole käytössä.",
+            "invalidParams": "Virheelliset parametrit! Discord-asetuksia ei voi tallentaa.",
+            "testInvalidParams": "Virheelliset parametrit! Testi-ilmoitusta ei voi lähettää."
+          },
+          "fields": {
+            "url": {
+              "label": "Palvelimen URL",
+              "placeholder": "Discord-palvelimen URL"
+            }
+          },
+          "buttons": {
+            "save": "Tallenna Discord",
+            "test": "Testaa Discord"
+          }
+        },
+        "slack": {
+          "title": "Slack",
+          "description": "Vastaanota ilmoituksia Slackin kautta.",
+          "toast": {
+            "disable": {
+              "success": "Slack-integraatio poistettu käytöstä.",
+              "error": "Slack-integraation poistaminen käytöstä epäonnistui!"
+            },
+            "save": {
+              "success": "Slack-asetukset tallennettu onnistuneesti.",
+              "error": "Slack-asetusten tallentaminen epäonnistui!"
+            },
+            "test": {
+              "success": "Slack-testi-ilmoitus lähetetty.",
+              "error": "Slack-testi-ilmoituksen lähettäminen epäonnistui!"
+            },
+            "notEnabled": "Slack-integraatio ei ole käytössä.",
+            "invalidParams": "Virheelliset parametrit! Slack-asetuksia ei voi tallentaa.",
+            "testInvalidParams": "Virheelliset parametrit! Testi-ilmoitusta ei voi lähettää."
+          },
+          "fields": {
+            "url": {
+              "label": "Palvelimen URL",
+              "placeholder": "Slack-palvelimen URL"
+            }
+          },
+          "buttons": {
+            "save": "Tallenna Slack",
+            "test": "Testaa Slack"
+          }
+        }
+      },
+      "dataExport": {
+        "title": "Tietojen vienti",
+        "description": "Lataa kopio tilauksistasi, kategorioistasi, maksutavoistasi ja asetuksistasi",
+        "button": "Vie tiedot",
+        "toast": {
+          "success": "Tiedot viety onnistuneesti.",
+          "error": "Tietojen vienti epäonnistui!"
+        }
+      }
+    },
+    "edit": {
+      "meta": {
+        "new": "Uusi tilaus",
+        "edit": "Muokkaa: {name}",
+        "unauthorized": "Ei käyttöoikeutta"
+      }
+    },
+    "login": {
+      "meta": {
+        "title": "Kirjaudu sisään"
+      },
+      "description": "Kirjaudu sisään sähköpostillasi päästäksesi tilillesi tai luo uusi tili automaattisesti",
+      "form": {
+        "emailPlaceholder": "m@esimerkki.fi",
+        "loginButton": "Kirjaudu",
+        "loginWithProvider": "Kirjaudu {provider}:lla"
+      },
+      "otp": {
+        "title": "Tarkista sähköpostisi",
+        "description": "Olemme lähettäneet linkin sähköpostiisi kirjautumista varten.",
+        "instructions": "Syötä sähköpostiisi lähetetty 6-numeroinen koodi",
+        "divider": "tai",
+        "resend": {
+          "prompt": "Etkö saanut sähköpostia?",
+          "button": "Lähetä uudelleen",
+          "timer": "Voit lähettää uudelleen {seconds, plural, one {# sekunnin} other {# sekunnin}} kuluttua"
+        }
+      },
+      "toast": {
+        "success": "Tervetuloa! Olet kirjautunut sisään onnistuneesti.",
+        "error": {
+          "accessDenied": "Valitettavasti sinulla ei ole oikeutta kirjautua sisään!",
+          "generic": "Outoa! Emme voineet kirjata sinua sisään. Syynä voi olla sähköpostiosoitteesi tai jokin meni vikaan meidän päässämme.",
+          "invalidCode": "Koodi näyttää virheelliseltä. Tarkista 6 numeroa ja yritä uudelleen.",
+          "somethingWrong": "Jokin meni vikaan. Pyydä uusi koodi ja yritä uudelleen.",
+          "workspaceAccess": "Valitettavasti sinulla ei ole pääsyä tähän työtilaan."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Yksinkertainen, läpinäkyvä hinnoittelu",
+      "description": "Seuraa ja hallitse kaikkia tilauksiasi tehokkailla ominaisuuksilla edulliseen hintaan"
+    },
+    "privacy": {
+      "lastUpdated": "Viimeksi päivitetty 17. tammikuuta 2025",
+      "introduction": {
+        "title": "Johdanto",
+        "paragraph1": "Olemme sitoutuneet suojaamaan yksityisyyttäsi ja varmistamaan henkilötietojesi turvallisuuden.",
+        "paragraph2": "Tämä tietosuojakäytäntö selittää, miten keräämme, käytämme ja suojaamme tietojasi, kun käytät tilaus- ja kulujenhallintapalveluamme."
+      },
+      "informationWeCollect": {
+        "title": "Keräämämme tiedot",
+        "description": "Keräämme vain palveluidemme tarjoamiseen tarvittavat tiedot:",
+        "items": {
+          "account": "Tilitiedot",
+          "subscription": "Tilaus- ja kulujenhallintaan liittyvät tiedot",
+          "expense": "Kulujenseurantatiedot"
+        }
+      },
+      "howWeUse": {
+        "title": "Miten käytämme tietojasi",
+        "description": "Tietojasi käytetään yksinomaan:",
+        "items": {
+          "providing": "Palveluidemme tarjoamiseen ja ylläpitoon",
+          "managing": "Tilisi ja tilaustesi hallintaan",
+          "sending": "Tärkeiden palvelupäivitysten lähettämiseen",
+          "improving": "Palveluidemme parantamiseen anonyymien käyttötietojen avulla"
+        }
+      },
+      "paymentProcessing": {
+        "title": "Maksujen käsittely",
+        "description": "Käytämme <paddle>Paddle.com</paddle>-palvelua maksujen käsittelyyn. Kun suoritat maksun, maksutietosi kerätään ja käsitellään suoraan Paddlen toimesta. Emme tallenna maksutietojasi palvelimillemme. Lisätietoja siitä, miten Paddle käsittelee tietojasi, löydät <privacy>Paddlen tietosuojakäytännöstä</privacy>."
+      },
+      "dataProtection": {
+        "title": "Tietosuoja",
+        "description": "Toteutamme vahvoja turvatoimia henkilötietojesi suojaamiseksi. Emme koskaan jaa tietojasi kolmansille osapuolille ja noudatamme tiukkoja tietosuojaprotokollia estääksemme luvattoman pääsyn, paljastamisen tai tietojesi väärinkäytön."
+      },
+      "analytics": {
+        "title": "Analytiikka",
+        "description": "Käytämme mukautettua analytiikkatyökalua palveluidemme parantamiseen. Tämä työkalu kerää anonyymejä käyttötietoja auttaakseen meitä ymmärtämään, miten käyttäjät ovat vuorovaikutuksessa alustamme kanssa ja parantaakseen käyttökokemusta."
+      },
+      "yourRights": {
+        "title": "Oikeutesi",
+        "description": "Sinulla on oikeus:",
+        "items": {
+          "access": "Päästä käsiksi henkilötietoihisi",
+          "correct": "Pyytää tietojesi korjaamista",
+          "delete": "Pyytää tietojesi poistamista",
+          "optOut": "Kieltäytyä ei-välttämättömästä tietojen keräämisestä"
+        }
+      },
+      "contactUs": {
+        "description": "Jos sinulla on kysyttävää tietosuojakäytännöstämme tai siitä, miten käsittelemme tietojasi, ota yhteyttä <link>yhteydenottolomakkeella</link>."
+      },
+      "updates": {
+        "title": "Käytännön päivitykset",
+        "description": "Saatamme päivittää tätä tietosuojakäytäntöä ajoittain. Ilmoitamme muutoksista julkaisemalla uuden tietosuojakäytännön tälle sivulle ja päivittämällä voimaantulopäivän."
+      }
+    },
+    "refundPolicy": {
+      "lastUpdated": "Viimeksi päivitetty 17. tammikuuta 2025",
+      "introduction": "Huonot palautuskäytännöt ovat turhauttavia. Tuntuu kuin yritys yrittäisi vain huijata sinua. Emme koskaan halua asiakkaidemme tuntevan niin, joten palautuskäytäntömme on yksinkertainen: Jos olet joskus tyytymätön mistä tahansa syystä, <link>ota yhteyttä</link> ja kerro meille, niin teemme töitä varmistaaksemme, että olet tyytyväinen.",
+      "fullRefunds": {
+        "title": "Esimerkkejä täysistä palautuksista",
+        "items": {
+          "charged": "Jos sinulta veloitettiin juuri seuraavan kuukauden palvelusta, mutta tarkoituksesi oli peruuttaa, palautamme mielellämme ylimääräisen veloituksen"
+        }
+      },
+      "partialRefunds": {
+        "title": "Esimerkkejä osittaisista palautuksista",
+        "items": {
+          "week": "Jos sinulta veloitettiin kuukauden palvelusta, mutta käytit sitä vain viikon, palautamme erotuksen",
+          "year": "Jos sinulta veloitettiin vuoden palvelusta, mutta käytit sitä vain kuukauden, palautamme erotuksen",
+          "weekDuplicate": "Jos sinulta veloitettiin kuukauden palvelusta, mutta käytit sitä vain viikon, palautamme erotuksen"
+        }
+      }
+    },
+    "reports": {
+      "meta": {
+        "title": "Tilausraportti"
+      }
+    },
+    "view": {
+      "meta": {
+        "unauthorized": "Ei käyttöoikeutta",
+        "view": "Näytä {name}"
+      }
+    },
+    "termsOfService": {
+      "lastUpdated": "Viimeksi päivitetty 17. tammikuuta 2025",
+      "welcome": "Tervetuloa {siteName}-verkkosivustolle (\"Sivusto\"). Käyttämällä tai käyttäessäsi Sivustoa hyväksyt noudattavasi seuraavia ehtoja (\"Käyttöehdot\").",
+      "overview": {
+        "title": "Yleiskatsaus",
+        "paragraph1": "{siteName} tarjoaa tämän Sivuston, mukaan lukien kaikki tiedot, työkalut ja palvelut, jotka ovat saatavilla tältä Sivustolta sinulle, käyttäjälle, edellyttäen, että hyväksyt kaikki tässä mainitut ehdot, edellytykset, käytännöt ja ilmoitukset.",
+        "paragraph2": "Lue nämä Käyttöehdot huolellisesti ennen Sivuston käyttöä tai käyttöönottoa. Käyttämällä tai käyttäessäsi mitä tahansa Sivuston osaa hyväksyt nämä Käyttöehdot. Jos et hyväksy kaikkia tämän sopimuksen ehtoja, et saa käyttää Sivustoa tai mitään palveluita. Jos näitä Käyttöehtoja pidetään tarjouksena, hyväksyminen rajoittuu nimenomaan näihin Käyttöehtoihin.",
+        "paragraph3": "Kaikki uudet ominaisuudet tai työkalut, jotka lisätään Sivustolle, ovat myös näiden Käyttöehtojen alaisia. Voit tarkastella Käyttöehtojen uusinta versiota milloin tahansa tällä sivulla. Sivusto pidättää oikeuden päivittää, muuttaa tai korvata mitä tahansa näiden Käyttöehtojen osaa julkaisemalla päivityksiä ja/tai muutoksia Sivustolle. Sinun vastuullasi on tarkistaa tämä sivu säännöllisesti muutosten varalta. Jatkuva Sivuston käyttö tai käyttöönotto muutosten julkaisemisen jälkeen merkitsee näiden muutosten hyväksymistä."
+      },
+      "websiteTerms": {
+        "title": "Verkkosivuston ehdot",
+        "paragraph1": "Hyväksymällä nämä Käyttöehdot vakuutat olevasi vähintään täysi-ikäinen osavaltiossasi tai maakunnassasi, tai että olet täysi-ikäinen osavaltiossasi tai maakunnassasi ja olet antanut meille suostumuksesi sallia alaikäisten huollettaviesi käyttää tätä sivustoa.",
+        "paragraph2": "Palveluidemme käytön on noudatettava kaikkia sovellettavia lakeja ja määräyksiä. Erityisesti:",
+        "items": {
+          "unlawful": "Sitoudut olemaan käyttämättä tuotteitamme laittomiin tai luvattomiin tarkoituksiin",
+          "comply": "Sinun on noudatettava kaikkia lainkäyttöalueesi lakeja, mukaan lukien tekijänoikeus- ja immateriaalioikeuslait",
+          "malicious": "Et saa lähettää haitallista koodia, viruksia tai muuta haitallista sisältöä"
+        },
+        "paragraph3": "Huomaa, että näiden Käyttöehtojen rikkominen johtaa välittömään pääsysi lopettamiseen Palveluihimme."
+      },
+      "payment": {
+        "title": "Maksu",
+        "paragraph1": "Jos ostat tilauksen Sivustolle, sitoudut maksamaan sovellettavat maksut, jotka on ilmoitettu kassaprosessin aikana.",
+        "paragraph2": "Käytämme <paddle>Paddle.com</paddle>-palvelua maksupalveluntarjoajanamme. Tekemällä ostoksen hyväksyt myös Paddlen <terms>Käyttöehdot</terms>. Paddle käsittelee kaikki maksut ja hoitaa niihin liittyvät asiakaspalvelukyselyt.",
+        "paragraph3": "Sivusto käsittelee palautukset <refund>palautuskäytäntömme</refund> mukaisesti."
+      },
+      "cookies": {
+        "title": "Evästeiden käyttö",
+        "description": "Sivusto käyttää evästeitä ja vastaavia teknologioita (kuten paikallista tallennustilaa) seuratakseen Sivuston käyttöäsi ja markkinointitarkoituksiin. Käyttämällä Sivustoa hyväksyt evästeiden käytön <privacy>Tietosuojakäytäntömme</privacy> mukaisesti."
+      },
+      "intellectualProperty": {
+        "title": "Immateriaalioikeudet",
+        "description": "Kaikki Sivuston sisältö, mukaan lukien mutta ei rajoittuen tekstiin, grafiikkaan, logoihin, kuviin, videoihin ja kurssisisältöön, on Sivuston tai sen lisenssinantajien omaisuutta ja suojattu immateriaalioikeuslaeilla. Et saa kopioida, muokata, jakaa tai muuten käyttää mitään Sivuston sisältöä ilman ennakkokirjallista suostumustamme."
+      },
+      "disclaimer": {
+        "title": "Vastuuvapauslauseke",
+        "description": "Sivuston tiedot ja sisältö on tarkoitettu vain tiedotustarkoituksiin, eikä niitä ole tarkoitettu ammattimaiseksi neuvoksi. Sivusto ei anna minkäänlaisia takuita, nimenomaisia tai oletettuja, Sivuston tietojen ja sisällön tarkkuudesta, luotettavuudesta, täydellisyydestä tai soveltuvuudesta. Käytät Sivustoa omalla vastuullasi."
+      },
+      "limitationOfLiability": {
+        "title": "Vastuunrajoitus",
+        "description": "{siteName} ei ole vastuussa mistään epäsuorista, satunnaisista, erityisistä tai välillisistä vahingoista, joita voi aiheutua Sivuston käytöstäsi, riippumatta siitä, johtuvatko tällaiset vahingot sopimuksesta, vahingonkorvauksesta, huolimattomuudesta, ankarasta vastuusta vai mistä tahansa muusta oikeudellisesta teoriasta. Enimmäismäärä, josta Sivusto voi olla vastuussa missä tahansa Sivustoon liittyvässä vaatimuksessa, rajoittuu viimeisten 12 kuukauden aikana maksamiisi tilausmaksuihin."
+      },
+      "changes": {
+        "title": "Muutokset Käyttöehtoihin",
+        "description": "Sivusto voi päivittää tai muuttaa näitä Käyttöehtoja ajoittain, ja kaikki muutokset tulevat voimaan, kun ne julkaistaan Sivustolla. Jatkuva Sivuston käyttö tällaisten muutosten jälkeen merkitsee tarkistettujen Käyttöehtojen hyväksymistä."
+      },
+      "indemnification": {
+        "title": "Korvausvelvollisuus",
+        "description": "Sitoudut korvaamaan ja pitämään {siteName}:n, sen tytäryhtiöt, toimihenkilöt, johtajat, työntekijät, edustajat ja lisenssinantajat vahingoittomina kaikista vaatimuksista, vastuista, vahingoista, tappioista ja kuluista, mukaan lukien kohtuulliset asianajajan palkkiot, jotka johtuvat tai liittyvät Sivuston käyttöösi, näiden Käyttöehtojen rikkomiseen tai toisen osapuolen oikeuksien rikkomiseen."
+      },
+      "modifications": {
+        "title": "Muutokset Palveluun ja hintoihin",
+        "paragraph1": "Palveluidemme hinnat voivat muuttua ilman ennakkoilmoitusta. Sivusto pidättää oikeuden milloin tahansa muuttaa tai lopettaa Palvelu (tai mikä tahansa sen osa tai sisältö) ilman ennakkoilmoitusta milloin tahansa.",
+        "paragraph2": "Sivusto ei ole vastuussa sinulle tai kolmannelle osapuolelle mistään muutoksesta, hinnanmuutoksesta, keskeyttämisestä tai Palvelun lopettamisesta."
+      },
+      "governingLaw": {
+        "title": "Sovellettava laki ja toimivalta",
+        "description": "Näitä Käyttöehtoja säännellään ja tulkitaan sen lainkäyttöalueen lakien mukaisesti, jossa {siteName}:n päätoimipaikka sijaitsee, ottamatta huomioon lainvalintaperiaatteita. Hyväksyt alistuvasi kyseisen lainkäyttöalueen tuomioistuinten yksinomaiseen toimivaltaan kaikissa riita-asioissa, jotka johtuvat näistä Käyttöehdoista tai Sivuston käytöstäsi."
+      },
+      "entireAgreement": {
+        "title": "Koko sopimus",
+        "description": "Nämä Käyttöehdot muodostavat koko sopimuksen sinun ja {siteName}:n välillä Sivuston käytöstäsi ja korvaavat kaikki aiemmat ja samanaikaiset sopimukset ja ymmärrykset, olivatpa ne suullisia tai kirjallisia, jotka liittyvät samaan aiheeseen."
+      },
+      "severability": {
+        "title": "Erotettavuus",
+        "description": "Jos jokin näiden Käyttöehtojen määräys todetaan pätemättömäksi, laittomaksi tai täytäntöönpanokelvottomaksi, loput määräykset pysyvät täysimääräisesti voimassa."
+      },
+      "waiver": {
+        "title": "Luopuminen",
+        "description": "{siteName}:n laiminlyönti panna täytäntöön mitä tahansa näiden Käyttöehtojen oikeutta tai määräystä ei muodosta luopumista kyseisestä oikeudesta tai määräyksestä."
+      },
+      "contactUs": {
+        "description": "Jos sinulla on kysyttävää tai huolenaiheita näistä Käyttöehdoista, ota yhteyttä <link>yhteydenottolomakkeella</link> Sivustolla."
+      }
+    }
+  },
+  "components": {
+    "notifications": {
+      "push": {
+        "test": {
+          "title": "{siteName} Testi-ilmoitus",
+          "message": "Tämä on testi-ilmoitus palvelusta {siteName}. Jos näet tämän, push-ilmoitukset toimivat oikein!"
+        }
+      },
+      "email": {
+        "header": "Maksumuistutus",
+        "footer": "Tämä on ystävällinen muistutussähköposti palvelusta {siteName}.",
+        "thanks": "Kiitos",
+        "madeBy": "Tehnyt ♥:lla {siteLink}"
+      },
+      "bell": {
+        "title": "Ilmoitukset",
+        "unreadTitle": "Lukemattomat ilmoitukset",
+        "clearAll": "Tyhjennä kaikki",
+        "removeNotification": "Poista ilmoitus",
+        "noNotifications": "Ei uusia ilmoituksia"
+      },
+      "toggle": {
+        "modal": {
+          "title": "Pysy ajan tasalla",
+          "description": "Saat oikea-aikaiset muistutukset tilausmaksuistasi ja eräpäivistä. Ilmoitamme sinulle ennen maksujen erääntymistä ja kun tilaukset ovat päättymässä.",
+          "maybeLater": "Ehkä myöhemmin",
+          "enable": "Ota ilmoitukset käyttöön",
+          "enabling": "Otetaan käyttöön..."
+        },
+        "toast": {
+          "success": "Saat nyt tilausmuistutuksia.",
+          "error": "Ilmoitusten käyttöönotto epäonnistui. Yritä uudelleen.",
+          "permissionRequired": {
+            "title": "Lupa vaaditaan",
+            "description": "Salli ilmoitukset vastaanottaaksesi muistutuksia."
+          }
+        }
+      }
+    },
+    "subscriptions": {
+      "validation": {
+        "name": "Nimen on oltava vähintään 2 merkkiä.",
+        "paymentDate": "Tuo ei ole kelvollinen päivämäärä!",
+        "color": "Virheellinen hex-väri"
+      },
+      "cycles": {
+        "DAYS": "{count, plural, =1 {Päivittäin} other {Joka # päivä}}",
+        "WEEKS": "{count, plural, =1 {Viikoittain} other {Joka # viikko}}",
+        "MONTHS": "{count, plural, =1 {Kuukausittain} other {Joka # kuukausi}}",
+        "YEARS": "{count, plural, =1 {Vuosittain} other {Joka # vuosi}}"
+      },
+      "form": {
+        "fields": {
+          "category": {
+            "label": "Kategoriat",
+            "selected": "{count, plural, =0 {Valitse kategoriat} one {# kategoria valittu} other {# kategoriaa valittu}}",
+            "search": "Etsi kategoriaa...",
+            "create": "Luo uusi kategoria \"{value}\""
+          },
+          "currency": {
+            "label": "Valuutta",
+            "placeholder": "Valitse valuutta",
+            "search": "Etsi valuuttaa...",
+            "noResults": "Ei tuloksia!"
+          },
+          "cycle": {
+            "label": "Laskutusjakso",
+            "placeholder": "Valitse laskutusjakso",
+            "options": {
+              "daily": "Päivittäin",
+              "weekly": "Viikoittain",
+              "monthly": "Kuukausittain",
+              "yearly": "Vuosittain",
+              "custom": "Mukautettu"
+            },
+            "units": {
+              "days": "{count, plural, one {Päivä} other {Päivää}}",
+              "weeks": "{count, plural, one {Viikko} other {Viikkoa}}",
+              "months": "{count, plural, one {Kuukausi} other {Kuukautta}}",
+              "years": "{count, plural, one {Vuosi} other {Vuotta}}"
+            },
+            "unitPlaceholder": "Yksikkö"
+          },
+          "name": {
+            "label": "Nimi",
+            "placeholder": "Tilauksen nimi"
+          },
+          "notes": {
+            "label": "Muistiinpanot",
+            "placeholder": "Lisää muistiinpanoja..."
+          },
+          "notifications": {
+            "title": "Ilmoitukset",
+            "description": "Määritä oletusarvoiset ilmoitukset tilauksillesi",
+            "via": "Kautta",
+            "whenToNotify": "Milloin ilmoitetaan",
+            "whenPlaceholder": "Valitse milloin ilmoitetaan",
+            "unitPlaceholder": "Yksikkö",
+            "addNotification": "Lisää ilmoitus",
+            "deleteDialog": {
+              "title": "Vahvista poisto",
+              "description": "Haluatko varmasti poistaa tämän ilmoitusmallin?"
+            },
+            "status": {
+              "denied": "Push-ilmoitukset on estetty tässä laitteessa. Ota ne käyttöön selaimen asetuksista.",
+              "default": "Push-ilmoitukset eivät ole käytössä tässä laitteessa. <link>Haluatko ottaa ne käyttöön?</link>",
+              "grantedNotConfigured": "Push-ilmoituslupa on myönnetty, mutta sitä ei ole määritetty oikein. <link>Haluatko ottaa sen käyttöön?</link>",
+              "grantedConfigured": "Push-ilmoitukset on otettu käyttöön tälle laitteelle. Haluatko lähettää <link>testi-push-ilmoituksen</link>?"
+            },
+            "toast": {
+              "success": "Push-ilmoitus lähetetty! Tarkista laitteesi.",
+              "error": "Testi-push-ilmoituksen lähettäminen epäonnistui! Varmista, että ilmoitukset on otettu käyttöön ja määritetty oikein."
+            },
+            "timeOptions": {
+              "instant": "Maksupäivänä",
+              "15minutes": "15 minuuttia ennen",
+              "1hour": "1 tunti ennen",
+              "2hours": "2 tuntia ennen",
+              "1day": "1 päivä ennen",
+              "2days": "2 päivää ennen",
+              "1week": "1 viikko ennen",
+              "custom": "Mukautettu"
+            },
+            "units": {
+              "minutes": "{count, plural, one {Minuutti} other {Minuuttia}}",
+              "hours": "{count, plural, one {Tunti} other {Tuntia}}",
+              "days": "{count, plural, one {Päivä} other {Päivää}}",
+              "weeks": "{count, plural, one {Viikko} other {Viikkoa}}"
+            },
+            "types": {
+              "push": {
+                "label": "Push-ilmoitukset",
+                "ariaLabel": "Vaihda push"
+              },
+              "email": {
+                "label": "Sähköposti-ilmoitukset",
+                "ariaLabel": "Vaihda sähköposti"
+              },
+              "webhook": {
+                "label": "Webhook-ilmoitukset",
+                "ariaLabel": "Vaihda webhook"
+              },
+              "ntfy": {
+                "label": "ntfy-ilmoitukset",
+                "ariaLabel": "Vaihda ntfy"
+              },
+              "discord": {
+                "label": "Discord-ilmoitukset",
+                "ariaLabel": "Vaihda Discord"
+              },
+              "slack": {
+                "label": "Slack-ilmoitukset",
+                "ariaLabel": "Vaihda Slack"
+              }
+            }
+          },
+          "paymentDate": {
+            "label": "Seuraava maksupäivä"
+          },
+          "paymentMethod": {
+            "label": "Maksutapa",
+            "placeholder": "Valitse maksutapa",
+            "search": "Etsi maksutapaa...",
+            "create": "Luo uusi maksutapa \"{value}\""
+          },
+          "price": {
+            "label": "Hinta"
+          },
+          "timezone": {
+            "label": "Aikavyöhyke",
+            "placeholder": "Valitse aikavyöhyke",
+            "search": "Etsi aikavyöhykettä...",
+            "noResults": "Ei tuloksia!"
+          },
+          "untilDate": {
+            "label": "Voimassa asti",
+            "description": "Jätä tyhjäksi toistaiseksi voimassa olevalle tilaukselle"
+          },
+          "url": {
+            "label": "URL"
+          },
+          "logo": {
+            "label": "Logo",
+            "description": "Valitse ennalta määritetty kuvake tai syötä URL"
+          }
+        }
+      },
+      "card": {
+        "timezone": "{timezone} aikavyöhyke",
+        "paymentDate": {
+          "past": "Olisi pitänyt maksaa <date></date>.",
+          "future": "Maksetaan <date></date>."
+        },
+        "markAsPaid": {
+          "question": "Maksoitko tämän? <action>Merkitse maksetuksi</action> tai katso <options>muut vaihtoehdot</options>.",
+          "customPrice": {
+            "title": "Maksoitko eri summan?",
+            "description": "Käytä tätä, jos maksoit enemmän tai vähemmän kuin tavallisesti",
+            "prompt": "Syötä maksamasi summa:"
+          },
+          "noPrice": {
+            "title": "Merkitse vain maksetuksi!",
+            "description": "Käytä tätä ohittaaksesi tämän maksun tallentamatta summaa",
+            "prompt": "Merkitäänkö maksetuksi tallentamatta summaa?",
+            "warning": "Tämä ei tallenna maksusummaa."
+          },
+          "toast": {
+            "success": "Tilaus merkitty maksetuksi!",
+            "error": "Virhe merkittäessä tilausta maksetuksi",
+            "custom": {
+              "success": "Tilaus merkitty maksetuksi mukautetulla hinnalla!",
+              "error": "Virhe merkittäessä tilausta maksetuksi mukautetulla hinnalla"
+            },
+            "noPrice": {
+              "success": "Tilaus merkitty maksetuksi ilman maksua!",
+              "error": "Virhe merkittäessä tilausta maksetuksi ilman maksua"
+            },
+            "failed": "Päivitys epäonnistui!"
+          }
+        },
+        "notifications": {
+          "willBeNotifiedAt": "Saat ilmoituksen <date></date> kautta {channels}.",
+          "willBeNotifiedSoon": "Saat ilmoituksen pian kautta {channels}.",
+          "willBeRemindedAt": "Saat muistutuksen <date></date> kautta {channels} uudelleen.",
+          "willBeRemindedSoon": "Saat muistutuksen pian kautta {channels} uudelleen.",
+          "wontBeNotified": "Et saa ilmoitusta.",
+          "types": {
+            "push": "ilmoitus",
+            "email": "sähköposti",
+            "webhook": "webhook",
+            "ntfy": "ntfy",
+            "discord": "discord",
+            "slack": "slack"
+          }
+        },
+        "paymentCount": {
+          "congratulations": "Onnittelut! Olet maksanut kaikki.",
+          "remaining": "Maksat tämän vielä <trigger>{count, plural, =1 {# kerran} other {# kertaa}}</trigger>.",
+          "until": "Asti {date}"
+        },
+        "paymentMethods": {
+          "paidVia": "Tämä maksetaan kautta {methods}."
+        },
+        "pastPayments": {
+          "count": "Olet tehnyt <highlight>{count, plural, one {# maksun} other {# maksua}}</highlight> tähän mennessä."
+        },
+        "actions": {
+          "inactive": "Tämä tilaus ei ole aktiivinen.",
+          "edit": "Muokkaa {name} tilausta",
+          "link": "Linkki osoitteeseen {url}",
+          "notificationEnabled": "{type} on käytössä",
+          "notificationDisabled": "{type} ei ole käytössä"
+        }
+      },
+      "edit": {
+        "title": {
+          "create": "Luo tilaus",
+          "update": "Päivitä tilaus"
+        },
+        "sections": {
+          "details": "Tilauksen tiedot",
+          "advanced": "Lisäasetukset"
+        },
+        "deleteDialog": {
+          "title": "Poista tilaus",
+          "description": "Haluatko varmasti poistaa tämän tilauksen? Tätä toimintoa ei voi peruuttaa."
+        },
+        "toast": {
+          "create": {
+            "error": "Mielenkiintoista, tilausta ei voi luoda!",
+            "success": "Tilaus luotu onnistuneesti!"
+          },
+          "delete": {
+            "success": "Tilaus poistettu onnistuneesti!",
+            "error": "Tilauksen poistaminen epäonnistui!"
+          }
+        }
+      },
+      "list": {
+        "newSubscription": "Uusi tilaus",
+        "noSubscription": "Tilauksia ei löytynyt"
+      }
+    },
+    "filters": {
+      "title": "Tilaussuodattimet",
+      "description": "Käytä suodattimia ja löydä tarvitsemasi tilaukset",
+      "buttons": {
+        "filter": "Suodata tilauksia",
+        "reset": "Nollaa suodattimet"
+      },
+      "selectAll": "Valitse kaikki",
+      "selectNone": "Älä valitse mitään",
+      "status": {
+        "title": "Tila",
+        "active": {
+          "title": "Aktiivinen",
+          "description": "Suodata aktiivisilla tilauksilla"
+        },
+        "inactive": {
+          "title": "Ei-aktiivinen",
+          "description": "Suodata ei-aktiivisilla tilauksilla"
+        }
+      },
+      "paymentDate": {
+        "title": "Maksupäivä",
+        "all": {
+          "title": "Kaikki",
+          "description": "Poista kaikki maksupäivän suodattimet käytöstä"
+        },
+        "thisMonth": {
+          "title": "Tämä kuukausi",
+          "description": "Suodata tällä kuukaudella"
+        },
+        "next30Days": {
+          "title": "Seuraavat 30 päivää",
+          "description": "Suodata seuraavilla 30 päivällä"
+        }
+      },
+      "currencies": {
+        "title": "Valuutat",
+        "all": {
+          "description": "Valitse kaikki valuutat"
+        },
+        "clear": {
+          "description": "Tyhjennä kaikki valuutat"
+        },
+        "filter": "Suodata valuutalla {currency}"
+      },
+      "categories": {
+        "title": "Kategoriat",
+        "uncategorized": "Luokittelematon",
+        "all": {
+          "description": "Valitse kaikki kategoriat"
+        },
+        "clear": {
+          "description": "Tyhjennä kaikki kategoriat"
+        },
+        "filterBy": "Suodata kategorialla {category}"
+      },
+      "paymentMethods": {
+        "title": "Maksutavat",
+        "unspecified": "Määrittelemätön",
+        "all": {
+          "description": "Valitse kaikki maksutavat"
+        },
+        "clear": {
+          "description": "Tyhjennä kaikki maksutavat"
+        },
+        "filterBy": "Suodata maksutavalla {method}"
+      }
+    },
+    "reports": {
+      "subscription": {
+        "willBePaid": "{price} maksetaan {count, plural, one {# kerran} other {# kertaa}}"
+      },
+      "overview": {
+        "title": "Yleiskatsaus",
+        "total": "<count></count> tilausta yhteensä",
+        "active": "<count></count> aktiivista tilausta",
+        "inactive": "<count></count> ei-aktiivista tilausta"
+      },
+      "costAverages": {
+        "title": "Kustannusten keskiarvot",
+        "description": "Kuukausittaiset ja vuosittaiset tilausten kustannusten keskiarvot",
+        "monthly": "Kuukausittainen keskiarvo",
+        "yearly": "Vuosittainen keskiarvo"
+      },
+      "monthlyCost": {
+        "title": "Kuukausittaisten kustannusten yleiskatsaus",
+        "description": "Seuraa kuukausittaisia tilauskulujasi"
+      },
+      "yearlyCost": {
+        "title": "Vuosittaisten kustannusten yleiskatsaus",
+        "description": "Seuraa vuosittaisia tilauskulujasi"
+      },
+      "upcomingPayments": {
+        "title": "Tulevat maksut",
+        "description": "Seuraa tulevia maksujasi",
+        "noPayments": "Ei tulevia maksuja kuukauteen.",
+        "nextMonth": "Seuraava kuukausi"
+      },
+      "periods": {
+        "thisMonth": {
+          "title": "Tämä kuukausi",
+          "description": "Kuukauden loppuun asti"
+        },
+        "nextMonth": {
+          "title": "Seuraava kuukausi",
+          "description": "Vain tuleva kuukausi"
+        },
+        "next30Days": {
+          "title": "Seuraavat 30 päivää",
+          "description": "Liukuva jakso"
+        },
+        "thisYear": {
+          "title": "Tämä vuosi",
+          "description": "Vuoden loppuun asti"
+        },
+        "nextYear": {
+          "title": "Ensi vuosi",
+          "description": "Seuraava kalenterivuosi"
+        },
+        "next365Days": {
+          "title": "Seuraavat 365 päivää",
+          "description": "Liukuva jakso"
+        }
+      },
+      "tabs": {
+        "byCategories": "Kategorioittain",
+        "byPaymentMethods": "Maksutavoittain"
+      },
+      "mostExpensive": {
+        "monthly": "Kallein kuukausittainen tilaus",
+        "yearly": "Kallein vuosittainen tilaus"
+      },
+      "modal": {
+        "category": {
+          "description": "{period} maksut tässä kategoriassa",
+          "noSubscriptions": "Tässä kategoriassa ei ole tilauksia"
+        },
+        "paymentMethod": {
+          "description": "{period} maksut tällä maksutavalla",
+          "noSubscriptions": "Tällä maksutavalla ei ole tilauksia"
+        }
+      }
+    },
+    "view": {
+      "buttons": {
+        "link": "Linkki",
+        "linkTitle": "Tilauksen linkki",
+        "editTitle": "Muokkaa tilausta"
+      },
+      "overview": {
+        "title": "Yleiskatsaus",
+        "description": "Tämän tilauksen keskeiset mittarit",
+        "disabled": "Tämä tilaus on tällä hetkellä poistettu käytöstä. Voit ottaa sen käyttöön milloin tahansa.",
+        "unpaid": {
+          "hasUnpaid": "Voi ei! Sinulla on <count>{count, plural, one {# maksamaton maksu} other {# maksamatonta maksua}}</count> tälle tilaukselle yhteensä <total>{total}</total>.",
+          "allPaid": "Hyvää työtä! Tämä tilaus on täysin maksettu tähän päivään asti."
+        },
+        "nextPayment": {
+          "scheduled": "Seuraava maksusi <price>{price}</price> erääntyy <date>{date}</date>, joka on <distance>{distance}</distance>.",
+          "none": "Onnittelut! Tälle tilaukselle ei ole aikataulutettuja tulevia maksuja."
+        },
+        "endDate": {
+          "hasEndDate": "Tämä tilaus päättyy <date>{date}</date>.",
+          "ongoing": "Tämä on jatkuva tilaus ilman määritettyä päättymispäivää."
+        },
+        "remainingPayments": {
+          "withEndDate": "Tämä tilaus vaatii <count>{count, plural, one {# maksun} other {# maksua}}</count> yhteensä <total>{total}</total>.",
+          "thisYear": "Tämä tilaus vaatii <count>{count, plural, one {# maksun} other {# maksua}}</count> tänä vuonna, yhteensä <total>{total}</total>."
+        },
+        "paymentMethods": {
+          "text": "Tämä tilaus maksetaan kautta <methods></methods>."
+        },
+        "pastPayments": {
+          "hasPast": "Olet tehnyt <countTag>{count, plural, one {# maksun} other {# maksua}}</countTag> tälle tilaukselle tähän mennessä, yhteensä <totalTag>{total}</totalTag>.",
+          "yearStats": " Viimeisen vuoden aikana teit <countTag>{count, plural, one {# maksun} other {# maksua}}</countTag>, yhteensä <totalTag>{total}</totalTag>.",
+          "none": "Tämä on tilaus, jolla ei ole vielä maksuhistoriaa."
+        },
+        "notifications": {
+          "title": "Saat ilmoituksia:",
+          "none": "Tälle tilaukselle ei ole määritetty ilmoituksia.",
+          "item": "<timing></timing> kautta <channels></channels>.",
+          "itemNoType": "<timing></timing> mutta <error>ilmoitustyyppiä ei ole määritetty</error>.",
+          "timing": {
+            "instant": "Maksupäivänä",
+            "minutes": "{count, plural, one {# minuutti} other {# minuuttia}} ennen maksua",
+            "hours": "{count, plural, one {# tunti} other {# tuntia}} ennen maksua",
+            "days": "{count, plural, one {# päivä} other {# päivää}} ennen maksua",
+            "weeks": "{count, plural, one {# viikko} other {# viikkoa}} ennen maksua"
+          },
+          "types": {
+            "email": "sähköposti",
+            "push": "push-ilmoitus",
+            "webhook": "webhook",
+            "ntfy": "ntfy",
+            "discord": "discord",
+            "slack": "slack"
+          }
+        },
+        "nextNotification": {
+          "text": "Seuraava ilmoitus tulee <date>{date}</date>, joka on <distance>{distance}</distance> kautta <channels></channels>.",
+          "soon": "pian"
+        }
+      },
+      "costBreakdown": {
+        "title": "Kustannuserittely",
+        "description": "Tulevat kulut tälle tilaukselle",
+        "periods": {
+          "30days": "Seuraavat 30 päivää",
+          "3months": "Seuraavat 3 kuukautta",
+          "12months": "Seuraavat 12 kuukautta"
+        }
+      },
+      "notes": {
+        "title": "Muistiinpanot"
+      },
+      "paymentSchedule": {
+        "title": "Maksuaikataulu",
+        "description": "Tulevat maksupäivät vuoden aikana",
+        "noUpcoming": "Ei tulevia maksuja",
+        "more": "+ {count} lisää",
+        "totalPayments": "Maksuja yhteensä:",
+        "total": "Yhteensä:"
+      },
+      "latestPayments": {
+        "title": "Viimeisimmät maksut",
+        "description": "Viimeisimmät maksut tälle tilaukselle",
+        "none": "Tälle tilaukselle ei ole vielä tallennettu aiempia maksuja.",
+        "status": {
+          "onTime": "ajallaan",
+          "late": "{distance} myöhässä",
+          "early": "{distance} etuajassa"
+        },
+        "popover": {
+          "paidStatus": "Tämä tilaus on maksettu <status>{status}</status>.",
+          "scheduled": "Aikataulutettu:",
+          "actual": "Todellinen:"
+        }
+      }
+    },
+    "addToHomeScreen": {
+      "title": "Asenna sovelluksena",
+      "description": "Parhaan kokemuksen saamiseksi suosittelemme sovelluksen asentamista aloitusnäytöllesi!",
+      "buttons": {
+        "gotIt": "Selvä",
+        "maybeLater": "Ehkä myöhemmin",
+        "installNow": "Asenna nyt"
+      },
+      "common": {
+        "addToHomeScreen": "Lisää aloitusnäytölle",
+        "clickIcon": "Napsauta <icon></icon> kuvaketta",
+        "scrollDownClick": "Vieritä alas ja napsauta"
+      },
+      "ios": {
+        "safari": {
+          "title": "iOS-asennusohjeet",
+          "step3": "Vahvista napauttamalla 'Lisää'"
+        },
+        "chrome": {
+          "title": "Chrome iOS:ssä -asennusohjeet"
+        },
+        "firefox": {
+          "title": "Firefox iOS:ssä -asennusohjeet",
+          "step2": "Vieritä alas ja napsauta <icon></icon> painiketta",
+          "step3": "Napsauta sitten"
+        }
+      },
+      "android": {
+        "chrome": {
+          "title": "Chrome-asennusohjeet"
+        },
+        "firefox": {
+          "title": "Firefox-asennusohjeet"
+        }
+      },
+      "unknown": {
+        "title": "Asennusohjeet",
+        "step1": "Etsi vaihtoehto kuten \"Lisää aloitusnäytölle\" tai \"Asenna sovellus\" selaimesi valikosta",
+        "step2": "Vaihtoehto löytyy yleensä päävalikosta (usein kolme pistettä tai viivaa)",
+        "step3": "Seuraa selaimesi erityisiä asennusohjeita"
+      }
+    },
+    "cookieConsent": {
+      "title": "Evästeasetukset",
+      "description": "Valitse, mitkä evästeet haluat hyväksyä. Välttämättömiä evästeitä ei voi poistaa käytöstä, koska ne ovat tarpeen verkkosivuston toiminnalle.",
+      "essential": {
+        "title": "Välttämättömät evästeet",
+        "description": "Vaaditaan verkkosivuston toimintaan (tunnistautuminen, turvallisuus)."
+      },
+      "functional": {
+        "title": "Toiminnalliset evästeet",
+        "description": "Parantavat käyttökokemustasi (teema, kieliasetukset)."
+      },
+      "analytics": {
+        "title": "Analytiikkaevästeet",
+        "description": "Auttavat meitä ymmärtämään, miten kävijät ovat vuorovaikutuksessa verkkosivustomme kanssa."
+      },
+      "buttons": {
+        "savePreferences": "Tallenna asetukset",
+        "acceptAll": "Hyväksy kaikki"
+      }
+    },
+    "modeToggle": {
+      "toggleTheme": "Vaihda teemaa",
+      "dark": "Tumma",
+      "light": "Vaalea",
+      "system": "Järjestelmä"
+    },
+    "pricingTable": {
+      "enjoy": {
+        "title": "Nauti",
+        "description": "Täydellinen vaivattomaan kokemukseen",
+        "period": "+vero/kk",
+        "features": {
+          "unlimited": "Rajattomat tilaukset",
+          "notifications": "Sähköposti- ja push-ilmoitukset",
+          "reports": "Raportit ja analytiikka",
+          "support": "Premium-tuki",
+          "firstMonth": "Ensimmäinen kuukausi ilmaiseksi",
+          "priority": "Ensisijainen ominaisuuspyynnöt"
+        },
+        "button": "Aloita"
+      },
+      "selfHosted": {
+        "title": "Itse isännöity",
+        "description": "Täydellinen itse isännöijille",
+        "price": "Ilmainen",
+        "period": "ikuisesti",
+        "features": {
+          "infrastructure": "Oma infrastruktuurisi",
+          "sourceCode": "Pääsy lähdekoodiin",
+          "community": "Yhteisötuki"
+        },
+        "button": "Katso GitHubissa"
+      }
+    },
+    "searchBar": {
+      "placeholder": "Etsi..."
+    },
+    "subscriptionGuard": {
+      "title": "Tilaus vaaditaan",
+      "description": {
+        "trialExpired": "Kokeilujaksosi on päättynyt.",
+        "cancelled": "Tilauksesi on peruutettu.",
+        "pastDue": "Maksusi on myöhässä.",
+        "paused": "Tilauksesi on keskeytetty.",
+        "default": "Tarvitset aktiivisen tilauksen päästäksesi tähän ominaisuuteen."
+      },
+      "message": "Käy tilisivullasi hallitaksesi tilauksiasi ja jatkaaksesi kaikkien ominaisuuksien käyttöä.",
+      "button": "Siirry tiliasetuksiin"
+    }
+  }
+}

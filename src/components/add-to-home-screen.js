@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -14,24 +15,27 @@ import { Icons } from '@/components/icons';
 import { useAuth } from '@/lib/auth-client';
 
 const AddToIosSafari = () => {
+  const t = useTranslations('components.addToHomeScreen.ios.safari');
+  const tCommon = useTranslations('components.addToHomeScreen.common');
+
   return (
     <>
-      <div className='text-sm font-semibold'>iOS Installation Steps</div>
+      <div className='text-sm font-semibold'>{t('title')}</div>
       <ol className='list-disc pl-4 text-muted-foreground text-sm space-y-1'>
         <li>
-          Click the <Icons.share className='size-4 inline' /> icon
+          {tCommon.rich('clickIcon', {
+            icon: () => <Icons.share className='size-4 inline' />
+          })}
         </li>
         <li>
-          Scroll down and click
+          {tCommon('scrollDownClick')}
           <br/>
           <span className='inline-flex items-center gap-1 border rounded-md px-2 py-1 mt-1'>
-            <Icons.squarePlus className='size-4' /> Add to Home Screen
+            <Icons.squarePlus className='size-4' /> {tCommon('addToHomeScreen')}
           </span>
         </li>
         <li>
-          <span>
-            Tap &apos;Add&apos; to confirm
-          </span>
+          {t('step3')}
         </li>
       </ol>
     </>
@@ -39,18 +43,23 @@ const AddToIosSafari = () => {
 };
 
 const AddToIosChrome = () => {
+  const t = useTranslations('components.addToHomeScreen.ios.chrome');
+  const tCommon = useTranslations('components.addToHomeScreen.common');
+
   return (
     <>
-      <div className='text-sm font-semibold'>Chrome on iOS Installation Steps</div>
+      <div className='text-sm font-semibold'>{t('title')}</div>
       <ol className='list-disc pl-4 text-muted-foreground text-sm space-y-1'>
         <li>
-          Click the <Icons.share className='size-4 inline' /> icon
+          {tCommon.rich('clickIcon', {
+            icon: () => <Icons.share className='size-4 inline' />
+          })}
         </li>
         <li>
-          Scroll down and click
+          {tCommon('scrollDownClick')}
           <br/>
           <span className='inline-flex items-center gap-1 border rounded-md px-2 py-1 mt-1'>
-            <Icons.squarePlus className='size-4' fill='currentColor' /> Add to Home Screen
+            <Icons.squarePlus className='size-4' fill='currentColor' /> {tCommon('addToHomeScreen')}
           </span>
         </li>
       </ol>
@@ -59,18 +68,23 @@ const AddToIosChrome = () => {
 };
 
 const AddToChrome = () => {
+  const t = useTranslations('components.addToHomeScreen.android.chrome');
+  const tCommon = useTranslations('components.addToHomeScreen.common');
+
   return (
     <>
-      <div className='text-sm font-semibold'>Chrome Installation Steps</div>
+      <div className='text-sm font-semibold'>{t('title')}</div>
       <ol className='list-disc pl-4 text-muted-foreground text-sm space-y-1'>
         <li>
-          Click the <Icons.ellipsisVertical className='size-4 inline' /> icon
+          {tCommon.rich('clickIcon', {
+            icon: () => <Icons.ellipsisVertical className='size-4 inline' />
+          })}
         </li>
         <li>
-          Scroll down and click
+          {tCommon('scrollDownClick')}
           <br/>
           <span className='inline-flex items-center gap-1 border rounded-md px-2 py-1 mt-1'>
-            <Icons.addToHomeScreen className='size-4' fill='currentColor' /> Add to Home Screen
+            <Icons.addToHomeScreen className='size-4' fill='currentColor' /> {tCommon('addToHomeScreen')}
           </span>
         </li>
       </ol>
@@ -79,21 +93,28 @@ const AddToChrome = () => {
 };
 
 const AddToIosFirefox = () => {
+  const t = useTranslations('components.addToHomeScreen.ios.firefox');
+  const tCommon = useTranslations('components.addToHomeScreen.common');
+
   return (
     <>
-      <div className='text-sm font-semibold'>Firefox on iOS Installation Steps</div>
+      <div className='text-sm font-semibold'>{t('title')}</div>
       <ol className='list-disc pl-4 text-muted-foreground text-sm space-y-1'>
         <li>
-          Click the <Icons.menu className='size-4 inline' /> icon
+          {tCommon.rich('clickIcon', {
+            icon: () => <Icons.menu className='size-4 inline' />
+          })}
         </li>
         <li>
-          Scroll down and click <Icons.share className='size-4 inline' /> button
+          {t.rich('step2', {
+            icon: () => <Icons.share className='size-4 inline' />
+          })}
         </li>
         <li>
-          Then click
+          {t('step3')}
           <br/>
           <span className='inline-flex items-center gap-1 border rounded-md px-2 py-1 mt-1'>
-            <Icons.squarePlus className='size-4' /> Add to Home Screen
+            <Icons.squarePlus className='size-4' /> {tCommon('addToHomeScreen')}
           </span>
         </li>
       </ol>
@@ -102,18 +123,23 @@ const AddToIosFirefox = () => {
 };
 
 const AddToFirefox = () => {
+  const t = useTranslations('components.addToHomeScreen.android.firefox');
+  const tCommon = useTranslations('components.addToHomeScreen.common');
+
   return (
     <>
-      <div className='text-sm font-semibold'>Firefox Installation Steps</div>
+      <div className='text-sm font-semibold'>{t('title')}</div>
       <ol className='list-disc pl-4 text-muted-foreground text-sm space-y-1'>
         <li>
-          Click the <Icons.ellipsisVertical className='size-4 inline' /> icon
+          {tCommon.rich('clickIcon', {
+            icon: () => <Icons.ellipsisVertical className='size-4 inline' />
+          })}
         </li>
         <li>
-          Scroll down and click
+          {tCommon('scrollDownClick')}
           <br/>
           <span className='inline-flex items-center gap-1 border rounded-md px-2 py-1 mt-1'>
-            <Icons.addToHomeScreen className='size-4' fill='currentColor' /> Add to Home Screen
+            <Icons.addToHomeScreen className='size-4' fill='currentColor' /> {tCommon('addToHomeScreen')}
           </span>
         </li>
       </ol>
@@ -122,19 +148,15 @@ const AddToFirefox = () => {
 };
 
 const AddToUnknown = () => {
+  const t = useTranslations('components.addToHomeScreen.unknown');
+
   return (
     <>
-      <div className='text-sm font-semibold'>Installation Steps</div>
+      <div className='text-sm font-semibold'>{t('title')}</div>
       <ol className='list-disc pl-4 text-muted-foreground text-sm space-y-1'>
-        <li>
-          Look for an option like &quot;Add to Home Screen&quot; or &quot;Install App&quot; in your browser&apos;s menu
-        </li>
-        <li>
-          The option is usually found in the main menu (often represented by three dots or lines)
-        </li>
-        <li>
-          Follow your browser&apos;s specific installation prompts
-        </li>
+        <li>{t('step1')}</li>
+        <li>{t('step2')}</li>
+        <li>{t('step3')}</li>
       </ol>
     </>
   );
@@ -145,6 +167,7 @@ const DELAY_DAYS = 400;
 const MIN_VISITS = 5;
 
 function AddToHomeScreenContent() {
+  const t = useTranslations('components.addToHomeScreen');
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isInstallSupported, setIsInstallSupported] = useState(false);
@@ -324,12 +347,12 @@ function AddToHomeScreenContent() {
     <ResponsiveDialog open={isVisible} onOpenChange={handleClose}>
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Install as Application</ResponsiveDialogTitle>
+          <ResponsiveDialogTitle>{t('title')}</ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
         <ResponsiveDialogBody className=''>
           <div className='flex flex-col gap-4'>
             <div>
-              For the best experience, we recommend installing the app to your home screen!
+              {t('description')}
             </div>
             {!isInstallSupported && (
               <>
@@ -353,11 +376,11 @@ function AddToHomeScreenContent() {
         </ResponsiveDialogBody>
         <ResponsiveDialogFooter>
           <Button variant='outline' onClick={handleClose}>
-            {!isInstallSupported ? 'Got it' : 'Maybe Later'}
+            {!isInstallSupported ? t('buttons.gotIt') : t('buttons.maybeLater')}
           </Button>
           {isInstallSupported && (
             <Button onClick={handleAddToHomeScreen}>
-              Install Now
+              {t('buttons.installNow')}
             </Button>
           )}
         </ResponsiveDialogFooter>

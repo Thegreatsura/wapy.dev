@@ -31,6 +31,8 @@ model User {
   timezone          String          @default("Europe/Helsinki")
   // Default currency
   currency          String          @default("EUR")
+  // Default language
+  language          String          @default("en")
   // Default notifications
   // time can be INSTANT, MINUTES, HOURS, DAYS, WEEKS
   // type is an array of PUSH + EMAIL + WEBHOOK + NTFY + DISCORD + SLACK

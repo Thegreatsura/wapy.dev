@@ -85,6 +85,10 @@ export const auth = betterAuth({
         type: "boolean",
         required: false,
       },
+			language: {
+        type: "string",
+        required: false,
+      },
 			externalServices: {
         type: "json",
         required: false,

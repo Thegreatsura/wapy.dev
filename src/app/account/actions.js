@@ -1,5 +1,6 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import { useAuthServer } from '@/lib/auth-server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
@@ -26,28 +27,6 @@ import {
   SchemaSlackService,
 } from './schema';
 import { siteConfig } from '@/components/config';
-
-export const UserGetCategories = async () => {
-  const {isAuthenticated, getUserId} = await useAuthServer();
-  if (!isAuthenticated()) {
-    throw new Error('Unauthorized');
-  }
-
-  const categories = await prisma.category.findMany({
-    where: {
-      userId: getUserId(),
-    },
-    orderBy: {
-      name: 'asc'
-    },
-  });
-
-  return categories.map((category) => ({
-    id: category.id,
-    name: category.name,
-    color: category.color
-  }));
-};
 
 export const UserLoadDefaultCategories = async () => {
   const {isAuthenticated, getUserId} = await useAuthServer();
@@ -139,28 +118,6 @@ export const UserSaveCategory = async (category) => {
     name: updatedCategory.name,
     color: updatedCategory.color
   };
-};
-
-export const UserGetPaymentMethods = async () => {
-  const {isAuthenticated, getUserId} = await useAuthServer();
-  if (!isAuthenticated()) {
-    throw new Error('Unauthorized');
-  }
-
-  const paymentMethods = await prisma.paymentMethod.findMany({
-    where: {
-      userId: getUserId(),
-    },
-    orderBy: {
-      name: 'asc'
-    },
-  });
-
-  return paymentMethods.map((paymentMethod) => ({
-    id: paymentMethod.id,
-    name: paymentMethod.name,
-    icon: paymentMethod.icon,
-  }));
 };
 
 export const UserLoadDefaultPaymentMethods = async () => {
@@ -518,13 +475,16 @@ export const UserTestNtfy = async (config) => {
     }
   }
 
+  const t = await getTranslations('pages.account.externalServices.testNotification');
+  const tCommon = await getTranslations('common');
+
   const success = await SendNtfy(validatedData, {
-    title: `${siteConfig.name} Test Notification`,
-    message: `This is a test notification from ${siteConfig.name}. Your ntfy integration is configured correctly.`,
+    title: t('title', { siteName: siteConfig.name }),
+    message: t('message', { siteName: siteConfig.name, service: 'ntfy' }),
     actions: [
       {
         action: 'view',
-        label: 'View',
+        label: tCommon('view'),
         url: siteConfig.url,
         clear: true
       }
@@ -586,13 +546,14 @@ export const UserTestWebhook = async (config) => {
     return { success: false };
   }
   const validatedData = result.data;
+  const t = await getTranslations('pages.account.externalServices.testNotification');
 
   const success = await SendWebhook(
     validatedData.url,
     {
       event: 'test-notification',
-      title: `${siteConfig.name} Test Notification`,
-      message: `This is a test webhook from ${siteConfig.name}. Your webhook integration is configured correctly.`,
+      title: t('title', { siteName: siteConfig.name }),
+      message: t('message', { siteName: siteConfig.name, service: 'webhook' }),
       tags: ['wapy.dev'],
       timestamp: new Date().toISOString(),
     }
@@ -653,11 +614,23 @@ export const UserTestDiscord = async (config) => {
     return { success: false };
   }
 
+  const t = await getTranslations('pages.account.externalServices.testNotification');
+  const tExternal = await getTranslations('notifications.externalServices');
+  const tPayment = await getTranslations('notifications.subscription.payment');
+
   const success = await SendDiscord(
     result.data,
     {
-      title: `${siteConfig.name} Test Notification`,
-      message: `This is a test Discord message from ${siteConfig.name}. Your Discord integration is configured correctly.`,
+      title: t('title', { siteName: siteConfig.name }),
+      message: t('message', { siteName: siteConfig.name, service: 'Discord' }),
+      translations: {
+        header: tExternal('header', { siteName: siteConfig.name }),
+        paymentQuestion: tExternal('paymentQuestion'),
+        markAsPaid: tPayment('markAsPaid'),
+        viewDetails: tExternal('viewDetails'),
+        visitDashboard: tExternal('visitDashboard'),
+        footer: tExternal('footer', { siteName: siteConfig.name }),
+      },
     }
   );
 
@@ -716,11 +689,21 @@ export const UserTestSlack = async (config) => {
     return { success: false };
   }
 
+  const t = await getTranslations('pages.account.externalServices.testNotification');
+  const tExternal = await getTranslations('notifications.externalServices');
+  const tPayment = await getTranslations('notifications.subscription.payment');
+
   const success = await SendSlack(
     result.data,
     {
-      title: `${siteConfig.name} Test Notification`,
-      message: `This is a test Slack message from ${siteConfig.name}. Your Slack integration is configured correctly.`,
+      title: t('title', { siteName: siteConfig.name }),
+      message: t('message', { siteName: siteConfig.name, service: 'Slack' }),
+      translations: {
+        header: tExternal('header', { siteName: siteConfig.name }),
+        markAsPaid: tPayment('markAsPaid'),
+        visitDashboard: tExternal('visitDashboard'),
+        footer: tExternal('footer', { siteName: siteConfig.name }),
+      },
     }
   );
 

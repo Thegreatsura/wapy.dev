@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { PushNotificationSubscribe } from '@/components/notifications/actions';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,46 +20,50 @@ import { useAuth } from '@/lib/auth-client';
 const STORAGE_KEY = 'notification-prompt-delay';
 const DELAY_DAYS = 30;
 
-const NotificationPermissionModal = ({ open, onOpenChange, onEnable, onMaybeLater, isEnabling }) => (
-  <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-    <ResponsiveDialogContent className='sm:max-w-[425px]'>
-      <ResponsiveDialogHeader>
-        <ResponsiveDialogTitle className='flex items-center gap-2'>
-          <Icons.bell className='size-6 text-primary' />
-          Stay updated
-        </ResponsiveDialogTitle>
-        <ResponsiveDialogDescription>
-          Get timely reminders about your subscription payments and due dates.
-          We&apos;ll notify you before payments are due and when subscriptions are about to expire.
-        </ResponsiveDialogDescription>
-      </ResponsiveDialogHeader>
-      <ResponsiveDialogFooter>
-        <Button
-          variant='outline'
-          onClick={onMaybeLater}
-          disabled={isEnabling}
-        >
-          Maybe Later
-        </Button>
-        <Button
-          onClick={onEnable}
-          disabled={isEnabling}
-        >
-          {isEnabling ? (
-            <>
-              <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-              Enabling...
-            </>
-          ) : (
-            'Enable Notifications'
-          )}
-        </Button>
-      </ResponsiveDialogFooter>
-    </ResponsiveDialogContent>
-  </ResponsiveDialog>
-);
+const NotificationPermissionModal = ({ open, onOpenChange, onEnable, onMaybeLater, isEnabling }) => {
+  const t = useTranslations('components.notifications.toggle.modal');
+
+  return (
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent className='sm:max-w-106.25'>
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle className='flex items-center gap-2'>
+            <Icons.bell className='size-6 text-primary' />
+            {t('title')}
+          </ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>
+            {t('description')}
+          </ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
+        <ResponsiveDialogFooter>
+          <Button
+            variant='outline'
+            onClick={onMaybeLater}
+            disabled={isEnabling}
+          >
+            {t('maybeLater')}
+          </Button>
+          <Button
+            onClick={onEnable}
+            disabled={isEnabling}
+          >
+            {isEnabling ? (
+              <>
+                <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+                {t('enabling')}
+              </>
+            ) : (
+              t('enable')
+            )}
+          </Button>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
+  );
+};
 
 const PushNotificationToggleContent = ({vapidPublicKey}) => {
+  const t = useTranslations('components.notifications.toggle.toast');
   const {
     showNotificationModal,
     setShowNotificationModal,
@@ -93,12 +98,12 @@ const PushNotificationToggleContent = ({vapidPublicKey}) => {
       });
 
       if (result.success) {
-        toast.success('You will now receive subscription reminders.');
+        toast.success(t('success'));
       } else {
-        toast.error('Failed to enable notifications. Please try again.');
+        toast.error(t('error'));
       }
     } catch (error) {
-      toast.error('Failed to enable notifications. Please try again.');
+      toast.error(t('error'));
     }
   };
 
@@ -111,8 +116,8 @@ const PushNotificationToggleContent = ({vapidPublicKey}) => {
         await subscribeUser();
       } else {
         localStorageSet();
-        toast.error('Permission Required', {
-          description: 'Please allow notifications to receive reminders.'
+        toast.error(t('permissionRequired.title'), {
+          description: t('permissionRequired.description')
         });
       }
     } catch (error) {

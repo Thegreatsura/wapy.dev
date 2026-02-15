@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { addYears } from 'date-fns';
 import { DateTimePicker } from '@/components/ui/datetime-picker';
 import {
@@ -10,9 +11,11 @@ import {
 } from '@/components/ui/form';
 
 export const FormFieldPaymentDate = ({ field }) => {
+  const t = useTranslations('components.subscriptions.form.fields.paymentDate');
+
   return (
     <FormItem className='flex flex-col'>
-      <FormLabel>Next Payment Date</FormLabel>
+      <FormLabel>{t('label')}</FormLabel>
       <FormControl>
         <DateTimePicker
           min={new Date()}

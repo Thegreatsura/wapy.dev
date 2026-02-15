@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   FormItem,
   FormLabel,
@@ -17,6 +18,8 @@ import {
 import { Input } from '@/components/ui/input';
 
 export const FormFieldCycle = ({ field }) => {
+  const t = useTranslations('components.subscriptions.form.fields.cycle');
+
   const convertCycleToWhen = (cycle) => {
     const { time = 'MONTHS', every = 1 } = cycle;
     if (time === 'DAYS' && every === 1) return 'DAILY';
@@ -37,18 +40,18 @@ export const FormFieldCycle = ({ field }) => {
   const [cycle, setCycle] = useState({when: convertCycleToWhen(field.value), time: field.value?.time || 'MONTHS', every: field?.value?.every ? field?.value?.every : 1 });
 
   const timeOptions = {
-    DAILY: 'Daily',
-    WEEKLY: 'Weekly',
-    MONTHLY: 'Monthly',
-    YEARLY: 'Annually',
-    CUSTOM: 'Custom',
+    DAILY: t('options.daily'),
+    WEEKLY: t('options.weekly'),
+    MONTHLY: t('options.monthly'),
+    YEARLY: t('options.yearly'),
+    CUSTOM: t('options.custom'),
   };
 
   const unitOptions = {
-    DAYS: { label: 'Day', min: 1 },
-    WEEKS: { label: 'Week', min: 1 },
-    MONTHS: { label: 'Month', min: 1 },
-    YEARS: { label: 'Year', min: 1 },
+    DAYS: { min: 1 },
+    WEEKS: { min: 1 },
+    MONTHS: { min: 1 },
+    YEARS: { min: 1 },
   };
 
   const handleWhenChange = (value) => {
@@ -62,7 +65,7 @@ export const FormFieldCycle = ({ field }) => {
 
   return (
     <FormItem>
-      <FormLabel>Billing Cycle</FormLabel>
+      <FormLabel>{t('label')}</FormLabel>
       <FormControl>
         <div className='flex flex-col gap-2'>
           <Select
@@ -70,7 +73,7 @@ export const FormFieldCycle = ({ field }) => {
             onValueChange={(value) => handleWhenChange(value)}
           >
             <SelectTrigger>
-              <SelectValue placeholder='Select billing cycle' value={cycle.when} />
+              <SelectValue placeholder={t('placeholder')} value={cycle.when} />
             </SelectTrigger>
             <SelectContent>
               {Object.entries(timeOptions).map(([key, label]) => (
@@ -116,12 +119,12 @@ export const FormFieldCycle = ({ field }) => {
                 className='flex-1 w-32'
               >
                 <SelectTrigger>
-                  <SelectValue placeholder='Unit' />
+                  <SelectValue placeholder={t('unitPlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(unitOptions).map(([key, option]) => (
                     <SelectItem key={key} value={key}>
-                      {`${option.label}${cycle.every > 1 ? 's' : ''}`}
+                      {t(`units.${key.toLowerCase()}`, { count: cycle.every })}
                     </SelectItem>
                   ))}
                 </SelectContent>

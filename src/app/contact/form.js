@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -19,16 +20,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { sendContactForm } from '@/app/contact/actions';
 import { Icons } from '@/components/icons';
 
-const formSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email_address: z.string().email('Invalid email address'),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-  honey_pot_email: z.string().optional(),
-});
-
 export function ContactForm() {
+  const t = useTranslations('pages.contact');
+  const tCommon = useTranslations('common');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const formSchema = z.object({
+    name: z.string().min(2, t('form.name.error')),
+    email_address: z.string().email(t('form.email.error')),
+    message: z.string().min(10, t('form.message.error')),
+    honey_pot_email: z.string().optional(),
+  });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -42,7 +45,7 @@ export function ContactForm() {
 
   const onSubmit = async (values) => {
     if (values.honey_pot_email) {
-      toast.error('An error occurred. Please try again later.');
+      toast.error(t('toast.spam'));
       return;
     }
 
@@ -56,9 +59,9 @@ export function ContactForm() {
 
       form.reset();
       setIsSubmitted(true);
-      toast.success('Your message has been sent successfully!');
+      toast.success(t('toast.success'));
     } catch (error) {
-      toast.error('Failed to send message. Please try again later.');
+      toast.error(t('toast.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -67,19 +70,19 @@ export function ContactForm() {
   return (
     <div className='flex flex-col gap-6 max-w-2xl'>
       <div className='space-y-2'>
-        <h1 className='text-3xl font-bold tracking-tight'>Contact Us</h1>
+        <h1 className='text-3xl font-bold tracking-tight'>{tCommon('contact')}</h1>
         <p className='text-muted-foreground text-lg'>
-          Have a question or want to get in touch? Fill out the form below and we&apos;ll get back to you as soon as possible.
+          {t('description')}
         </p>
       </div>
       {isSubmitted ? (
         <div className='rounded-lg border bg-card p-6 shadow-xs text-center space-y-4'>
           <Icons.check className='mx-auto h-12 w-12 text-green-500' />
-          <h2 className='text-2xl font-semibold'>Thank You!</h2>
+          <h2 className='text-2xl font-semibold'>{t('success.title')}</h2>
           <p className='text-muted-foreground'>
-            Your message has been sent successfully.
+            {t('success.message1')}
             <br />
-            We&apos;ll get back to you as soon as possible.
+            {t('success.message2')}
           </p>
         </div>
       ) : (
@@ -92,9 +95,9 @@ export function ContactForm() {
                   name='name'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>{t('form.name.label')}</FormLabel>
                       <FormControl>
-                        <Input placeholder='Your name' {...field} />
+                        <Input placeholder={t('form.name.placeholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -105,9 +108,9 @@ export function ContactForm() {
                   name='email_address'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t('form.email.label')}</FormLabel>
                       <FormControl>
-                        <Input type='email' placeholder='your@email.com' {...field} />
+                        <Input type='email' placeholder={t('form.email.placeholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -119,11 +122,11 @@ export function ContactForm() {
                 name='message'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Message</FormLabel>
+                    <FormLabel>{t('form.message.label')}</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder='Tell us how we can help...'
-                        className='min-h-[150px] resize-none'
+                        placeholder={t('form.message.placeholder')}
+                        className='min-h-37.5 resize-none'
                         {...field}
                       />
                     </FormControl>
@@ -144,14 +147,14 @@ export function ContactForm() {
                   pointerEvents: 'none',
                 }}
               />
-              <Button type='submit' title='Send Message' size='lg' className='w-full' disabled={isSubmitting}>
+              <Button type='submit' title={t('form.submit')} size='lg' className='w-full' disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
-                    Sending...
+                    {t('form.submitting')}
                   </>
                 ) : (
-                  'Send Message'
+                  t('form.submit')
                 )}
               </Button>
             </form>

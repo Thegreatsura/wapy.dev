@@ -1,5 +1,6 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import { withAuth } from '@/lib/with-auth';
 import { SignInForm } from './signin-form';
 
@@ -23,7 +24,8 @@ const PageLogin = async () => {
 export default withAuth(PageLogin, /* isProtected */ false, /* isRedirected */ true);
 
 export async function generateMetadata() {
+  const t = await getTranslations('common');
   return {
-    title: 'Sign In',
+    title: t('signIn'),
   };
 };

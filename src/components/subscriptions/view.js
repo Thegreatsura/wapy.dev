@@ -1,15 +1,14 @@
 'use client';
 
-import { useMemo, Fragment } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
+import { useTranslations, useFormatter } from 'next-intl';
 import {
-  format,
   addMonths,
   differenceInDays,
   addYears,
   isBefore,
   isPast,
-  formatDistanceToNowStrict,
   isEqual,
   formatDistanceStrict,
   differenceInMinutes,
@@ -31,7 +30,7 @@ import {
   SubscriptionGetUpcomingPayments,
   SubscriptionGetNextFuturePaymentDate,
 } from '@/components/subscriptions/lib';
-import { getCycleLabel, getPaymentCount, formatPrice } from '@/components/subscriptions/utils';
+import { getPaymentCount, formatPrice } from '@/components/subscriptions/utils';
 import { cn } from '@/lib/utils';
 import {
   Popover,
@@ -40,6 +39,10 @@ import {
 } from '@/components/ui/popover';
 
 export function SubscriptionView({ subscription, externalServices }) {
+  const t = useTranslations('components.view');
+  const tCycle = useTranslations('components.subscriptions.cycles');
+  const tCommon = useTranslations('common');
+  const formatter = useFormatter();
   const parsedIcon = subscription.logo ? JSON.parse(subscription.logo) : false;
   const maxUpcomingPayments = 20;
 
@@ -110,7 +113,7 @@ export function SubscriptionView({ subscription, externalServices }) {
     <div className='w-full max-w-3xl flex flex-col gap-6'>
       <div className='flex flex-col items-center gap-4 w-full'>
         <div className='relative mt-2'>
-          <div className={cn('size-6 rounded-full absolute -top-0 -right-0 ring-2 ring-background',
+          <div className={cn('size-6 rounded-full absolute top-0 right-0 ring-2 ring-background',
             {'bg-green-500': subscription.enabled},
             {'bg-red-500': !subscription.enabled}
           )} />
@@ -125,8 +128,8 @@ export function SubscriptionView({ subscription, externalServices }) {
           <h1 className='text-3xl font-bold'>
             {subscription.name}
           </h1>
-          <p className='text-lg break-words font-medium tabular-nums'>
-            {formatPrice(subscription.price, subscription.currency)}{' / '}{getCycleLabel(subscription.cycle)}
+          <p className='text-lg wrap-break-word font-medium tabular-nums'>
+            {formatPrice(subscription.price, subscription.currency)}{' / '}{tCycle(subscription.cycle.time, { count: subscription.cycle.every })}
           </p>
         </div>
 
@@ -150,16 +153,16 @@ export function SubscriptionView({ subscription, externalServices }) {
         <div className='flex flex-col sm:flex-row gap-4 gap-4 w-full max-w-sm items-center justify-center'>
           {subscription.url && (
             <Button className='w-full sm:w-auto max-w-xs sm:basis-sm' asChild>
-              <Link href={subscription.url} target='_blank' rel='noopener noreferrer' title='Subscription Link'>
+              <Link href={subscription.url} target='_blank' rel='noopener noreferrer' title={t('buttons.linkTitle')}>
                 <Icons.link />
-              Link
-            </Link>
-          </Button>
+                {t('buttons.link')}
+              </Link>
+            </Button>
           )}
           <Button variant='outline' className='w-full sm:w-auto max-w-xs sm:basis-sm' asChild>
-            <Link href={`/edit/${subscription.id}`} title='Edit Subscription'>
+            <Link href={`/edit/${subscription.id}`} title={t('buttons.editTitle')}>
               <Icons.edit />
-              Edit
+              {tCommon('edit')}
             </Link>
           </Button>
         </div>
@@ -167,14 +170,14 @@ export function SubscriptionView({ subscription, externalServices }) {
 
       <Card className='text-left'>
         <CardHeader>
-          <CardTitle>Overview</CardTitle>
-          <CardDescription>Key metrics for this subscription</CardDescription>
+          <CardTitle>{t('overview.title')}</CardTitle>
+          <CardDescription>{t('overview.description')}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-3'>
           {!subscription.enabled && (
             <div className='flex items-center gap-2 p-4 rounded-lg border-l-4 border-l-red-500 bg-red-500/10'>
               <p className='text-sm'>
-                This subscription is currently disabled. You can enable it again at any time.
+                {t('overview.disabled')}
               </p>
             </div>
           )}
@@ -187,11 +190,12 @@ export function SubscriptionView({ subscription, externalServices }) {
               })}>
                 <p className='text-sm'>
                   {stats.unpaidPayments.count ? (
-                    <>
-                      Oh no! You have <span className='font-semibold'>{stats.unpaidPayments.count} unpaid payment{stats.unpaidPayments.count > 1 ? 's' : ''}</span> for this subscription totaling <span className='font-semibold tabular-nums'>{formatPrice(stats.unpaidPayments.total, subscription.currency)}</span>.
-                    </>
+                    t.rich('overview.unpaid.hasUnpaid', {
+                      count: () => <span className='font-semibold'>{stats.unpaidPayments.count}</span>,
+                      total: () => <span className='font-semibold tabular-nums'>{formatPrice(stats.unpaidPayments.total, subscription.currency)}</span>
+                    })
                   ) : (
-                    'Good job! This subscription is fully paid up to date.'
+                    t('overview.unpaid.allPaid')
                   )}
                 </p>
               </div>
@@ -199,25 +203,19 @@ export function SubscriptionView({ subscription, externalServices }) {
               <div className='flex items-center gap-2 px-4 py-2 rounded-lg border-l-4 border-l-muted-foreground'>
                 <p className='text-sm'>
                   {stats.nextPaymentDate ? (
-                    <>
-                      Your next payment of{' '}
-                      <span className='font-semibold tabular-nums'>
-                        {formatPrice(subscription.price, subscription.currency)}
-                      </span>
-                      {' '}
-                      is due on
-                      {' '}
-                      <span className='font-semibold'>
-                        {format(stats.nextPaymentDate, 'dd MMMM yyyy, HH:mm')}
-                      </span>
-                      {' which is '}
-                      <span className='font-semibold'>
-                        {formatDistanceToNowStrict(stats.nextPaymentDate, {addSuffix: true})}
-                      </span>
-                      {'.'}
-                    </>
+                    t.rich('overview.nextPayment.scheduled', {
+                      price: () => <span className='font-semibold tabular-nums'>{formatPrice(subscription.price, subscription.currency)}</span>,
+                      date: () => <span className='font-semibold'>{formatter.dateTime(stats.nextPaymentDate, {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}</span>,
+                      distance: () => <span className='font-semibold'>{formatter.relativeTime(stats.nextPaymentDate, {now: new Date()})}</span>
+                    })
                   ) : (
-                    'Congrats! There are no future payments scheduled for this subscription.'
+                    t('overview.nextPayment.none')
                   )}
                 </p>
               </div>
@@ -225,15 +223,15 @@ export function SubscriptionView({ subscription, externalServices }) {
               <div className='flex items-center gap-2 px-4 py-2 rounded-lg border-l-4 border-l-muted-foreground'>
                 <p className='text-sm'>
                   {subscription?.untilDate ? (
-                    <>
-                      This subscription will end on{' '}
-                      <span className='font-semibold'>
-                        {format(subscription.untilDate, 'dd MMMM yyyy')}
-                      </span>
-                      .
-                    </>
+                    t.rich('overview.endDate.hasEndDate', {
+                      date: () => <span className='font-semibold'>{formatter.dateTime(subscription.untilDate, {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                      })}</span>
+                    })
                   ) : (
-                    'This is an ongoing subscription with no specified end date.'
+                    t('overview.endDate.ongoing')
                   )}
                 </p>
               </div>
@@ -241,29 +239,15 @@ export function SubscriptionView({ subscription, externalServices }) {
               <div className='flex items-center gap-2 px-4 py-2 rounded-lg border-l-4 border-l-muted-foreground'>
                 <p className='text-sm'>
                   {subscription?.untilDate ? (
-                    <>
-                      This subscription will require{' '}
-                      <span className='font-semibold'>
-                        {stats.remainingPayments} payment{stats.remainingPayments !== 1 ? 's' : ''}
-                      </span>
-                      {' totaling '}
-                      <span className='font-semibold tabular-nums'>
-                        {formatPrice(stats.remainingPayments * subscription.price, subscription.currency)}
-                      </span>
-                      {'.'}
-                    </>
+                    t.rich('overview.remainingPayments.withEndDate', {
+                      count: () => <span className='font-semibold'>{stats.remainingPayments}</span>,
+                      total: () => <span className='font-semibold tabular-nums'>{formatPrice(stats.remainingPayments * subscription.price, subscription.currency)}</span>
+                    })
                   ) : (
-                    <>
-                      This subscription will require{' '}
-                      <span className='font-semibold'>
-                        {stats.payments.length} payment{stats.payments.length !== 1 ? 's' : ''}
-                      </span>
-                      {' this year, totaling '}
-                      <span className='font-semibold tabular-nums'>
-                        {formatPrice(stats.totalCost, subscription.currency)}
-                      </span>
-                      {'.'}
-                    </>
+                    t.rich('overview.remainingPayments.thisYear', {
+                      count: () => <span className='font-semibold'>{stats.payments.length}</span>,
+                      total: () => <span className='font-semibold tabular-nums'>{formatPrice(stats.totalCost, subscription.currency)}</span>
+                    })
                   )}
                 </p>
               </div>
@@ -271,27 +255,17 @@ export function SubscriptionView({ subscription, externalServices }) {
               {(subscription?.paymentMethods?.length || 0) > 0 && (
                 <div className='flex items-center gap-2 px-4 py-2 rounded-lg border-l-4 border-l-muted-foreground'>
                   <div className='block text-sm'>
-                    This subscription will be paid{' '}
-                    {subscription?.paymentMethods.map((paymentMethod, index) => {
-                        const isLast = index === subscription?.paymentMethods.length - 1;
-                        const separator =
-                          index === 0
-                            ? ' via '
-                            : isLast
-                            ? ' and '
-                            : ', ';
-
-                        return (
-                          <Fragment key={`pm-${index}`}>
-                            {separator}
-                            <div key={paymentMethod.name} className='inline-flex gap-1 align-bottom items-center'>
-                              <LogoIcon icon={paymentMethod.icon ? JSON.parse(paymentMethod.icon) : false} className='size-4' />
-                              <span className='font-semibold'>{paymentMethod.name}</span>
-                            </div>
-                          </Fragment>
-                        );
-                      })}
-                    {'.'}
+                    {t.rich('overview.paymentMethods.text', {
+                      methods: () => {
+                        const methodElements = subscription?.paymentMethods.map((paymentMethod) => (
+                          <span key={paymentMethod.name} className='inline-flex gap-1 align-bottom items-center'>
+                            <LogoIcon icon={paymentMethod.icon ? JSON.parse(paymentMethod.icon) : false} className='size-4' />
+                            <span className='font-semibold'>{paymentMethod.name}</span>
+                          </span>
+                        ));
+                        return formatter.list(methodElements, { type: 'conjunction', style: 'long' });
+                      }
+                    })}
                   </div>
                 </div>
               )}
@@ -300,36 +274,25 @@ export function SubscriptionView({ subscription, externalServices }) {
                 <p className='text-sm'>
                   {(subscription?.pastPayments?.totalCount || 0) > 0 ? (
                     <>
-                      You have made
-                      {' '}
-                      <span className='font-semibold'>
-                        {subscription.pastPayments.totalCount} payment{subscription.pastPayments.totalCount !== 1 ? 's' : ''}
-                      </span>
-                      {' '}
-                      for this subscription so far, totaling
-                      {' '}
-                      <span className='font-semibold tabular-nums'>
-                        {subscription.pastPayments.total.map(c => `${formatPrice(c.sum, c.currency)}`).join(' + ')}
-                      </span>
-                      {'.'}
+                      {t.rich('overview.pastPayments.hasPast', {
+                        count: subscription.pastPayments.totalCount,
+                        total: subscription.pastPayments.total.map(c => formatPrice(c.sum, c.currency)).join(' + '),
+                        // 3. Define the tag renderers for the style
+                        countTag: (chunks) => <span className='font-semibold'>{chunks}</span>,
+                        totalTag: (chunks) => <span className='font-semibold tabular-nums'>{chunks}</span>
+                      })}
                       {(subscription.pastPayments.yearCount || 0) > 0 && (
-                        <>
-                          {' '}
-                          In the past year, you made
-                          {' '}
-                          <span className='font-semibold'>
-                            {subscription.pastPayments.yearCount} payment{subscription.pastPayments.yearCount !== 1 ? 's' : ''}
-                          </span>
-                          , totaling{' '}
-                          <span className='font-semibold tabular-nums'>
-                            {subscription.pastPayments.year.map(c => `${formatPrice(c.sum, c.currency)}`).join(' + ')}
-                          </span>
-                          {'.'}
-                        </>
+                        t.rich('overview.pastPayments.yearStats', {
+                          count: subscription.pastPayments.yearCount,
+                          total: subscription.pastPayments.year.map(c => formatPrice(c.sum, c.currency)).join(' + '),
+                          // 3. Define the tag renderers for the style
+                          countTag: (chunks) => <span className='font-semibold'>{chunks}</span>,
+                          totalTag: (chunks) => <span className='font-semibold tabular-nums'>{chunks}</span>
+                        })
                       )}
                     </>
                   ) : (
-                    'This is a subscription with no payment history yet.'
+                    t('overview.pastPayments.none')
                   )}
                 </p>
               </div>
@@ -337,64 +300,53 @@ export function SubscriptionView({ subscription, externalServices }) {
               <div className='flex items-center gap-2 px-4 py-2 rounded-lg border-l-4 border-l-muted-foreground'>
                 {subscription?.notifications?.length > 0 ? (
                   <div className='text-sm flex flex-col gap-1'>
-                    You will receive notifications:
+                    {t('overview.notifications.title')}
                     {subscription.notifications.sort((a, b) => {
                         const timeOrder = { 'INSTANT': 0, 'MINUTES': 1, 'HOURS': 2, 'DAYS': 3, 'WEEKS': 4 };
                         return timeOrder[b.time] - timeOrder[a.time];
                       }).map((notification) => {
                         // Build list of notification methods
                         const notifyViaList = [
-                          notification.type.includes('EMAIL') && 'email',
-                          notification.type.includes('PUSH') && 'push notification',
-                          notification.type.includes('WEBHOOK') && externalServices?.webhook?.enabled && 'webhook',
-                          notification.type.includes('NTFY') && externalServices?.ntfy?.enabled && 'ntfy',
-                          notification.type.includes('DISCORD') && externalServices?.discord?.enabled && 'discord',
-                          notification.type.includes('SLACK') && externalServices?.slack?.enabled && 'slack',
+                          notification.type.includes('EMAIL') && t('overview.notifications.types.email'),
+                          notification.type.includes('PUSH') && t('overview.notifications.types.push'),
+                          notification.type.includes('WEBHOOK') && externalServices?.webhook?.enabled && t('overview.notifications.types.webhook'),
+                          notification.type.includes('NTFY') && externalServices?.ntfy?.enabled && t('overview.notifications.types.ntfy'),
+                          notification.type.includes('DISCORD') && externalServices?.discord?.enabled && t('overview.notifications.types.discord'),
+                          notification.type.includes('SLACK') && externalServices?.slack?.enabled && t('overview.notifications.types.slack'),
                         ].filter(Boolean);
-
-                        // Format "email, push notification and webhook"
-                        const notifyVia = notifyViaList.length === 0
-                          ? ''
-                          : notifyViaList.length === 1
-                            ? notifyViaList[0]
-                            : notifyViaList.length === 2
-                              ? notifyViaList.join(' and ')
-                              : notifyViaList.slice(0, -1).join(', ') + ' and ' + notifyViaList.slice(-1);
 
                         // Format timing text
                         const timing = notification.due === 0
-                            ? 'At the payment date'
+                            ? t('overview.notifications.timing.instant')
                             : notification.time === 'MINUTES'
-                              ? `${notification.due} minute${notification.due > 1 ? 's' : ''} before payment`
+                              ? t('overview.notifications.timing.minutes', { count: notification.due })
                             : notification.time === 'HOURS'
-                              ? `${notification.due} hour${notification.due > 1 ? 's' : ''} before payment`
+                              ? t('overview.notifications.timing.hours', { count: notification.due })
                             : notification.time === 'DAYS'
-                              ? `${notification.due} day${notification.due > 1 ? 's' : ''} before payment`
-                            : `${notification.due} week${notification.due > 1 ? 's' : ''} before payment`;
+                              ? t('overview.notifications.timing.days', { count: notification.due })
+                            : t('overview.notifications.timing.weeks', { count: notification.due });
 
                         return (
                           <p key={`${notification.time}-${notification.due}`}>
-                      {'• '}
-                            <span className='font-semibold'>{timing}</span>
-                            {notifyVia ? (
-                              <>
-                                {' via '}
-                                <span className='font-semibold'>{notifyVia}</span>
-                              </>
+                            {'• '}
+                            {notifyViaList.length > 0 ? (
+                              t.rich('overview.notifications.item', {
+                                timing: () => <span className='font-semibold'>{timing}</span>,
+                                channels: () => <span className='font-semibold'>{formatter.list(notifyViaList, { type: 'conjunction', style: 'long' })}</span>
+                              })
                             ) : (
-                              <>
-                                { ' but ' }
-                                <span className='text-red-500'>no notification type is set</span>
-                              </>
+                              t.rich('overview.notifications.itemNoType', {
+                                timing: () => <span className='font-semibold'>{timing}</span>,
+                                error: (chunks) => <span className='text-red-500'>{chunks}</span>
+                              })
                             )}
-                            {'.'}
                           </p>
                         );
                       })}
                   </div>
                 ) : (
                   <div className='text-sm'>
-                    No notifications are set up for this subscription.
+                    {t('overview.notifications.none')}
                   </div>
                 )}
               </div>
@@ -402,39 +354,24 @@ export function SubscriptionView({ subscription, externalServices }) {
               {subscription?.nextNotificationTime && (
                 <div className='flex items-center gap-2 px-4 py-2 rounded-lg border-l-4 border-l-muted-foreground'>
                   <p className='text-sm'>
-                      <>
-                        Next notification will be on
-                        {' '}
-                        <span className='font-semibold'>
-                          {format(subscription.nextNotificationTime, 'dd MMMM yyyy')}
-                        </span>
-                        {' which is '}
-                        <span className='font-semibold'>
-                          {isPast(subscription.nextNotificationTime) ? 'soon' : formatDistanceToNowStrict(subscription.nextNotificationTime, {addSuffix: true})}
-                        </span>
-                        {' via '}
-                        {subscription.nextNotificationDetails.type
+                    {t.rich('overview.nextNotification.text', {
+                      date: () => <span className='font-semibold'>{formatter.dateTime(subscription.nextNotificationTime, {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                      })}</span>,
+                      distance: () => <span className='font-semibold'>{isPast(subscription.nextNotificationTime) ? t('overview.nextNotification.soon') : formatter.relativeTime(subscription.nextNotificationTime, {now: new Date()})}</span>,
+                      channels: () => {
+                        const translatedChannels = subscription.nextNotificationDetails.type
                           .filter(type => (type !== 'WEBHOOK' || externalServices?.webhook?.enabled) && (type !== 'NTFY' || externalServices?.ntfy?.enabled) && (type !== 'DISCORD' || externalServices?.discord?.enabled) && (type !== 'SLACK' || externalServices?.slack?.enabled))
-                          .map((type, index) => (
-                            <span key={type}>
-                              {index > 0 && ' and '}
-                              <span className='font-semibold'>
-                                {type === 'EMAIL'
-                                  ? 'email'
-                                  : type === 'WEBHOOK'
-                                  ? 'webhook'
-                                  : type === 'NTFY'
-                                  ? 'ntfy'
-                                  : type === 'DISCORD'
-                                  ? 'discord'
-                                  : type === 'SLACK'
-                                  ? 'slack'
-                                  : 'push notification'}
-                              </span>
+                          .map((type) => (
+                            <span key={type} className='font-semibold'>
+                              {t(`overview.notifications.types.${type.toLowerCase()}`)}
                             </span>
-                        ))}
-                        {'.'}
-                      </>
+                          ));
+                        return formatter.list(translatedChannels, { type: 'conjunction', style: 'long' });
+                      }
+                    })}
                   </p>
                 </div>
               )}
@@ -445,22 +382,22 @@ export function SubscriptionView({ subscription, externalServices }) {
 
       <Card className='text-left'>
         <CardHeader>
-          <CardTitle>Cost Breakdown</CardTitle>
-          <CardDescription>Future spending for this subscription</CardDescription>
+          <CardTitle>{t('costBreakdown.title')}</CardTitle>
+          <CardDescription>{t('costBreakdown.description')}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-6'>
           <div className='flex flex-col gap-4'>
             {[
-              { period: '30 days', cost: stats.monthlyCost },
-              { period: '3 months', cost: stats.quarterlyCost },
-              { period: '12 months', cost: stats.yearlyCost }
+              { period: t('costBreakdown.periods.30days'), cost: stats.monthlyCost },
+              { period: t('costBreakdown.periods.3months'), cost: stats.quarterlyCost },
+              { period: t('costBreakdown.periods.12months'), cost: stats.yearlyCost }
             ].map(({ period, cost }) => (
               <div key={period} className='flex items-center justify-between'>
                 <div className='flex items-center gap-2 sm:gap-3'>
                   <div className='flex items-center justify-center'>
                     <Icons.calendar className='size-4 sm:size-5 text-primary' />
                   </div>
-                  <span className='text-sm font-medium'>Next {period}</span>
+                  <span className='text-sm font-medium'>{period}</span>
                 </div>
                 <span className='text-lg font-semibold tabular-nums'>
                   {formatPrice(cost, subscription.currency)}
@@ -474,7 +411,7 @@ export function SubscriptionView({ subscription, externalServices }) {
       {subscription?.notes && (
         <Card className='text-left'>
           <CardHeader>
-            <CardTitle>Notes</CardTitle>
+            <CardTitle>{t('notes.title')}</CardTitle>
           </CardHeader>
           <CardContent className='flex flex-wrap gap-2 whitespace-pre-wrap text-sm'>
             {subscription.notes}
@@ -484,13 +421,13 @@ export function SubscriptionView({ subscription, externalServices }) {
 
       <Card className='text-left'>
         <CardHeader>
-          <CardTitle>Payment Schedule</CardTitle>
-          <CardDescription>Upcoming payment dates in a year</CardDescription>
+          <CardTitle>{t('paymentSchedule.title')}</CardTitle>
+          <CardDescription>{t('paymentSchedule.description')}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-2'>
           <div className='divide-y divide-border'>
             {stats.payments.length === 0 ? (
-              <p className='text-muted-foreground'>No upcoming payments</p>
+              <p className='text-muted-foreground'>{t('paymentSchedule.noUpcoming')}</p>
             ) : (
               stats.payments.slice(0, maxUpcomingPayments).map((payment, index) => (
                 <div
@@ -505,7 +442,11 @@ export function SubscriptionView({ subscription, externalServices }) {
                   )}></div>
                   <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between w-full'>
                     <span className='truncate'>
-                      {format(payment.date, 'dd MMMM yyyy')}
+                      {formatter.dateTime(payment.date, {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                      })}
                     </span>
                     <span className='font-medium tabular-nums break-all'>
                       {formatPrice(payment.price, subscription.currency)}
@@ -517,17 +458,17 @@ export function SubscriptionView({ subscription, externalServices }) {
           </div>
           {stats.payments.length > maxUpcomingPayments && (
             <div className='text-center text-sm text-muted-foreground'>
-              + {stats.payments.length - maxUpcomingPayments} more
+              {t('paymentSchedule.more', { count: stats.payments.length - maxUpcomingPayments })}
             </div>
           )}
         </CardContent>
         <CardFooter className='flex flex-col sm:flex-row items-start sm:items-center justify-between border-t pt-4 text-left'>
           <div className='flex items-center gap-1 text-base font-medium'>
-            <span className='text-sm text-muted-foreground'>Total payments:</span>
+            <span className='text-sm text-muted-foreground'>{t('paymentSchedule.totalPayments')}</span>
             <span>{stats.payments.length}</span>
           </div>
           <div className='flex items-center gap-1 text-base font-medium'>
-            <span className='text-sm text-muted-foreground'>Total:</span>
+            <span className='text-sm text-muted-foreground'>{t('paymentSchedule.total')}</span>
             <span className='tabular-nums'>{formatPrice(stats.totalCost, subscription.currency)}</span>
           </div>
         </CardFooter>
@@ -535,19 +476,19 @@ export function SubscriptionView({ subscription, externalServices }) {
 
       <Card className='text-left'>
         <CardHeader>
-          <CardTitle>Latest Payments</CardTitle>
-          <CardDescription>Most recent payments for this subscription</CardDescription>
+          <CardTitle>{t('latestPayments.title')}</CardTitle>
+          <CardDescription>{t('latestPayments.description')}</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-col gap-2'>
           <div className='divide-y divide-border'>
             {(!subscription?.pastPayments?.lastPayments || subscription.pastPayments.lastPayments.length === 0) ? (
-              <p className='text-muted-foreground'>No past payments recorded for this subscription yet.</p>
+              <p className='text-muted-foreground'>{t('latestPayments.none')}</p>
             ) : (
               subscription.pastPayments.lastPayments.map((payment, index) => {
                 const getStatus = (paidAt, paymentDate) => {
                   const onTime = {
                     status: 0,
-                    label: 'on time',
+                    label: t('latestPayments.status.onTime'),
                   };
                   const acceptableMinutes = 15;
 
@@ -565,13 +506,13 @@ export function SubscriptionView({ subscription, externalServices }) {
                   if (diff > 0) {
                     return {
                       status: 1,
-                      label: formatDistanceStrict(paidAt, paymentDate) + ' late',
+                      label: t('latestPayments.status.late', { distance: formatDistanceStrict(paidAt, paymentDate) }),
                     };
                   }
 
                   return {
                     status: -1,
-                    label: formatDistanceStrict(paidAt, paymentDate) + ' early',
+                    label: t('latestPayments.status.early', { distance: formatDistanceStrict(paidAt, paymentDate) }),
                   };
                 };
 
@@ -588,20 +529,38 @@ export function SubscriptionView({ subscription, externalServices }) {
                       <Popover>
                         <PopoverTrigger asChild>
                           <span className='truncate cursor-pointer'>
-                            {format(paidAtZoned, 'dd MMMM yyyy')}
+                            {formatter.dateTime(paidAtZoned, {
+                              day: '2-digit',
+                              month: 'long',
+                              year: 'numeric'
+                            })}
                           </span>
                         </PopoverTrigger>
                         <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl break-words px-4 py-2 leading-6'>
                           <div>
-                            This subscription is paid <span className='font-semibold'>{status.label}</span>.
+                            {t.rich('latestPayments.popover.paidStatus', {
+                              status: () => <span className='font-semibold'>{status.label}</span>
+                            })}
                           </div>
                           <div>
-                            <span className='font-semibold'>Scheduled:</span><br/>
-                            {format(paymentDateZoned, 'dd MMMM yyyy, HH:mm')}
+                            <span className='font-semibold'>{t('latestPayments.popover.scheduled')}</span><br/>
+                            {formatter.dateTime(paymentDateZoned, {
+                              day: '2-digit',
+                              month: 'long',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
                           </div>
                           <div>
-                            <span className='font-semibold'>Actual:</span><br/>
-                            {format(payment.paidAt, 'dd MMMM yyyy, HH:mm')}
+                            <span className='font-semibold'>{t('latestPayments.popover.actual')}</span><br/>
+                            {formatter.dateTime(payment.paidAt, {
+                              day: '2-digit',
+                              month: 'long',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
                           </div>
                         </PopoverContent>
                       </Popover>
@@ -616,17 +575,17 @@ export function SubscriptionView({ subscription, externalServices }) {
           </div>
           {subscription?.pastPayments?.totalCount > subscription?.pastPayments?.lastPayments?.length && (
             <div className='text-center text-sm text-muted-foreground'>
-              + {subscription?.pastPayments?.totalCount - subscription?.pastPayments?.lastPayments?.length} more
+              {t('paymentSchedule.more', { count: subscription?.pastPayments?.totalCount - subscription?.pastPayments?.lastPayments?.length })}
             </div>
           )}
         </CardContent>
         <CardFooter className='flex flex-col sm:flex-row items-start sm:items-center justify-between border-t pt-4 text-left'>
           <div className='flex items-center gap-1 text-base font-medium'>
-            <span className='text-sm text-muted-foreground'>Total payments:</span>
+            <span className='text-sm text-muted-foreground'>{t('paymentSchedule.totalPayments')}</span>
             <span>{subscription?.pastPayments?.totalCount || 0}</span>
           </div>
           <div className='flex items-center gap-1 text-base font-medium'>
-            <span className='text-sm text-muted-foreground'>Total:</span>
+            <span className='text-sm text-muted-foreground'>{t('paymentSchedule.total')}</span>
             <span className='tabular-nums'>
               {subscription.pastPayments.total.map(c => `${formatPrice(c.sum, c.currency)}`).join(' + ')}
             </span>

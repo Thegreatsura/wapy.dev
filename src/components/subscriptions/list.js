@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Fuse from 'fuse.js';
 import { SearchBar } from '@/components/search-bar';
@@ -11,6 +12,8 @@ import { SubscriptionCard } from '@/components/subscriptions/card';
 import { FilterPanel } from '@/components/subscriptions/filter';
 
 export function SubscriptionList({ subscriptions, externalServices }) {
+  const t = useTranslations('components.subscriptions.list');
+  const tFilters = useTranslations('components.filters');
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchFilter, setSearchFilter] = useState(searchParams.get('s') || '');
@@ -60,7 +63,7 @@ export function SubscriptionList({ subscriptions, externalServices }) {
         <Button asChild className='w-full sm:w-auto'>
           <Link href='/edit/new' className='shrink-0'>
             <Icons.add />
-            New Subscription
+            {t('newSubscription')}
           </Link>
         </Button>
         <div className='flex flex-row gap-2 grow w-full sm:w-auto'>
@@ -69,12 +72,12 @@ export function SubscriptionList({ subscriptions, externalServices }) {
             categories={{
               ...subscriptions.flatMap(sub => sub.categories?.map(cat => ({name: cat.name, color: cat.color})) || [])
                 .reduce((acc, category) => ({...acc, [category.name]: {status: true, color: category.color}}), {}),
-              ...(subscriptions.some(sub => !sub.categories?.length) ? {'Uncategorized': {status: true}} : {})
+              ...(subscriptions.some(sub => !sub.categories?.length) ? {[tFilters('categories.uncategorized')]: {status: true}} : {})
             }}
             paymentMethods={{
               ...subscriptions.flatMap(sub => sub.paymentMethods?.map(cat => ({name: cat.name, icon: cat.icon})) || [])
                 .reduce((acc, paymentMethod) => ({...acc, [paymentMethod.name]: {status: true, icon: paymentMethod.icon}}), {}),
-              ...(subscriptions.some(sub => !sub.paymentMethods?.length) ? {'Unspecified': {status: true}} : {})
+              ...(subscriptions.some(sub => !sub.paymentMethods?.length) ? {[tFilters('paymentMethods.unspecified')]: {status: true}} : {})
             }}
             currencies={Array.from(new Set(subscriptions.map(sub => sub.currency)))}
             filteredSubscriptions={searchFilteredSubscriptions}
@@ -86,7 +89,7 @@ export function SubscriptionList({ subscriptions, externalServices }) {
       <div className='flex flex-col gap-4 w-full'>
         {filteredSubscriptions.length === 0 ? (
           <div className='text-center text-muted-foreground py-8'>
-            No subscriptions found
+            {t('noSubscription')}
           </div>
         ) : (
           filteredSubscriptions.map((subscription) => (

@@ -11,7 +11,8 @@
     "lint": "next lint",
     "migrate": "prisma migrate dev",
     "clean": "rm -rf node_modules && rm -rf ./src/generated && rm -rf .next && rm -rf ./public/icons/dashboard/",
-    "postinstall": "node scripts/fetch-dashboard-icons.js"
+    "postinstall": "node scripts/fetch-dashboard-icons.js",
+    "studio": "prisma studio --browser none --port 5555"
   },
   "author": "meceware",
   "license": "MIT+Commons Clause",
