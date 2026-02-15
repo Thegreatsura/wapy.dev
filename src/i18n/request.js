@@ -35,38 +35,9 @@ function deepFill(target, defaults) {
   }
 
   return target;
-}
+};
 
-export default getRequestConfig(async () => {
-  let locale = DefaultLanguage;
-
-  const cookieStore = await cookies();
-  const localeCookie = cookieStore.get(LANGUAGE_COOKIE_NAME);
-
-  // 1. Check cookie
-  if (ValidateLanguageCode(localeCookie?.value)) {
-    locale = localeCookie.value;
-  }
-  // 2. Check database (authenticated users)
-  else {
-    const { session, isAuthenticated } = await useAuthServer();
-
-    if (isAuthenticated && isLanguageSupported(session?.user?.language)) {
-      locale = session.user.language;
-    }
-    // 3. Fallback to Accept-Language header
-    else {
-      const headersList = await headers();
-      const acceptLanguage = headersList.get('accept-language');
-      if (acceptLanguage) {
-        const browserLocale = acceptLanguage.split(',')[0].split('-')[0];
-        if (isLanguageSupported(browserLocale)) {
-          locale = browserLocale;
-        }
-      }
-    }
-  }
-
+const buildConfig = async (locale) => {
   return {
     locale,
     messages: deepFill(
@@ -92,4 +63,39 @@ export default getRequestConfig(async () => {
       },
     },
   };
+};
+
+export default getRequestConfig(async ({requestLocale}) => {
+  const requested = await requestLocale;
+
+  // Check if a specific locale was requested
+  if (requested && isLanguageSupported(requested)) {
+    return buildConfig(requested);
+  }
+
+  // Check User Authentication (Database)
+  const { session, isAuthenticated } = await useAuthServer();
+  if (isAuthenticated && isLanguageSupported(session?.user?.language)) {
+    return buildConfig(session.user.language);
+  }
+
+  // Check Cookies if locale is still not set
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get(LANGUAGE_COOKIE_NAME);
+
+  if (ValidateLanguageCode(localeCookie?.value)) {
+    return buildConfig(localeCookie.value);
+  }
+
+  // Fallback to Accept-Language header
+  const headersList = await headers();
+  const acceptLanguage = headersList.get('accept-language');
+  if (acceptLanguage) {
+    const browserLocale = acceptLanguage.split(',')[0].split('-')[0];
+    if (isLanguageSupported(browserLocale)) {
+      return buildConfig(browserLocale);
+    }
+  }
+
+  return buildConfig(DefaultLanguage);
 });
