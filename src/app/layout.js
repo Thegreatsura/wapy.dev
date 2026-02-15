@@ -3,6 +3,8 @@ import './globals.css';
 
 // Imports
 import { Inter } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale } from 'next-intl/server';
 import { AuthProviderServer } from '@/lib/auth-server';
 import { ThemeProvider } from '@/components/providers';
 import Footer from '@/components/footer';
@@ -153,8 +155,10 @@ const jsonLd = {
 
 // Root Layout
 export default async function RootLayout({ children }) {
+  const locale = await getLocale();
+
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script
           type='application/ld+json'
@@ -164,21 +168,23 @@ export default async function RootLayout({ children }) {
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
           <AuthProviderServer>
-            <PushNotificationProvider>
-              <div className='flex min-h-dvh flex-col'>
-                <Header />
-                <main className='flex flex-col h-full grow items-center p-4 sm:p-8 md:p-12'>
-                  <div className='container flex flex-col items-center gap-6 text-center grow relative'>
-                    {children}
-                  </div>
-                </main>
-                <Footer author={siteConfig.author} github={siteConfig.links.github} />
-              </div>
-              <PushNotificationToggle vapidPublicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''} />
-              <AddToHomeScreen />
-            </PushNotificationProvider>
-            <Toaster richColors closeButton />
-            <CookieConsent />
+            <NextIntlClientProvider>
+              <PushNotificationProvider>
+                <div className='flex min-h-dvh flex-col'>
+                  <Header />
+                  <main className='flex flex-col h-full grow items-center p-4 sm:p-8 md:p-12'>
+                    <div className='container flex flex-col items-center gap-6 text-center grow relative'>
+                      {children}
+                    </div>
+                  </main>
+                  <Footer author={siteConfig.author} github={siteConfig.links.github} />
+                </div>
+                <PushNotificationToggle vapidPublicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''} />
+                <AddToHomeScreen />
+              </PushNotificationProvider>
+              <Toaster richColors closeButton />
+              <CookieConsent />
+            </NextIntlClientProvider>
           </AuthProviderServer>
         </ThemeProvider>
       </body>

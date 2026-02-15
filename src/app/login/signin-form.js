@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useAuth } from "@/lib/auth-client";
 import {
@@ -34,6 +35,7 @@ import { signInSchema, signInOTPSchema } from './schema';
 import { signInAction, signInOTPAction } from './action';
 
 const SignInOTP = ({ email }) => {
+  const t = useTranslations('pages.login');
   const [otp, setOtp] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {refetch} = useAuth();
@@ -47,7 +49,7 @@ const SignInOTP = ({ email }) => {
       const parsedEmail = signInSchema.safeParse({ email });
 
       if (!parsedCode.success || !parsedEmail.success) {
-        toast.error('The code looks incorrect. Double-check the 6 digits and try again.');
+        toast.error(t('toast.error.invalidCode'));
         return;
       }
 
@@ -56,25 +58,25 @@ const SignInOTP = ({ email }) => {
         code: parsedCode.data.code,
       });
 
-      if (result?.error === 'Access Denied') {
-        toast.error('Sorry, you do not have access to this workspace.');
+      if (result?.error === 'AccessDenied') {
+        toast.error(t('toast.error.accessDenied'));
         return;
       }
 
       if (result?.error) {
-        toast.error(result.error);
+        toast.error(t('toast.error.generic'));
         return;
       }
 
-      toast.success('Welcome! You have successfully signed in.');
+      toast.success(t('toast.success'));
       refetch();
       router.push('/');
     } catch (error) {
-      toast.error('Something went wrong. Please request a new code and try again.');
+      toast.error(t('toast.error.somethingWrong'));
     } finally {
       setIsSubmitting(false);
     }
-  }, [email]);
+  }, [email, t, refetch, router]);
 
   return (
     <InputOTP
@@ -98,6 +100,7 @@ const SignInOTP = ({ email }) => {
 };
 
 const SignInSendAgain = ({ email, onClick }) => {
+  const t = useTranslations('pages.login.otp');
   const [timeLeft, setTimeLeft] = useState(90);
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -125,28 +128,28 @@ const SignInSendAgain = ({ email, onClick }) => {
           <div className='rounded-full bg-green-100 dark:bg-green-900/30 p-3'>
             <Icons.check className='h-8 w-8 text-green-600 dark:text-green-400' />
           </div>
-          <CardTitle className='text-2xl'>Check your inbox</CardTitle>
+          <CardTitle className='text-2xl'>{t('title')}</CardTitle>
           <CardDescription className='text-base'>
-            We&apos;ve sent a link to your email to sign in.
+            {t('description')}
           </CardDescription>
         </div>
       </CardHeader>
       <CardContent className='flex flex-col gap-4'>
-        <Divider text='or' />
+        <Divider text={t('divider')} />
         <div className='space-y-2 text-center'>
-          <p className='text-sm text-muted-foreground'>Enter the 6-digit code sent to your email</p>
+          <p className='text-sm text-muted-foreground'>{t('instructions')}</p>
           <SignInOTP email={email} />
         </div>
       </CardContent>
-      <CardFooter className='flex flex-col sm:flex-row justify-center gap-0 sm:gap-1'>
-        <span className='text-sm text-muted-foreground'>Didn&apos;t receive the email?</span>
+      <CardFooter className='flex flex-wrap justify-center gap-0 sm:gap-1'>
+        <span className='text-sm text-muted-foreground'>{t('resend.prompt')}</span>
         <Button
           onClick={handleClick}
           variant='link'
-          className='p-0 h-auto'
+          className='p-0 h-auto whitespace-normal'
           disabled={!isEnabled}
         >
-          {isEnabled ? 'Click to resend' : `You can resend in ${timeLeft}s`}
+          {isEnabled ? t('resend.button') : t('resend.timer', { seconds: timeLeft })}
         </Button>
       </CardFooter>
     </Card>
@@ -154,6 +157,8 @@ const SignInSendAgain = ({ email, onClick }) => {
 };
 
 export function SignInForm({isGoogle = false, isGithub = false, genericAuthProvider = false}) {
+  const t = useTranslations('pages.login');
+  const tCommon = useTranslations('common');
   const [loginMethod, setLoginMethod] = useState(null);
   const [success, setSuccess] = useState(false);
   const {signIn} = useAuth();
@@ -170,10 +175,10 @@ export function SignInForm({isGoogle = false, isGithub = false, genericAuthProvi
     try {
       const result = await signInAction(data);
       if (!result || result?.error) {
-        if (result?.error === 'Access Denied') {
-          toast.error('Sorry but you are not allowed to sign in!');
+        if (result?.error === 'AccessDenied') {
+          toast.error(t('toast.error.accessDenied'));
         } else {
-          toast.error('Weird! We couldn\'t sign you in. It might be your email, or something went wrong on our end.');
+          toast.error(t('toast.error.generic'));
         }
       } else {
         setSuccess(true);
@@ -228,9 +233,9 @@ export function SignInForm({isGoogle = false, isGithub = false, genericAuthProvi
   return (
     <Card className='mx-auto max-w-md shadow-lg'>
       <CardHeader>
-        <CardTitle className='text-2xl'>Sign in</CardTitle>
+        <CardTitle className='text-2xl'>{tCommon('signIn')}</CardTitle>
         <CardDescription>
-          Sign in with your email to access your account or create a new one automatically
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-4'>
@@ -242,7 +247,7 @@ export function SignInForm({isGoogle = false, isGithub = false, genericAuthProvi
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input type='email' placeholder='m@example.com' {...field} />
+                    <Input type='email' placeholder={t('form.emailPlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage className='text-left' />
                 </FormItem>
@@ -253,12 +258,12 @@ export function SignInForm({isGoogle = false, isGithub = false, genericAuthProvi
                 ? <Icons.spinner className='mr-2 size-4 animate-spin' />
                 : <Icons.send className='mr-2 size-4' />
               }
-              Login
+              {t('form.loginButton')}
             </Button>
           </form>
         </Form>
         { (isGoogle || isGithub || genericAuthProvider) && (
-          <Divider text='or' />
+          <Divider text={t('otp.divider')} />
         ) }
         { (isGithub) && (
           <Button variant='outline' className='w-full' onClick={signInGithub} disabled={!!loginMethod}>
@@ -266,7 +271,7 @@ export function SignInForm({isGoogle = false, isGithub = false, genericAuthProvi
               ? <Icons.spinner className='mr-2 animate-spin' />
               : <Icons.github className='mr-2' />
             }
-            Login with Github
+            {t('form.loginWithProvider', { provider: 'Github' })}
           </Button>
         ) }
         { (isGoogle) && (
@@ -275,7 +280,7 @@ export function SignInForm({isGoogle = false, isGithub = false, genericAuthProvi
               ? <Icons.spinner className='mr-2 animate-spin' />
               : <Icons.google className='mr-2' />
             }
-            Login with Google
+            {t('form.loginWithProvider', { provider: 'Google' })}
           </Button>
         ) }
         { (genericAuthProvider) && (
@@ -288,7 +293,7 @@ export function SignInForm({isGoogle = false, isGithub = false, genericAuthProvi
                 <Icons.keyRound className='mr-2 text-green-600' />
               )
             }
-            Login with {genericAuthProvider.replace(/\b\w/g, l => l.toUpperCase())}
+            {t('form.loginWithProvider', { provider: genericAuthProvider.replace(/\b\w/g, l => l.toUpperCase()) })}
           </Button>
         ) }
       </CardContent>

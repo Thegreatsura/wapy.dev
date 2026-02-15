@@ -1,6 +1,7 @@
 'use server';
 
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import {
@@ -18,36 +19,42 @@ export const SubscriptionGuard = async ({ children, paddleStatus }) => {
     return <>{children}</>;
   }
 
+  const t = await getTranslations('components.subscriptionGuard');
+
+  const getDescription = () => {
+    if (paddleStatus?.status === PADDLE_STATUS_MAP.trialExpired) {
+      return t('description.trialExpired');
+    } else if (paddleStatus?.status === PADDLE_STATUS_MAP.cancelled) {
+      return t('description.cancelled');
+    } else if (paddleStatus?.status === PADDLE_STATUS_MAP.past_due) {
+      return t('description.pastDue');
+    } else if (paddleStatus?.status === PADDLE_STATUS_MAP.paused) {
+      return t('description.paused');
+    } else {
+      return t('description.default');
+    }
+  };
+
   return (
     <>
       <div className='absolute z-10 -m-[0.25rem] inset-0 flex flex-col items-center grow backdrop-blur-xs bg-background/70'>
         <Card className='w-full max-w-md sticky top-20 mt-4'>
           <CardHeader>
-            <CardTitle>Subscription Required</CardTitle>
+            <CardTitle>{t('title')}</CardTitle>
             <CardDescription>
-              {paddleStatus?.status === PADDLE_STATUS_MAP.trialExpired ? (
-                'Your trial period has expired.'
-              ) : paddleStatus?.status === PADDLE_STATUS_MAP.cancelled ? (
-                'Your subscription has been cancelled.'
-              ) : paddleStatus?.status === PADDLE_STATUS_MAP.past_due ? (
-                'Your payment is past due.'
-              ) : paddleStatus?.status === PADDLE_STATUS_MAP.paused ? (
-                'Your subscription has been paused.'
-              ) : (
-                'You need an active subscription to access this feature.'
-              )}
+              {getDescription()}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p className='text-sm text-muted-foreground'>
-              Please visit your account page to manage your subscription and continue using all features.
+              {t('message')}
             </p>
           </CardContent>
           <CardFooter className='flex justify-center'>
             <Button asChild>
               <Link href='/account'>
                 <Icons.settings />
-                Go to Account Settings
+                {t('button')}
               </Link>
             </Button>
           </CardFooter>

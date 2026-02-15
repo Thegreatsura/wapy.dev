@@ -8,16 +8,6 @@ export const formatPrice = (price, currencySymbol) => {
     : `${price.toFixed(2)}${currency.symbol}`;
 };
 
-export const getCycleLabel = (cycle) => {
-  if (cycle.every === 1) {
-    if (cycle.time === 'DAYS') return 'Daily';
-    if (cycle.time === 'WEEKS') return 'Weekly';
-    if (cycle.time === 'MONTHS') return 'Monthly';
-    if (cycle.time === 'YEARS') return 'Annually';
-  }
-  return `Every ${cycle.every} ${cycle.time.toLowerCase()}`;
-};
-
 export const getPaymentCount = (startDate, endDate, cycle) => {
   if (endDate < startDate) {
     return 0;

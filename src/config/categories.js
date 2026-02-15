@@ -13,5 +13,5 @@ export const DefaultCategories = {
   'Transport': '#FF5722', // Deep Orange
   'Education': '#3F51B5', // Indigo
   'Insurance': '#009688', // Teal
-  'Charity & Donations': '#E91E63' // Pink
+  'Charity & Donations': '#E91E63', // Pink
 };

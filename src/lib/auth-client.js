@@ -36,7 +36,7 @@ export const AuthProvider = ({ children, initialSession = null }) => {
     : initialSession;
 
   // Compute derived states
-  const isLoading = isPending || isRefetching;
+  const isAuthLoading = isPending || isRefetching;
   const isAuthenticated = !!currentSession?.id;
 
   // Session getter function (privacy-first)
@@ -55,14 +55,14 @@ export const AuthProvider = ({ children, initialSession = null }) => {
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo(
     () => ({
-      isLoading,
+      isAuthLoading,
       isAuthenticated,
       getSession,
       signIn,
       signOut,
       refetch,
     }),
-    [isLoading, isAuthenticated, getSession, signIn, signOut, refetch]
+    [isAuthLoading, isAuthenticated, getSession, signIn, signOut, refetch]
   );
 
   return (

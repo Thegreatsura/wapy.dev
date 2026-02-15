@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/form';
 
 export const CategoryFieldManager = ({ field, categories }) => {
+  const t = useTranslations('components.subscriptions.form.fields.category');
   const [open, setOpen] = useState(false);
   const [currentCategories, setCurrentCategories] = useState(categories);
   const [selectedCategories, setSelectedCategories] = useState(field.value || []);
@@ -55,7 +56,7 @@ export const CategoryFieldManager = ({ field, categories }) => {
         className='text-sm text-muted-foreground bg-muted'
         onSelect={onSelect}
       >
-        Create new category &quot;{value}&quot;
+        {t('create', { value })}
       </CommandItem>
     );
   };
@@ -111,20 +112,18 @@ export const CategoryFieldManager = ({ field, categories }) => {
             className='justify-between h-10 px-3 py-2 font-normal text-sm w-full hover:bg-transparent'
           >
             <span className='truncate'>
-              {selectedCategories.length === 0 && 'Select categories'}
-              {selectedCategories.length === 1 && `${selectedCategories.length} category selected`}
-              {selectedCategories.length > 1 && `${selectedCategories.length} categories selected`}
+              {t('selected', { count: selectedCategories.length })}
             </span>
             <Icons.down className='ml-2 size-4 shrink-0 opacity-50' />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className='p-0 w-[300px] sm:w-[512px]' align='start'>
+        <PopoverContent className='p-0 w-75 sm:w-lg' align='start'>
           <Command loop>
             <CommandInput
               ref={inputRef}
               value={inputValue}
               onValueChange={setInputValue}
-              placeholder='Search category...'
+              placeholder={t('search')}
             />
             <CommandList>
               <CommandGroup>
@@ -176,9 +175,11 @@ export const CategoryFieldManager = ({ field, categories }) => {
 }
 
 export const FormFieldCategory = ({ field, categories }) => {
+  const t = useTranslations('components.subscriptions.form.fields.category');
+
   return (
     <FormItem className='flex-1 truncate space-y-2'>
-      <FormLabel>Categories</FormLabel>
+      <FormLabel>{t('label')}</FormLabel>
       <FormControl>
         <CategoryFieldManager field={field} categories={categories} />
       </FormControl>

@@ -1,0 +1,1287 @@
+{
+  "common": {
+    "add": "Ekle",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "confirm": "Onayla",
+    "view": "Görüntüle",
+    "close": "Kapat",
+    "contact": "Bize Ulaşın",
+    "signIn": "Giriş Yap",
+    "pricing": "Fiyatlandırma",
+    "refundPolicy": "İade Politikası",
+    "termsOfService": "Kullanım Koşulları",
+    "privacyPolicy": "Gizlilik Politikası"
+  },
+  "notifications": {
+    "trial": {
+      "reminder": {
+        "title": "{siteName} Deneme Süresi Hatırlatması",
+        "message": "{siteName} deneme süreniz yakında sona eriyor. Tüm özelliklerden yararlanmaya devam etmek için şimdi abone olun."
+      },
+      "expired": {
+        "title": "{siteName} Deneme Süresi Sona Erdi",
+        "message": "{siteName} deneme süreniz sona erdi. Tüm özelliklerden yararlanmaya devam etmek için şimdi abone olun."
+      }
+    },
+    "subscription": {
+      "reminder": {
+        "title": "{siteName} Ödeme Hatırlatması",
+        "message": "{siteName} aboneliğinizin yakında sona ereceğini hatırlatmak isteriz."
+      },
+      "payment": {
+        "title": {
+          "due": "{name} için Ödeme Zamanı",
+          "reminder": "{name} için Ödeme Hatırlatması",
+          "upcoming": "{name} için Yaklaşan Ödeme"
+        },
+        "message": {
+          "due": "{name} abonelik ödemeniz ({price}) şimdi yapılmalı!",
+          "reminder": "{name} abonelik ödemeniz ({price}) gecikmiş durumda!",
+          "upcoming": "{name} abonelik ödemeniz ({price}) {dueText}!"
+        },
+        "markAsPaid": "Ödendi Olarak İşaretle",
+        "dismiss": "Kapat"
+      }
+    },
+    "externalServices": {
+      "header": "{siteName} Abonelik Hatırlatması",
+      "footer": "{siteName} tarafından gönderildi",
+      "visitDashboard": "Panele Git",
+      "paymentQuestion": "Ödemeyi tamamladınız mı?",
+      "viewDetails": "Detayları Görüntüle"
+    }
+  },
+  "header": {
+    "signOut": "Çıkış Yap",
+    "subscriptions": "Abonelikler",
+    "reports": "Raporlar",
+    "settings": "Ayarlar",
+    "account": "Hesap"
+  },
+  "footer": {
+    "madeBy": "<author>{name}</author> tarafından ♥ ile yapıldı.",
+    "github": "Github",
+    "menu": "Menü"
+  },
+  "languages": {
+    "selectLanguage": "Dil seçin",
+    "invalid": "Geçersiz dil",
+    "failed": "Dil değiştirilemedi",
+    "notAvailableTitle": "Dil Seçimi Kullanılamıyor",
+    "notAvailableMessage": "Fonksiyonel çerezler devre dışı olduğu ve giriş yapmadığınız için dil tercihleri değiştirilemiyor. Dili değiştirmek için şunlardan birini yapmanız gerekiyor:",
+    "enableCookies": "Fonksiyonel çerezleri etkinleştirin"
+  },
+  "home": {
+    "visitor": {
+      "hero": {
+        "badge": "Harcamalarınızı kontrol altına almak ister misiniz?",
+        "title": "Akıllı Abonelik Yönetimi Artık Çok Kolay",
+        "subtitle": "{appName} ile aboneliklerinizi takip edin, tekrarlayan harcamalarınızı izleyin ve güçlü, okunabilir bir panelde ödeme hatırlatmaları alın.",
+        "tagline": "Bildirim alın ve bir daha asla ödeme kaçırmayın.",
+        "imageAlt": "Ana Görsel"
+      },
+      "features": {
+        "title": "Güçlü Özellikler",
+        "subtitle": "Aboneliklerinizi etkili bir şekilde yönetmek için ihtiyacınız olan her şey",
+        "billingCycles": {
+          "title": "Esnek Faturalama Dönemleri",
+          "description": "Aylık, yıllık ve özel faturalama aralıkları desteği"
+        },
+        "notifications": {
+          "title": "Akıllı Bildirimler",
+          "description": "Ödemeler ve deneme süreleri için zamanında hatırlatmalar alın"
+        },
+        "reports": {
+          "title": "Raporlar ve İçgörüler",
+          "description": "Detaylı raporlar ve içgörülerle harcamalarınızı takip edin"
+        },
+        "currencies": {
+          "title": "Çoklu Para Birimi",
+          "description": "Gerçek zamanlı maliyet takibi ile birden fazla para birimi desteği"
+        },
+        "timezone": {
+          "title": "Saat Dilimi Desteği",
+          "description": "Otomatik tarih dönüşümleriyle farklı saat dilimlerinde abonelikleri takip edin"
+        },
+        "categories": {
+          "title": "Kategori Yönetimi",
+          "description": "Özel kategoriler ve renk kodlamasıyla aboneliklerinizi düzenleyin"
+        }
+      },
+      "howItWorks": {
+        "title": "Wapy Nasıl Çalışır",
+        "subtitle": "Dakikalar içinde başlayın",
+        "step1": {
+          "title": "Kaydolun ve Giriş Yapın",
+          "description": "Harcamalarınızı takip etmeye başlamak için bir hesap oluşturun veya giriş yapın"
+        },
+        "step2": {
+          "title": "Bildirimleri Ayarlayın",
+          "description": "Yaklaşan ödemeler ve deneme bitiş tarihleri için e-posta, push ve webhook bildirimleri ile uyarıları özelleştirin"
+        },
+        "step3": {
+          "title": "Takip Edin ve Optimize Edin",
+          "description": "Harcama alışkanlıklarınızı izleyin ve gereksiz abonelik maliyetlerini azaltmak için içgörüler edinin"
+        }
+      }
+    }
+  },
+  "pages": {
+    "notFound": {
+      "meta" : {
+        "title": "Sayfa Bulunamadı",
+        "description": "Aradığınız sayfa mevcut değil."
+      },
+      "title": "404",
+      "backToHome": "Ana Sayfaya Dön"
+    },
+    "contact": {
+      "description": "Bir sorunuz mu var veya bizimle iletişime geçmek mi istiyorsunuz? Aşağıdaki formu doldurun, en kısa sürede size geri dönelim.",
+      "form": {
+        "name": {
+          "label": "İsim",
+          "placeholder": "Adınız",
+          "error": "İsim en az 2 karakter olmalıdır"
+        },
+        "email": {
+          "label": "E-posta",
+          "placeholder": "eposta@ornek.com",
+          "error": "Geçersiz e-posta adresi"
+        },
+        "message": {
+          "label": "Mesaj",
+          "placeholder": "Size nasıl yardımcı olabileceğimizi söyleyin...",
+          "error": "Mesaj en az 10 karakter olmalıdır"
+        },
+        "submit": "Mesaj Gönder",
+        "submitting": "Gönderiliyor..."
+      },
+      "success": {
+        "title": "Teşekkürler!",
+        "message1": "Mesajınız başarıyla gönderildi.",
+        "message2": "Size en kısa sürede geri döneceğiz..."
+      },
+      "toast": {
+        "success": "Mesajınız başarıyla gönderildi.",
+        "error": "Mesaj gönderilemedi! Lütfen daha sonra tekrar deneyin.",
+        "spam": "Bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      }
+    },
+    "account": {
+      "meta" : {
+        "title": "Hesap Ayarları",
+        "description": "Hesap ayarlarınızı ve tercihlerinizi yönetin."
+      },
+      "defaultSettings": {
+        "title": "Varsayılan Ayarlar",
+        "description": "Yeni abonelikler için varsayılan ayarlarınızı yapılandırın",
+        "timezone": {
+          "label": "Saat Dilimi",
+          "success": "Saat dilimi başarıyla güncellendi.",
+          "error": "Saat dilimi güncellenemedi!"
+        },
+        "currency": {
+          "label": "Para Birimi",
+          "success": "Para birimi başarıyla güncellendi.",
+          "error": "Para birimi güncellenemedi!"
+        }
+      },
+      "notifications": {
+        "success": "Bildirim tercihleri kaydedildi.",
+        "error": "Bildirim tercihleri kaydedilemedi!",
+        "saveButton": "Değişiklikleri Kaydet",
+        "saveButtonTitle": "Bildirim tercihlerini kaydet"
+      },
+      "profile": {
+        "success": "Adınız başarıyla güncellendi.",
+        "error": "Adınız güncellenemedi!",
+        "namePlaceholder": "Adınızı girin",
+        "addNamePrompt": "Adınızı ekleyin",
+        "memberSince": "{date} tarihinden beri üye"
+      },
+      "categories": {
+        "title": "Kategoriler",
+        "description": "Kategorilerinizi yönetin",
+        "default": {
+          "load": "Varsayılan kategorileri yükle",
+          "success": "Varsayılan kategoriler başarıyla yüklendi.",
+          "error": "Varsayılan kategoriler oluşturulamadı!"
+        },
+        "save": {
+          "success": "Kategori başarıyla kaydedildi.",
+          "error": "Kategori kaydedilemedi!"
+        },
+        "addButtonTitle": "Yeni kategori ekle",
+        "selectColor": "Renk seçin",
+        "namePlaceholder": "Kategori adı",
+        "delete": {
+          "title": "Kategoriyi Sil",
+          "description": "Bu kategoriyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+          "success": "Kategori başarıyla silindi.",
+          "error": "Kategori silinemedi!"
+        },
+        "invalid": "Geçersiz kategori verisi",
+        "edit": "Kategoriyi düzenle"
+      },
+      "paymentMethods": {
+        "title": "Ödeme Yöntemleri",
+        "description": "Ödeme yöntemlerinizi yönetin",
+        "add": "Yeni ödeme yöntemi ekle",
+        "edit": "Ödeme yöntemini düzenle",
+        "invalid": "Geçersiz ödeme yöntemi verisi",
+        "placeholder": "Ödeme yöntemi adı",
+        "load": {
+          "title": "Varsayılan ödeme yöntemlerini yükle",
+          "success": "Varsayılan ödeme yöntemleri başarıyla yüklendi.",
+          "error": "Varsayılan ödeme yöntemleri oluşturulamadı!"
+        },
+        "save": {
+          "success": "Ödeme yöntemi başarıyla kaydedildi.",
+          "error": "Ödeme yöntemi kaydedilemedi!"
+        },
+        "delete": {
+          "title": "Ödeme Yöntemini Sil",
+          "description": "Bu ödeme yöntemini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+          "success": "Ödeme yöntemi başarıyla silindi.",
+          "error": "Ödeme yöntemi silinemedi!"
+        }
+      },
+      "subscriptionStatus": {
+        "title": "Abonelik Durumu",
+        "description": "Abonelik durumunuz",
+        "trial": {
+          "active": "Deneme süreniz <date></date> tarihinde sona eriyor.",
+          "notification": {
+            "multipleDays": "Deneme süreniz bitmeden <highlight>1 gün önce</highlight> sizi bilgilendireceğiz.",
+            "lastDay": "Deneme süreniz bittiğinde sizi bilgilendireceğiz."
+          },
+          "ended": "Deneme süreniz sona erdi!",
+          "subscribe": "Bizimle devam etmeye hazır mısınız?"
+        },
+        "subscription": {
+          "active": {
+            "scheduled": {
+              "pause": "Aboneliğiniz <status>duraklatıldı</status> ve <date></date> tarihinde sona erecek.",
+              "cancel": "Aboneliğiniz <status>iptal edildi</status> ve <date></date> tarihinde sona erecek."
+            },
+            "nextPayment": "Bir sonraki ödemeniz <date></date> tarihinde.",
+            "notification": "Aboneliğiniz bitmeden önce sizi bilgilendireceğiz."
+          },
+          "paused": {
+            "message": "Aboneliğiniz şu anda duraklatılmış durumda.",
+            "button": "Aboneliği Devam Ettir"
+          },
+          "cancelled": {
+            "message": "Aboneliğiniz iptal edildi.",
+            "button": "Aboneliği Yeniden Etkinleştir"
+          },
+          "pastDue": {
+            "message": "Ödemeniz gecikmiş durumda. Lütfen ödeme yönteminizi güncelleyin."
+          },
+          "cancel": {
+            "button": "Aboneliği İptal Et",
+            "dialog": {
+              "title": "İptal etmek istediğinizden emin misiniz?",
+              "description": "Bu işlem aboneliğinizi mevcut faturalama döneminin sonunda iptal edecektir. O zamana kadar erişiminiz devam edecektir."
+            },
+            "confirmButton": "İptali Onayla"
+          }
+        },
+        "fullAccess": {
+          "message": "Tebrikler! Tüm özelliklere tam erişiminiz var."
+        },
+        "blocked": {
+          "message": "Garip! Hizmetimizi kullanmanız engellenmiş."
+        }
+      },
+      "externalServices": {
+        "title": "Harici Servisler",
+        "description": "Harici servislerle entegrasyonları yapılandırın",
+        "testNotification": {
+          "title": "{siteName} Test Bildirimi",
+          "message": "Bu {siteName}'den bir test {service} mesajıdır. {service} entegrasyonunuz doğru şekilde yapılandırılmış."
+        },
+        "ntfy": {
+          "title": "ntfy",
+          "description": "ntfy üzerinden bildirim alın.",
+          "toast": {
+            "disable": {
+              "success": "ntfy entegrasyonu devre dışı bırakıldı.",
+              "error": "ntfy entegrasyonu devre dışı bırakılamadı!"
+            },
+            "save": {
+              "success": "ntfy yapılandırması başarıyla kaydedildi.",
+              "error": "ntfy yapılandırması kaydedilemedi!"
+            },
+            "test": {
+              "success": "Test ntfy bildirimi gönderildi.",
+              "error": "Test ntfy bildirimi gönderilemedi!"
+            },
+            "notEnabled": "ntfy entegrasyonu etkin değil.",
+            "invalidParams": "Geçersiz parametreler! ntfy yapılandırması kaydedilemiyor.",
+            "testInvalidParams": "Geçersiz parametreler! Test bildirimi gönderilemiyor."
+          },
+          "fields": {
+            "serverUrl": {
+              "label": "Sunucu URL'si",
+              "placeholder": "ntfy.sh veya kendi sunucunuzun URL'si"
+            },
+            "topic": {
+              "label": "Konu Adı"
+            },
+            "token": {
+              "label": "Erişim Anahtarı (İsteğe Bağlı)",
+              "placeholder": "Erişim Anahtarı"
+            }
+          },
+          "buttons": {
+            "save": "ntfy'yi Kaydet",
+            "test": "ntfy'yi Test Et"
+          }
+        },
+        "webhook": {
+          "title": "Webhook",
+          "description": "Webhook üzerinden bildirim alın.",
+          "toast": {
+            "disable": {
+              "success": "Webhook entegrasyonu devre dışı bırakıldı.",
+              "error": "Webhook entegrasyonu devre dışı bırakılamadı!"
+            },
+            "save": {
+              "success": "Webhook yapılandırması başarıyla kaydedildi.",
+              "error": "Webhook yapılandırması kaydedilemedi!"
+            },
+            "test": {
+              "success": "Test webhook bildirimi gönderildi.",
+              "error": "Test webhook bildirimi gönderilemedi!"
+            },
+            "notEnabled": "Webhook entegrasyonu etkin değil.",
+            "invalidParams": "Geçersiz parametreler! Webhook yapılandırması kaydedilemiyor.",
+            "testInvalidParams": "Geçersiz parametreler! Test bildirimi gönderilemiyor."
+          },
+          "fields": {
+            "url": {
+              "label": "Sunucu URL'si",
+              "placeholder": "Webhook sunucu URL'si"
+            }
+          },
+          "buttons": {
+            "save": "Webhook'u Kaydet",
+            "test": "Webhook'u Test Et"
+          }
+        },
+        "discord": {
+          "title": "Discord",
+          "description": "Discord üzerinden bildirim alın.",
+          "toast": {
+            "disable": {
+              "success": "Discord entegrasyonu devre dışı bırakıldı.",
+              "error": "Discord entegrasyonu devre dışı bırakılamadı!"
+            },
+            "save": {
+              "success": "Discord yapılandırması başarıyla kaydedildi.",
+              "error": "Discord yapılandırması kaydedilemedi!"
+            },
+            "test": {
+              "success": "Test Discord bildirimi gönderildi.",
+              "error": "Test Discord bildirimi gönderilemedi!"
+            },
+            "notEnabled": "Discord entegrasyonu etkin değil.",
+            "invalidParams": "Geçersiz parametreler! Discord yapılandırması kaydedilemiyor.",
+            "testInvalidParams": "Geçersiz parametreler! Test bildirimi gönderilemiyor."
+          },
+          "fields": {
+            "url": {
+              "label": "Sunucu URL'si",
+              "placeholder": "Discord sunucu URL'si"
+            }
+          },
+          "buttons": {
+            "save": "Discord'u Kaydet",
+            "test": "Discord'u Test Et"
+          }
+        },
+        "slack": {
+          "title": "Slack",
+          "description": "Slack üzerinden bildirim alın.",
+          "toast": {
+            "disable": {
+              "success": "Slack entegrasyonu devre dışı bırakıldı.",
+              "error": "Slack entegrasyonu devre dışı bırakılamadı!"
+            },
+            "save": {
+              "success": "Slack yapılandırması başarıyla kaydedildi.",
+              "error": "Slack yapılandırması kaydedilemedi!"
+            },
+            "test": {
+              "success": "Test Slack bildirimi gönderildi.",
+              "error": "Test Slack bildirimi gönderilemedi!"
+            },
+            "notEnabled": "Slack entegrasyonu etkin değil.",
+            "invalidParams": "Geçersiz parametreler! Slack yapılandırması kaydedilemiyor.",
+            "testInvalidParams": "Geçersiz parametreler! Test bildirimi gönderilemiyor."
+          },
+          "fields": {
+            "url": {
+              "label": "Sunucu URL'si",
+              "placeholder": "Slack sunucu URL'si"
+            }
+          },
+          "buttons": {
+            "save": "Slack'i Kaydet",
+            "test": "Slack'i Test Et"
+          }
+        }
+      },
+      "dataExport": {
+        "title": "Veri Dışa Aktarımı",
+        "description": "Aboneliklerinizin, kategorilerinizin, ödeme yöntemlerinizin ve ayarlarınızın bir kopyasını indirin",
+        "button": "Verileri Dışa Aktar",
+        "toast": {
+          "success": "Veriler başarıyla dışa aktarıldı.",
+          "error": "Veriler dışa aktarılamadı!"
+        }
+      }
+    },
+    "edit": {
+      "meta": {
+        "new": "Yeni Abonelik",
+        "edit": "{name} Düzenle",
+        "unauthorized": "Yetkisiz"
+      }
+    },
+    "login": {
+      "meta": {
+        "title": "Giriş Yap"
+      },
+      "description": "Hesabınıza erişmek veya otomatik olarak yeni bir hesap oluşturmak için e-postanızla giriş yapın",
+      "form": {
+        "emailPlaceholder": "m@ornek.com",
+        "loginButton": "Giriş Yap",
+        "loginWithProvider": "{provider} ile Giriş Yap"
+      },
+      "otp": {
+        "title": "Gelen kutunuzu kontrol edin",
+        "description": "Giriş yapmanız için e-postanıza bir bağlantı gönderdik.",
+        "instructions": "E-postanıza gönderilen 6 haneli kodu girin",
+        "divider": "veya",
+        "resend": {
+          "prompt": "E-postayı almadınız mı?",
+          "button": "Yeniden göndermek için tıklayın",
+          "timer": "{seconds, plural, one {# saniye} other {# saniye}} içinde yeniden gönderebilirsiniz"
+        }
+      },
+      "toast": {
+        "success": "Hoş geldiniz! Başarıyla giriş yaptınız.",
+        "error": {
+          "accessDenied": "Üzgünüz ama giriş yapmanıza izin verilmiyor!",
+          "generic": "Garip! Giriş yapamadık. E-postanız yanlış olabilir veya bizim tarafımızda bir sorun oluşmuş olabilir.",
+          "invalidCode": "Kod yanlış görünüyor. 6 haneyi tekrar kontrol edin ve tekrar deneyin.",
+          "somethingWrong": "Bir şeyler yanlış gitti. Lütfen yeni bir kod isteyin ve tekrar deneyin.",
+          "workspaceAccess": "Üzgünüz, bu çalışma alanına erişiminiz yok."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Basit, şeffaf fiyatlandırma",
+      "description": "Uygun fiyatlarla güçlü özelliklerle tüm aboneliklerinizi takip edin ve yönetin"
+    },
+    "privacy": {
+      "lastUpdated": "Son güncelleme 17 Ocak 2025",
+      "introduction": {
+        "title": "Giriş",
+        "paragraph1": "Gizliliğinizi korumaya ve kişisel bilgilerinizin güvenliğini sağlamaya kararlıyız.",
+        "paragraph2": "Bu Gizlilik Politikası, abonelik ve harcama yönetimi hizmetimizi kullandığınızda verilerinizi nasıl topladığımızı, kullandığımızı ve koruduğumuzu açıklar."
+      },
+      "informationWeCollect": {
+        "title": "Topladığımız Bilgiler",
+        "description": "Size hizmetlerimizi sunmak için gerekli olan bilgileri topluyoruz:",
+        "items": {
+          "account": "Hesap bilgileri",
+          "subscription": "Abonelik ve harcama yönetimi verileri",
+          "expense": "Harcama takip bilgileri"
+        }
+      },
+      "howWeUse": {
+        "title": "Bilgilerinizi Nasıl Kullanıyoruz",
+        "description": "Bilgileriniz yalnızca şunlar için kullanılır:",
+        "items": {
+          "providing": "Hizmetlerimizi sağlamak ve sürdürmek",
+          "managing": "Hesabınızı ve aboneliklerinizi yönetmek",
+          "sending": "Önemli hizmet güncellemelerini göndermek",
+          "improving": "Anonim kullanım analizi yoluyla hizmetlerimizi geliştirmek"
+        }
+      },
+      "paymentProcessing": {
+        "title": "Ödeme İşleme",
+        "description": "Ödeme işleme sistemimiz olarak <paddle>Paddle.com</paddle> kullanıyoruz. Bir ödeme yaptığınızda, ödeme bilgileriniz doğrudan Paddle tarafından toplanır ve işlenir. Ödeme detaylarınızı sunucularımızda saklamıyoruz. Paddle'ın verilerinizi nasıl işlediği hakkında bilgi için lütfen <privacy>Paddle'ın Gizlilik Politikası</privacy>'na bakın."
+      },
+      "dataProtection": {
+        "title": "Veri Koruma",
+        "description": "Kişisel bilgilerinizi korumak için güçlü güvenlik önlemleri uyguluyoruz. Verilerinizi asla üçüncü taraflarla paylaşmıyoruz ve bilgilerinizin yetkisiz erişim, ifşa veya kötüye kullanımını önlemek için katı veri koruma protokolleri uyguluyoruz."
+      },
+      "analytics": {
+        "title": "Analitik",
+        "description": "Hizmetlerimizi geliştirmek için özel bir analitik aracı kullanıyoruz. Bu araç, kullanıcıların platformumuzla nasıl etkileşime girdiğini anlamamıza ve kullanıcı deneyimini geliştirmemize yardımcı olmak için anonim kullanım verileri toplar."
+      },
+      "yourRights": {
+        "title": "Haklarınız",
+        "description": "Şu haklara sahipsiniz:",
+        "items": {
+          "access": "Kişisel verilerinize erişim",
+          "correct": "Verilerinizde düzeltme talep etme",
+          "delete": "Verilerinizin silinmesini talep etme",
+          "optOut": "Zorunlu olmayan veri toplamadan vazgeçme"
+        }
+      },
+      "contactUs": {
+        "description": "Gizlilik Politikamız veya verilerinizi nasıl işlediğimiz hakkında sorularınız varsa, lütfen <link>iletişim formu</link> aracılığıyla bizimle iletişime geçin."
+      },
+      "updates": {
+        "title": "Bu Politikadaki Güncellemeler",
+        "description": "Bu Gizlilik Politikasını zaman zaman güncelleyebiliriz. Yeni Gizlilik Politikasını bu sayfada yayınlayarak ve yürürlük tarihini güncelleyerek sizi değişikliklerden haberdar edeceğiz."
+      }
+    },
+    "refundPolicy": {
+      "lastUpdated": "Son güncelleme 17 Ocak 2025",
+      "introduction": "Kötü iade politikaları sinir bozucudur. Şirketin sizi dolandırmaya çalıştığını hissedersiniz. Müşterilerimizin böyle hissetmesini asla istemeyiz, bu yüzden iade politikamız basittir: Herhangi bir nedenle memnun değilseniz, <link>bizimle iletişime geçin</link> ve ne olduğunu söyleyin, memnun olmanızı sağlamak için sizinle birlikte çalışacağız.",
+      "fullRefunds": {
+        "title": "Tam iade örnekleri",
+        "items": {
+          "charged": "Bir sonraki ay hizmetiniz için ücretlendirildiyseniz ancak iptal etmek istediyseniz, bu ekstra ücreti iade etmekten mutluluk duyarız"
+        }
+      },
+      "partialRefunds": {
+        "title": "Kısmi iade örnekleri",
+        "items": {
+          "week": "Bir aylık hizmet için ücretlendirildiyseniz ancak sadece bir hafta kullandıysanız, farkı iade edeceğiz",
+          "year": "Bir yıllık hizmet için ücretlendirildiyseniz ancak sadece bir ay kullandıysanız, farkı iade edeceğiz",
+          "weekDuplicate": "Bir aylık hizmet için ücretlendirildiyseniz ancak sadece bir hafta kullandıysanız, farkı iade edeceğiz"
+        }
+      }
+    },
+    "reports": {
+      "meta": {
+        "title": "Abonelik Raporu"
+      }
+    },
+    "view": {
+      "meta": {
+        "unauthorized": "Yetkisiz",
+        "view": "{name} Görüntüle"
+      }
+    },
+    "termsOfService": {
+      "lastUpdated": "Son güncelleme 17 Ocak 2025",
+      "welcome": "{siteName} web sitesine (\"Site\") hoş geldiniz. Siteye erişerek veya kullanarak, aşağıdaki şartlar ve koşullara (\"Kullanım Koşulları\") uymayı ve bunlara bağlı kalmayı kabul edersiniz.",
+      "overview": {
+        "title": "Genel Bakış",
+        "paragraph1": "{siteName}, bu Sitede bulunan tüm bilgileri, araçları ve hizmetleri, burada belirtilen tüm şartları, koşulları, politikaları ve bildirimleri kabul etmeniz koşuluyla size sunar.",
+        "paragraph2": "Lütfen Siteye erişmeden veya kullanmadan önce bu Kullanım Koşullarını dikkatlice okuyun. Sitenin herhangi bir bölümüne erişerek veya kullanarak, bu Kullanım Koşullarına bağlı kalmayı kabul edersiniz. Bu sözleşmenin tüm şart ve koşullarını kabul etmiyorsanız, Siteye erişemez veya herhangi bir hizmeti kullanamazsınız. Bu Kullanım Koşulları bir teklif olarak kabul edilirse, kabul açıkça bu Kullanım Koşulları ile sınırlıdır.",
+        "paragraph3": "Siteye eklenen yeni özellikler veya araçlar da Kullanım Koşullarına tabi olacaktır. Kullanım Koşullarının en güncel sürümünü bu sayfada her zaman inceleyebilirsiniz. Site, güncellemeleri ve/veya değişiklikleri Siteye yayınlayarak bu Kullanım Koşullarının herhangi bir bölümünü güncelleme, değiştirme veya değiştirme hakkını saklı tutar. Değişiklikler için bu sayfayı periyodik olarak kontrol etmek sizin sorumluluğunuzdadır. Herhangi bir değişikliğin yayınlanmasından sonra Siteyi kullanmaya veya erişmeye devam etmeniz, bu değişiklikleri kabul ettiğiniz anlamına gelir."
+      },
+      "websiteTerms": {
+        "title": "Web Sitesi Koşulları",
+        "paragraph1": "Bu Kullanım Koşullarını kabul ederek, eyaletinizde veya ikamet ettiğiniz ildeki reşit olma yaşında olduğunuzu veya eyaletinizde veya ikamet ettiğiniz ildeki reşit olma yaşında olduğunuzu ve reşit olmayan bağımlılarınızdan herhangi birinin bu siteyi kullanmasına izin vermeniz için bize onay verdiğinizi beyan edersiniz.",
+        "paragraph2": "Hizmetlerimizin kullanımı tüm geçerli yasa ve düzenlemelere uygun olmalıdır. Özellikle:",
+        "items": {
+          "unlawful": "Ürünlerimizi yasadışı veya yetkisiz amaçlar için kullanmamayı kabul edersiniz",
+          "comply": "Telif hakkı ve fikri mülkiyet yasaları dahil olmak üzere yetki alanınızdaki tüm yasalara uymalısınız",
+          "malicious": "Kötü amaçlı kod, virüs veya diğer zararlı içerikleri iletemezsiniz"
+        },
+        "paragraph3": "Lütfen bu Kullanım Koşullarının herhangi bir ihlalinin Hizmetlerimize erişiminizin derhal sonlandırılmasına yol açacağını unutmayın."
+      },
+      "payment": {
+        "title": "Ödeme",
+        "paragraph1": "Siteye bir abonelik satın alırsanız, ödeme işlemi sırasında belirtilen geçerli ücretleri ödemeyi kabul edersiniz.",
+        "paragraph2": "Ödeme hizmeti sağlayıcımız olarak <paddle>Paddle.com</paddle> kullanıyoruz. Bir satın alma işlemi yaparak, Paddle'ın <terms>Kullanım Koşulları</terms>'nı da kabul etmiş olursunuz. Paddle tüm ödemeleri işler ve ilgili müşteri hizmetleri sorgularını yönetir.",
+        "paragraph3": "Site, <refund>iade politikamıza</refund> göre iadeleri işler."
+      },
+      "cookies": {
+        "title": "Çerez Kullanımı",
+        "description": "Site, Sitenin kullanımınızı izlemek ve pazarlama amaçları için çerezler ve benzer teknolojiler (yerel depolama gibi) kullanır. Siteyi kullanarak, <privacy>Gizlilik Politikamıza</privacy> uygun olarak çerezlerin kullanımına onay verirsiniz."
+      },
+      "intellectualProperty": {
+        "title": "Fikri Mülkiyet",
+        "description": "Sitedeki tüm içerik, metin, grafikler, logolar, resimler, videolar ve kurs içeriği dahil ancak bunlarla sınırlı olmamak üzere, Sitenin veya lisans verenlerinin mülkiyetindedir ve fikri mülkiyet yasalarıyla korunmaktadır. Önceden yazılı onayımız olmadan Sitedeki herhangi bir içeriği çoğaltamaz, değiştiremez, dağıtamaz veya başka şekilde kullanamazsınız."
+      },
+      "disclaimer": {
+        "title": "Sorumluluk Reddi",
+        "description": "Sitedeki bilgiler ve içerik yalnızca bilgilendirme amaçlıdır ve profesyonel tavsiye olarak tasarlanmamıştır. Site, Sitedeki bilgilerin ve içeriğin doğruluğu, güvenilirliği, eksiksizliği veya uygunluğu hakkında açık veya zımni herhangi bir beyan veya garanti vermez. Siteyi kendi riskinizle kullanırsınız."
+      },
+      "limitationOfLiability": {
+        "title": "Sorumluluk Sınırlaması",
+        "description": "{siteName}, Sitenin kullanımınızdan kaynaklanabilecek dolaylı, arızi, özel veya sonuç olarak ortaya çıkan zararlardan, bu tür zararların sözleşme, haksız fiil, ihmal, katı sorumluluk veya başka herhangi bir yasal teoriden kaynaklanıp kaynaklanmadığına bakılmaksızın sorumlu tutulamaz. Siteyle ilgili herhangi bir iddiada Site'nin sorumlu olabileceği maksimum tutar, son 12 ayda ödediğiniz toplam abonelik ücretleriyle sınırlıdır."
+      },
+      "changes": {
+        "title": "Kullanım Koşullarındaki Değişiklikler",
+        "description": "Site bu Kullanım Koşullarını zaman zaman güncelleyebilir veya değiştirebilir ve herhangi bir değişiklik Sitede yayınlandıktan sonra geçerli olacaktır. Bu tür değişikliklerden sonra Siteyi kullanmaya devam etmeniz, revize edilmiş Kullanım Koşullarını kabul ettiğiniz anlamına gelir."
+      },
+      "indemnification": {
+        "title": "Tazminat",
+        "description": "{siteName}'i, bağlı kuruluşlarını, görevlilerini, yöneticilerini, çalışanlarını, temsilcilerini ve lisans verenlerini, Sitenin kullanımınızdan, bu Kullanım Koşullarını ihlal etmenizden veya başka bir tarafın haklarını ihlal etmenizden kaynaklanan veya bunlarla bağlantılı olarak ortaya çıkan makul avukat ücretleri dahil ancak bunlarla sınırlı olmamak üzere tüm iddialar, yükümlülükler, zararlar, kayıplar ve masraflardan tazmin etmeyi ve zararsız tutmayı kabul edersiniz."
+      },
+      "modifications": {
+        "title": "Hizmet ve Fiyatlarda Değişiklikler",
+        "paragraph1": "Hizmetlerimizin fiyatları bildirimde bulunulmaksızın değiştirilebilir. Site, Hizmeti (veya herhangi bir bölümünü veya içeriğini) herhangi bir zamanda bildirimde bulunmaksızın değiştirme veya durdurma hakkını saklı tutar.",
+        "paragraph2": "Site, Hizmette yapılan herhangi bir değişiklik, fiyat değişikliği, askıya alma veya durdurma için size veya herhangi bir üçüncü tarafa karşı sorumlu olmayacaktır."
+      },
+      "governingLaw": {
+        "title": "Geçerli Hukuk ve Yargı Yetkisi",
+        "description": "Bu Kullanım Koşulları, {siteName}'in merkezinin bulunduğu yargı alanının yasalarına göre yönetilecek ve yorumlanacaktır, herhangi bir hukuk çatışması ilkesine etki etmeksizin. Bu Kullanım Koşullarından veya Sitenin kullanımınızdan kaynaklanan veya bunlarla bağlantılı herhangi bir anlaşmazlık için o yargı alanındaki mahkemelerin münhasır yargı yetkisine tabi olmayı kabul edersiniz."
+      },
+      "entireAgreement": {
+        "title": "Tüm Anlaşma",
+        "description": "Bu Kullanım Koşulları, Sitenin kullanımınızla ilgili olarak sizinle {siteName} arasındaki tüm anlaşmayı oluşturur ve aynı konuyla ilgili sözlü veya yazılı olsun, önceki ve eşzamanlı tüm anlaşmaların ve anlayışların yerini alır."
+      },
+      "severability": {
+        "title": "Ayrılabilirlik",
+        "description": "Bu Kullanım Koşullarının herhangi bir hükmünün geçersiz, yasadışı veya uygulanamaz olduğu tespit edilirse, kalan hükümler tam olarak yürürlükte kalmaya devam edecektir."
+      },
+      "waiver": {
+        "title": "Feragat",
+        "description": "{siteName}'in bu Kullanım Koşullarının herhangi bir hakkını veya hükmünü uygulamaması, o hak veya hükümden feragat edildiği anlamına gelmez."
+      },
+      "contactUs": {
+        "description": "Bu Kullanım Koşulları hakkında herhangi bir sorunuz veya endişeniz varsa, lütfen Sitedeki <link>iletişim formu</link> aracılığıyla bizimle iletişime geçin."
+      }
+    }
+  },
+  "components": {
+    "notifications": {
+      "push": {
+        "test": {
+          "title": "{siteName} Test Bildirimi",
+          "message": "Bu {siteName}'den bir test bildirimidir. Bunu görüyorsanız, push bildirimleri doğru çalışıyor demektir!"
+        }
+      },
+      "email": {
+        "header": "Ödeme Hatırlatması",
+        "footer": "Bu {siteName}'den gönderilen dostane bir hatırlatma e-postasıdır.",
+        "thanks": "Teşekkürler",
+        "madeBy": "{siteLink} tarafından ♥ ile yapıldı"
+      },
+      "bell": {
+        "title": "Bildirimler",
+        "unreadTitle": "Okunmamış bildirimler",
+        "clearAll": "Tümünü temizle",
+        "removeNotification": "Bildirimi kaldır",
+        "noNotifications": "Yeni bildirim yok"
+      },
+      "toggle": {
+        "modal": {
+          "title": "Güncel kalın",
+          "description": "Abonelik ödemeleriniz ve son ödeme tarihleri hakkında zamanında hatırlatmalar alın. Ödemeler yapılmadan önce ve abonelikler sona ermek üzereyken sizi bilgilendireceğiz.",
+          "maybeLater": "Belki Sonra",
+          "enable": "Bildirimleri Etkinleştir",
+          "enabling": "Etkinleştiriliyor..."
+        },
+        "toast": {
+          "success": "Artık abonelik hatırlatmaları alacaksınız.",
+          "error": "Bildirimler etkinleştirilemedi. Lütfen tekrar deneyin.",
+          "permissionRequired": {
+            "title": "İzin Gerekli",
+            "description": "Hatırlatma almak için lütfen bildirimlere izin verin."
+          }
+        }
+      }
+    },
+    "subscriptions": {
+      "validation": {
+        "name": "İsim en az 2 karakter olmalıdır.",
+        "paymentDate": "Bu geçerli bir tarih değil!",
+        "color": "Geçersiz hex renk kodu"
+      },
+      "cycles": {
+        "DAYS": "{count, plural, =1 {Günlük} other {Her # günde bir}}",
+        "WEEKS": "{count, plural, =1 {Haftalık} other {Her # haftada bir}}",
+        "MONTHS": "{count, plural, =1 {Aylık} other {Her # ayda bir}}",
+        "YEARS": "{count, plural, =1 {Yıllık} other {Her # yılda bir}}"
+      },
+      "form": {
+        "fields": {
+          "category": {
+            "label": "Kategoriler",
+            "selected": "{count, plural, =0 {Kategori seçin} one {# kategori seçildi} other {# kategori seçildi}}",
+            "search": "Kategori ara...",
+            "create": "Yeni kategori oluştur \"{value}\""
+          },
+          "currency": {
+            "label": "Para Birimi",
+            "placeholder": "Para birimi seçin",
+            "search": "Para birimi ara...",
+            "noResults": "Sonuç bulunamadı!"
+          },
+          "cycle": {
+            "label": "Faturalama Dönemi",
+            "placeholder": "Faturalama dönemi seçin",
+            "options": {
+              "daily": "Günlük",
+              "weekly": "Haftalık",
+              "monthly": "Aylık",
+              "yearly": "Yıllık",
+              "custom": "Özel"
+            },
+            "units": {
+              "days": "{count, plural, one {Gün} other {Gün}}",
+              "weeks": "{count, plural, one {Hafta} other {Hafta}}",
+              "months": "{count, plural, one {Ay} other {Ay}}",
+              "years": "{count, plural, one {Yıl} other {Yıl}}"
+            },
+            "unitPlaceholder": "Birim"
+          },
+          "name": {
+            "label": "İsim",
+            "placeholder": "Abonelik Adı"
+          },
+          "notes": {
+            "label": "Notlar",
+            "placeholder": "Not ekleyin..."
+          },
+          "notifications": {
+            "title": "Bildirimler",
+            "description": "Abonelikleriniz için varsayılan bildirimleri yapılandırın",
+            "via": "Yöntem",
+            "whenToNotify": "Ne Zaman Bildirilsin",
+            "whenPlaceholder": "Ne zaman bildirileceğini seçin",
+            "unitPlaceholder": "Birim",
+            "addNotification": "Bildirim Ekle",
+            "deleteDialog": {
+              "title": "Silmeyi Onayla",
+              "description": "Bu bildirim şablonunu kaldırmak istediğinizden emin misiniz?"
+            },
+            "status": {
+              "denied": "Push bildirimleri bu cihazda engellenmiş. Lütfen tarayıcı ayarlarınızdan etkinleştirin.",
+              "default": "Push bildirimleri bu cihazda etkin değil. <link>Etkinleştirmek ister misiniz?</link>",
+              "grantedNotConfigured": "Push bildirim izni verilmiş ancak düzgün yapılandırılmamış. <link>Etkinleştirmek ister misiniz?</link>",
+              "grantedConfigured": "Push bildirimleri bu cihaz için etkin. <link>Test push bildirimi</link> göndermek ister misiniz?"
+            },
+            "toast": {
+              "success": "Push bildirimi gönderildi! Cihazınızı kontrol edin.",
+              "error": "Test push bildirimi gönderilemedi! Bildirimlerin etkin ve doğru yapılandırıldığından emin olun."
+            },
+            "timeOptions": {
+              "instant": "Ödeme Tarihinde",
+              "15minutes": "15 dakika önce",
+              "1hour": "1 saat önce",
+              "2hours": "2 saat önce",
+              "1day": "1 gün önce",
+              "2days": "2 gün önce",
+              "1week": "1 hafta önce",
+              "custom": "Özel"
+            },
+            "units": {
+              "minutes": "{count, plural, one {Dakika} other {Dakika}}",
+              "hours": "{count, plural, one {Saat} other {Saat}}",
+              "days": "{count, plural, one {Gün} other {Gün}}",
+              "weeks": "{count, plural, one {Hafta} other {Hafta}}"
+            },
+            "types": {
+              "push": {
+                "label": "Push Bildirimleri",
+                "ariaLabel": "Push'u aç/kapat"
+              },
+              "email": {
+                "label": "E-posta Bildirimleri",
+                "ariaLabel": "E-postayı aç/kapat"
+              },
+              "webhook": {
+                "label": "Webhook Bildirimleri",
+                "ariaLabel": "Webhook'u aç/kapat"
+              },
+              "ntfy": {
+                "label": "ntfy Bildirimleri",
+                "ariaLabel": "ntfy'yi aç/kapat"
+              },
+              "discord": {
+                "label": "Discord Bildirimleri",
+                "ariaLabel": "Discord'u aç/kapat"
+              },
+              "slack": {
+                "label": "Slack Bildirimleri",
+                "ariaLabel": "Slack'i aç/kapat"
+              }
+            }
+          },
+          "paymentDate": {
+            "label": "Sonraki Ödeme Tarihi"
+          },
+          "paymentMethod": {
+            "label": "Ödeme Yöntemi",
+            "placeholder": "Ödeme yöntemi seçin",
+            "search": "Ödeme yöntemi ara...",
+            "create": "Yeni ödeme yöntemi oluştur \"{value}\""
+          },
+          "price": {
+            "label": "Fiyat"
+          },
+          "timezone": {
+            "label": "Saat Dilimi",
+            "placeholder": "Saat dilimi seçin",
+            "search": "Saat dilimi ara...",
+            "noResults": "Sonuç bulunamadı!"
+          },
+          "untilDate": {
+            "label": "Geçerlilik Tarihi",
+            "description": "Süresiz abonelik için boş bırakın"
+          },
+          "url": {
+            "label": "URL"
+          },
+          "logo": {
+            "label": "Logo",
+            "description": "Önceden tanımlanmış bir ikon seçin veya bir URL girin"
+          }
+        }
+      },
+      "card": {
+        "timezone": "{timezone} Saat Dilimi",
+        "paymentDate": {
+          "past": "<date></date> tarihinde ödenmeliydi.",
+          "future": "<date></date> tarihinde ödenecek."
+        },
+        "markAsPaid": {
+          "question": "Bunu ödediniz mi? <action>Ödendi olarak işaretle</action> veya <options>diğer seçeneklere</options> bakın.",
+          "customPrice": {
+            "title": "Farklı bir miktar mı ödediniz?",
+            "description": "Normalden fazla veya az ödediyseniz bunu kullanın",
+            "prompt": "Ödediğiniz miktarı girin:"
+          },
+          "noPrice": {
+            "title": "Sadece ödendi olarak işaretle!",
+            "description": "Bir miktar kaydetmeden bu ödemeyi atlamak için bunu kullanın",
+            "prompt": "Miktar kaydedilmeden ödendi olarak işaretlensin mi?",
+            "warning": "Bu bir ödeme miktarı kaydetmeyecektir."
+          },
+          "toast": {
+            "success": "Abonelik ödendi olarak işaretlendi!",
+            "error": "Abonelik ödendi olarak işaretlenirken hata oluştu",
+            "custom": {
+              "success": "Abonelik özel fiyatla ödendi olarak işaretlendi!",
+              "error": "Abonelik özel fiyatla ödendi olarak işaretlenirken hata oluştu"
+            },
+            "noPrice": {
+              "success": "Abonelik ödeme olmadan ödendi olarak işaretlendi!",
+              "error": "Abonelik ödeme olmadan ödendi olarak işaretlenirken hata oluştu"
+            },
+            "failed": "Güncelleme başarısız!"
+          }
+        },
+        "notifications": {
+          "willBeNotifiedAt": "<date></date> {channels} üzerinden bildirim alacaksınız.",
+          "willBeNotifiedSoon": "Yakında {channels} üzerinden bildirim alacaksınız.",
+          "willBeRemindedAt": "<date></date> {channels} üzerinden tekrar hatırlatılacaksınız.",
+          "willBeRemindedSoon": "Yakında {channels} üzerinden tekrar hatırlatılacaksınız.",
+          "wontBeNotified": "Bildirim almayacaksınız.",
+          "types": {
+            "push": "push",
+            "email": "e-posta",
+            "webhook": "webhook",
+            "ntfy": "ntfy",
+            "discord": "discord",
+            "slack": "slack"
+          }
+        },
+        "paymentCount": {
+          "congratulations": "Tebrikler! Hepsini ödediniz.",
+          "remaining": "Bunu <trigger>{count, plural, =1 {# kez} other {# kez}}</trigger> daha ödeyeceksiniz.",
+          "until": "{date} tarihine kadar"
+        },
+        "paymentMethods": {
+          "paidVia": "Bu {methods} ile ödenecek."
+        },
+        "pastPayments": {
+          "count": "Şu ana kadar <highlight>{count, plural, one {# ödeme} other {# ödeme}}</highlight> yaptınız."
+        },
+        "actions": {
+          "inactive": "Bu abonelik aktif değil.",
+          "edit": "{name} Aboneliğini Düzenle",
+          "link": "{url} bağlantısı",
+          "notificationEnabled": "{type} etkin",
+          "notificationDisabled": "{type} devre dışı"
+        }
+      },
+      "edit": {
+        "title": {
+          "create": "Abonelik Oluştur",
+          "update": "Aboneliği Güncelle"
+        },
+        "sections": {
+          "details": "Abonelik Detayları",
+          "advanced": "Gelişmiş Ayarlar"
+        },
+        "deleteDialog": {
+          "title": "Aboneliği Sil",
+          "description": "Bu aboneliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+        },
+        "toast": {
+          "create": {
+            "error": "İlginç, abonelik oluşturulamıyor!",
+            "success": "Abonelik başarıyla oluşturuldu!"
+          },
+          "delete": {
+            "success": "Abonelik başarıyla silindi!",
+            "error": "Abonelik silinemedi!"
+          }
+        }
+      },
+      "list": {
+        "newSubscription": "Yeni Abonelik",
+        "noSubscription": "Abonelik bulunamadı"
+      }
+    },
+    "filters": {
+      "title": "Abonelik Filtreleri",
+      "description": "Filtre uygulayın ve ihtiyacınız olan abonelikleri bulun",
+      "buttons": {
+        "filter": "Abonelikleri filtrele",
+        "reset": "Filtreleri sıfırla"
+      },
+      "selectAll": "Tümünü Seç",
+      "selectNone": "Hiçbirini Seçme",
+      "status": {
+        "title": "Durum",
+        "active": {
+          "title": "Aktif",
+          "description": "Aktif aboneliklere göre filtrele"
+        },
+        "inactive": {
+          "title": "Pasif",
+          "description": "Pasif aboneliklere göre filtrele"
+        }
+      },
+      "paymentDate": {
+        "title": "Ödeme Tarihi",
+        "all": {
+          "title": "Tümü",
+          "description": "Tüm ödeme tarihi filtrelerini devre dışı bırak"
+        },
+        "thisMonth": {
+          "title": "Bu Ay",
+          "description": "Bu aya göre filtrele"
+        },
+        "next30Days": {
+          "title": "Sonraki 30 Gün",
+          "description": "Sonraki 30 güne göre filtrele"
+        }
+      },
+      "currencies": {
+        "title": "Para Birimleri",
+        "all": {
+          "description": "Tüm para birimlerini seç"
+        },
+        "clear": {
+          "description": "Tüm para birimlerini temizle"
+        },
+        "filter": "{currency} ile filtrele"
+      },
+      "categories": {
+        "title": "Kategoriler",
+        "uncategorized": "Kategorisiz",
+        "all": {
+          "description": "Tüm kategorileri seç"
+        },
+        "clear": {
+          "description": "Tüm kategorileri temizle"
+        },
+        "filterBy": "{category} ile filtrele"
+      },
+      "paymentMethods": {
+        "title": "Ödeme Yöntemleri",
+        "unspecified": "Belirtilmemiş",
+        "all": {
+          "description": "Tüm ödeme yöntemlerini seç"
+        },
+        "clear": {
+          "description": "Tüm ödeme yöntemlerini temizle"
+        },
+        "filterBy": "{method} ile filtrele"
+      }
+    },
+    "reports": {
+      "subscription": {
+        "willBePaid": "{price} {count, plural, one {# kez} other {# kez}} ödenecek"
+      },
+      "overview": {
+        "title": "Genel Bakış",
+        "total": "<count></count> toplam abonelik",
+        "active": "<count></count> aktif abonelik",
+        "inactive": "<count></count> pasif abonelik"
+      },
+      "costAverages": {
+        "title": "Maliyet Ortalamaları",
+        "description": "Aylık ve yıllık abonelik maliyet ortalamaları",
+        "monthly": "Aylık Ortalama",
+        "yearly": "Yıllık Ortalama"
+      },
+      "monthlyCost": {
+        "title": "Aylık Maliyet Genel Bakışı",
+        "description": "Aylık abonelik maliyetlerinizi takip edin"
+      },
+      "yearlyCost": {
+        "title": "Yıllık Maliyet Genel Bakışı",
+        "description": "Yıllık abonelik maliyetlerinizi takip edin"
+      },
+      "upcomingPayments": {
+        "title": "Yaklaşan Ödemeler",
+        "description": "Yaklaşan ödemelerinizi takip edin",
+        "noPayments": "Bir ay içinde yaklaşan ödeme yok.",
+        "nextMonth": "Gelecek Ay"
+      },
+      "periods": {
+        "thisMonth": {
+          "title": "Bu Ay",
+          "description": "Ay sonuna kadar"
+        },
+        "nextMonth": {
+          "title": "Gelecek Ay",
+          "description": "Sadece gelecek ay"
+        },
+        "next30Days": {
+          "title": "Sonraki 30 Gün",
+          "description": "Kayan dönem"
+        },
+        "thisYear": {
+          "title": "Bu Yıl",
+          "description": "Yıl sonuna kadar"
+        },
+        "nextYear": {
+          "title": "Gelecek Yıl",
+          "description": "Gelecek takvim yılı"
+        },
+        "next365Days": {
+          "title": "Sonraki 365 Gün",
+          "description": "Kayan dönem"
+        }
+      },
+      "tabs": {
+        "byCategories": "Kategorilere Göre",
+        "byPaymentMethods": "Ödeme Yöntemlerine Göre"
+      },
+      "mostExpensive": {
+        "monthly": "En Pahalı Aylık Abonelik",
+        "yearly": "En Pahalı Yıllık Abonelik"
+      },
+      "modal": {
+        "category": {
+          "description": "Bu kategorideki {period} ödemeleri",
+          "noSubscriptions": "Bu kategoride abonelik bulunamadı"
+        },
+        "paymentMethod": {
+          "description": "Bu ödeme yöntemiyle {period} ödemeleri",
+          "noSubscriptions": "Bu ödeme yöntemiyle abonelik bulunamadı"
+        }
+      }
+    },
+    "view": {
+      "buttons": {
+        "link": "Bağlantı",
+        "linkTitle": "Abonelik Bağlantısı",
+        "editTitle": "Aboneliği Düzenle"
+      },
+      "overview": {
+        "title": "Genel Bakış",
+        "description": "Bu abonelik için temel metrikler",
+        "disabled": "Bu abonelik şu anda devre dışı. İstediğiniz zaman tekrar etkinleştirebilirsiniz.",
+        "unpaid": {
+          "hasUnpaid": "Ah hayır! Bu abonelik için toplam <total>{total}</total> tutarında <count>{count, plural, one {# ödenmemiş ödeme} other {# ödenmemiş ödeme}}</count> var.",
+          "allPaid": "Tebrikler! Bu abonelik güncel olarak tamamen ödenmiş durumda."
+        },
+        "nextPayment": {
+          "scheduled": "Bir sonraki <price>{price}</price> tutarındaki ödemeniz <date>{date}</date> tarihinde, yani <distance>{distance}</distance> yapılacak.",
+          "none": "Tebrikler! Bu abonelik için planlanmış gelecek ödeme yok."
+        },
+        "endDate": {
+          "hasEndDate": "Bu abonelik <date>{date}</date> tarihinde sona erecek.",
+          "ongoing": "Bu, belirli bir bitiş tarihi olmayan devam eden bir abonelik."
+        },
+        "remainingPayments": {
+          "withEndDate": "Bu abonelik toplam <total>{total}</total> tutarında <count>{count, plural, one {# ödeme} other {# ödeme}}</count> gerektirecek.",
+          "thisYear": "Bu abonelik bu yıl toplam <total>{total}</total> tutarında <count>{count, plural, one {# ödeme} other {# ödeme}}</count> gerektirecek."
+        },
+        "paymentMethods": {
+          "text": "Bu abonelik <methods></methods> üzerinden ödenecek."
+        },
+        "pastPayments": {
+          "hasPast": "Bu abonelik için şu ana kadar toplam <totalTag>{total}</totalTag> tutarında <countTag>{count, plural, one {# ödeme} other {# ödeme}}</countTag> yaptınız.",
+          "yearStats": " Geçen yıl toplam <totalTag>{total}</totalTag> tutarında <countTag>{count, plural, one {# ödeme} other {# ödeme}}</countTag> yaptınız.",
+          "none": "Bu henüz ödeme geçmişi olmayan bir abonelik."
+        },
+        "notifications": {
+          "title": "Bildirim alacaksınız:",
+          "none": "Bu abonelik için bildirim ayarlanmamış.",
+          "item": "<timing></timing> <channels></channels> üzerinden.",
+          "itemNoType": "<timing></timing> ancak <error>bildirim türü ayarlanmamış</error>.",
+          "timing": {
+            "instant": "Ödeme tarihinde",
+            "minutes": "Ödemeden {count, plural, one {# dakika} other {# dakika}} önce",
+            "hours": "Ödemeden {count, plural, one {# saat} other {# saat}} önce",
+            "days": "Ödemeden {count, plural, one {# gün} other {# gün}} önce",
+            "weeks": "Ödemeden {count, plural, one {# hafta} other {# hafta}} önce"
+          },
+          "types": {
+            "email": "e-posta",
+            "push": "push bildirimi",
+            "webhook": "webhook",
+            "ntfy": "ntfy",
+            "discord": "discord",
+            "slack": "slack"
+          }
+        },
+        "nextNotification": {
+          "text": "Bir sonraki bildirim <date>{date}</date> tarihinde, yani <distance>{distance}</distance> <channels></channels> üzerinden olacak.",
+          "soon": "yakında"
+        }
+      },
+      "costBreakdown": {
+        "title": "Maliyet Dağılımı",
+        "description": "Bu abonelik için gelecek harcamalar",
+        "periods": {
+          "30days": "Sonraki 30 gün",
+          "3months": "Sonraki 3 ay",
+          "12months": "Sonraki 12 ay"
+        }
+      },
+      "notes": {
+        "title": "Notlar"
+      },
+      "paymentSchedule": {
+        "title": "Ödeme Takvimi",
+        "description": "Bir yıl içindeki yaklaşan ödeme tarihleri",
+        "noUpcoming": "Yaklaşan ödeme yok",
+        "more": "+ {count} tane daha",
+        "totalPayments": "Toplam ödemeler:",
+        "total": "Toplam:"
+      },
+      "latestPayments": {
+        "title": "Son Ödemeler",
+        "description": "Bu abonelik için en son ödemeler",
+        "none": "Bu abonelik için henüz kaydedilmiş geçmiş ödeme yok.",
+        "status": {
+          "onTime": "zamanında",
+          "late": "{distance} geç",
+          "early": "{distance} erken"
+        },
+        "popover": {
+          "paidStatus": "Bu abonelik <status>{status}</status> ödendi.",
+          "scheduled": "Planlanan:",
+          "actual": "Gerçek:"
+        }
+      }
+    },
+    "addToHomeScreen": {
+      "title": "Uygulama Olarak Yükle",
+      "description": "En iyi deneyim için uygulamayı ana ekranınıza yüklemenizi öneririz!",
+      "buttons": {
+        "gotIt": "Anladım",
+        "maybeLater": "Belki Sonra",
+        "installNow": "Şimdi Yükle"
+      },
+      "common": {
+        "addToHomeScreen": "Ana Ekrana Ekle",
+        "clickIcon": "<icon></icon> simgesine tıklayın",
+        "scrollDownClick": "Aşağı kaydırın ve tıklayın"
+      },
+      "ios": {
+        "safari": {
+          "title": "iOS Yükleme Adımları",
+          "step3": "Onaylamak için 'Ekle'ye dokunun"
+        },
+        "chrome": {
+          "title": "iOS'ta Chrome Yükleme Adımları"
+        },
+        "firefox": {
+          "title": "iOS'ta Firefox Yükleme Adımları",
+          "step2": "Aşağı kaydırın ve <icon></icon> düğmesine tıklayın",
+          "step3": "Sonra tıklayın"
+        }
+      },
+      "android": {
+        "chrome": {
+          "title": "Chrome Yükleme Adımları"
+        },
+        "firefox": {
+          "title": "Firefox Yükleme Adımları"
+        }
+      },
+      "unknown": {
+        "title": "Yükleme Adımları",
+        "step1": "Tarayıcınızın menüsünde \"Ana Ekrana Ekle\" veya \"Uygulamayı Yükle\" gibi bir seçenek arayın",
+        "step2": "Seçenek genellikle ana menüde bulunur (genellikle üç nokta veya çizgi ile temsil edilir)",
+        "step3": "Tarayıcınızın özel yükleme talimatlarını takip edin"
+      }
+    },
+    "cookieConsent": {
+      "title": "Çerez Tercihleri",
+      "description": "Lütfen kabul etmek istediğiniz çerezleri seçin. Temel çerezler web sitesinin çalışması için gerekli olduğundan devre dışı bırakılamaz.",
+      "essential": {
+        "title": "Temel Çerezler",
+        "description": "Web sitesinin çalışması için gereklidir (kimlik doğrulama, güvenlik)."
+      },
+      "functional": {
+        "title": "Fonksiyonel Çerezler",
+        "description": "Deneyiminizi geliştirir (tema, dil tercihleri)."
+      },
+      "analytics": {
+        "title": "Analitik Çerezler",
+        "description": "Ziyaretçilerin web sitemizle nasıl etkileşime girdiğini anlamamıza yardımcı olur."
+      },
+      "buttons": {
+        "savePreferences": "Tercihleri Kaydet",
+        "acceptAll": "Tümünü Kabul Et"
+      }
+    },
+    "modeToggle": {
+      "toggleTheme": "Temayı değiştir",
+      "dark": "Koyu",
+      "light": "Açık",
+      "system": "Sistem"
+    },
+    "pricingTable": {
+      "enjoy": {
+        "title": "Keyif",
+        "description": "Sorunsuz bir deneyim için mükemmel",
+        "period": "+vergi/ay",
+        "features": {
+          "unlimited": "Sınırsız Abonelik",
+          "notifications": "E-posta ve Push Bildirimleri",
+          "reports": "Raporlar ve İçgörüler",
+          "support": "Premium Destek",
+          "firstMonth": "İlk Ay Ücretsiz",
+          "priority": "Öncelikli Özellik İstekleri"
+        },
+        "button": "Başlayın"
+      },
+      "selfHosted": {
+        "title": "Kendi Sunucunuzda",
+        "description": "Kendi sunucusunda barındırmak isteyenler için mükemmel",
+        "price": "Ücretsiz",
+        "period": "sonsuza kadar",
+        "features": {
+          "infrastructure": "Kendi Altyapınız",
+          "sourceCode": "Kaynak Koda Erişim",
+          "community": "Topluluk Desteği"
+        },
+        "button": "GitHub'da Görüntüle"
+      }
+    },
+    "searchBar": {
+      "placeholder": "Ara..."
+    },
+    "subscriptionGuard": {
+      "title": "Abonelik Gerekli",
+      "description": {
+        "trialExpired": "Deneme süreniz sona erdi.",
+        "cancelled": "Aboneliğiniz iptal edildi.",
+        "pastDue": "Ödemeniz gecikmiş durumda.",
+        "paused": "Aboneliğiniz duraklatıldı.",
+        "default": "Bu özelliğe erişmek için aktif bir aboneliğe ihtiyacınız var."
+      },
+      "message": "Aboneliğinizi yönetmek ve tüm özellikleri kullanmaya devam etmek için lütfen hesap sayfanızı ziyaret edin.",
+      "button": "Hesap Ayarlarına Git"
+    }
+  }
+}

@@ -1,10 +1,25 @@
 'use server';
 
 import { NextResponse } from 'next/server';
+import { getTranslations } from 'next-intl/server';
+import { createFormatter } from 'use-intl/core';
 import jsonwebtoken from 'jsonwebtoken';
-import { formatDistanceToNowStrict, isEqual, addDays, addMonths, isAfter, isPast } from 'date-fns';
+import {
+  isEqual,
+  addDays,
+  addMonths,
+  isAfter,
+  isPast,
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  differenceInWeeks,
+} from 'date-fns';
 import { prisma } from '@/lib/prisma';
-import { UserSubscriptionSendNotification, UserSubscriptionSendEmail } from '@/lib/notifications';
+import {
+  UserSubscriptionSendNotification,
+  UserSubscriptionSendEmail,
+} from '@/lib/notifications';
 import { SubscriptionGetNextNotificationDate } from '@/components/subscriptions/lib';
 import { siteConfig } from '@/components/config';
 import { paddleGetStatus } from '@/lib/paddle/status';
@@ -45,6 +60,10 @@ const UserSubscriptionNotifications = async (rightNow) => {
       continue;
     }
 
+    const t = await getTranslations({ locale: user.language || 'en', namespace: 'notifications' });
+    const tEmail = await getTranslations({ locale: user.language || 'en', namespace: 'components.notifications.email' });
+    const tExternal = await getTranslations({ locale: user.language || 'en', namespace: 'notifications.externalServices' });
+
     const nextNotificationDate = user.subNextNotification;
     const pastNotificationData = {
       userId: user.id,
@@ -57,8 +76,8 @@ const UserSubscriptionNotifications = async (rightNow) => {
     if (paddleStatus.status === PADDLE_STATUS_MAP.trialActive) {
       const paymentDate = addMonths(user.trialStartedAt, TRIAL_DURATION_MONTHS);
 
-      pastNotificationData.title = 'Wapy.dev Trial Reminder';
-      pastNotificationData.message = `Your Wapy.dev trial period is ending soon. Subscribe now to keep enjoying all features.`;
+      pastNotificationData.title = t('trial.reminder.title', { siteName: siteConfig.name });
+      pastNotificationData.message = t('trial.reminder.message', { siteName: siteConfig.name });
 
       // Send push notification for trial active
       promises.push(UserSubscriptionSendNotification(
@@ -85,8 +104,8 @@ const UserSubscriptionNotifications = async (rightNow) => {
         })
       );
     } else if (paddleStatus.status === PADDLE_STATUS_MAP.trialExpired) {
-      pastNotificationData.title = 'Wapy.dev Trial Expired';
-      pastNotificationData.message = `Your Wapy.dev trial period is expired. Subscribe now to keep enjoying all features.`;
+      pastNotificationData.title = t('trial.expired.title', { siteName: siteConfig.name });
+      pastNotificationData.message = t('trial.expired.message', { siteName: siteConfig.name });
 
       // Send push notification for expired trial
       promises.push(UserSubscriptionSendNotification(
@@ -102,7 +121,15 @@ const UserSubscriptionNotifications = async (rightNow) => {
         {user: user},
         pastNotificationData.title,
         pastNotificationData.message,
-        `${siteConfig.url}/account`
+        `${siteConfig.url}/account`,
+        {
+          header: tEmail('header'),
+          markAsPaid: t('subscription.payment.markAsPaid'),
+          viewDetails: tExternal('viewDetails'),
+          footer: tEmail('footer', { siteName: siteConfig.name }),
+          thanks: tEmail('thanks'),
+          madeBy: tEmail('madeBy', { siteLink: `<a href="${siteConfig.url}" target="_blank">${siteConfig.name}</a>` }),
+        }
       ));
 
       // Set next notification to null
@@ -113,8 +140,8 @@ const UserSubscriptionNotifications = async (rightNow) => {
         })
       );
     } else {
-      pastNotificationData.title = 'Wapy.dev Payment Reminder';
-      pastNotificationData.message = 'Just a reminder that your Wapy.dev subscription is ending soon.';
+      pastNotificationData.title = t('subscription.reminder.title', { siteName: siteConfig.name });
+      pastNotificationData.message = t('subscription.reminder.message', { siteName: siteConfig.name });
 
       promises.push(UserSubscriptionSendNotification(
         {user: user},
@@ -128,7 +155,15 @@ const UserSubscriptionNotifications = async (rightNow) => {
         {user: user},
         pastNotificationData.title,
         pastNotificationData.message,
-        `${siteConfig.url}/account`
+        `${siteConfig.url}/account`,
+        {
+          header: tEmail('header'),
+          markAsPaid: t('subscription.payment.markAsPaid'),
+          viewDetails: tExternal('viewDetails'),
+          footer: tEmail('footer', { siteName: siteConfig.name }),
+          thanks: tEmail('thanks'),
+          madeBy: tEmail('madeBy', { siteLink: `<a href="${siteConfig.url}" target="_blank">${siteConfig.name}</a>` }),
+        }
       ));
 
       promises.push(
@@ -185,6 +220,11 @@ export async function GET() {
       continue;
     }
 
+    const t = await getTranslations({ locale: subscription.user.language || 'en', namespace: 'notifications.subscription.payment' });
+    const tExternal = await getTranslations({ locale: subscription.user.language || 'en', namespace: 'notifications.externalServices' });
+    const tEmail = await getTranslations({ locale: subscription.user.language || 'en', namespace: 'components.notifications.email' });
+    const formatter = await createFormatter({ locale: subscription.user.language || 'en' });
+
     const notificationTypes = subscription?.nextNotificationDetails?.type && Array.isArray(subscription?.nextNotificationDetails?.type)
       ? subscription.nextNotificationDetails.type
       : [];
@@ -203,22 +243,45 @@ export async function GET() {
       && subscription.user?.externalServices?.slack?.url);
     const isSlackEnabled = isUserSlackEnabled && notificationTypes.includes('SLACK');
 
-    const paymentDate = subscription.nextNotificationDetails?.paymentDate;
+    const paymentDateRaw = subscription.nextNotificationDetails?.paymentDate;
+    const paymentDate = paymentDateRaw?.$type === 'DateTime' ? new Date(paymentDateRaw.value) : paymentDateRaw;
     const isPaymentDueNow = isEqual(paymentDate, subscription.nextNotificationTime);
     const isPaymentReminder = subscription.nextNotificationDetails?.isRepeat ? true : false;
-    const dueText = isPaymentDueNow
-      ? 'due now'
-      : isPaymentReminder
-        ? 'overdue'
-        : `${formatDistanceToNowStrict(paymentDate, {addSuffix: true})}`;
-    const title = (isPaymentDueNow
-        ? 'Payment Due'
+
+    const title = t(
+      isPaymentDueNow
+        ? 'title.due'
         : isPaymentReminder
-          ? 'Payment Reminder'
-          : 'Upcoming Payment'
-      )
-      + ` for '${subscription.name}'`;
-    const message = `Your '${subscription.name}' subscription payment (${formatPrice(subscription.price, subscription.currency)}) is ${dueText}!`;
+          ? 'title.reminder'
+          : 'title.upcoming',
+      { name: subscription.name }
+    );
+
+    const message = t(
+      isPaymentDueNow
+        ? 'message.due'
+        : isPaymentReminder
+          ? 'message.reminder'
+          : 'message.upcoming',
+      {
+        name: subscription.name,
+        price: formatPrice(subscription.price, subscription.currency),
+        ...(!isPaymentDueNow && !isPaymentReminder && {
+          dueText: formatter.relativeTime(paymentDate, {
+            now: rightNow,
+            unit: Math.abs(differenceInWeeks(paymentDate, rightNow)) >= 1
+              ? 'week'
+              : Math.abs(differenceInDays(paymentDate, rightNow)) >= 1
+              ? 'day'
+              : Math.abs(differenceInHours(paymentDate, rightNow)) >= 1
+              ? 'hour'
+              : Math.abs(differenceInMinutes(paymentDate, rightNow)) >= 1
+              ? 'minute'
+              : undefined,
+          })
+        })
+      }
+    );
 
     const token = jsonwebtoken.sign({
       id: subscription.id,
@@ -229,12 +292,22 @@ export async function GET() {
 
     // Send push notification if enabled
     if (isPushEnabled) {
-      promises.push(UserSubscriptionSendNotification(subscription, title, message, markAsPaidUrl, isPaymentDueNow));
+      promises.push(UserSubscriptionSendNotification(subscription, title, message, markAsPaidUrl, isPaymentDueNow, {
+        markAsPaid: t('markAsPaid'),
+        dismiss: t('dismiss'),
+      }));
     }
 
     // Send email notification if enabled
     if (isEmailEnabled) {
-      promises.push(UserSubscriptionSendEmail(subscription, title, message, markAsPaidUrl));
+      promises.push(UserSubscriptionSendEmail(subscription, title, message, markAsPaidUrl, {
+        header: tEmail('header'),
+        markAsPaid: t('markAsPaid'),
+        viewDetails: tExternal('viewDetails'),
+        footer: tEmail('footer', { siteName: siteConfig.name }),
+        thanks: tEmail('thanks'),
+        madeBy: tEmail('madeBy', { siteLink: `<a href="${siteConfig.url}" target="_blank">${siteConfig.name}</a>` }),
+      }));
     }
 
     // Send webhook notification if enabled
@@ -262,7 +335,7 @@ export async function GET() {
         actions: [
           {
             action: 'view',
-            label: 'Mark As Paid',
+            label: t('markAsPaid'),
             url: markAsPaidUrl,
             clear: true
           },
@@ -275,6 +348,14 @@ export async function GET() {
         title: title,
         message: message,
         markAsPaidUrl: markAsPaidUrl,
+        translations: {
+          header: tExternal('header', { siteName: siteConfig.name }),
+          paymentQuestion: tExternal('paymentQuestion'),
+          markAsPaid: t('markAsPaid'),
+          viewDetails: tExternal('viewDetails'),
+          visitDashboard: tExternal('visitDashboard'),
+          footer: tExternal('footer', { siteName: siteConfig.name }),
+        },
       }));
     }
 
@@ -283,6 +364,12 @@ export async function GET() {
         title: title,
         message: message,
         markAsPaidUrl: markAsPaidUrl,
+        translations: {
+          header: tExternal('header', { siteName: siteConfig.name }),
+          markAsPaid: t('markAsPaid'),
+          visitDashboard: tExternal('visitDashboard'),
+          footer: tExternal('footer', { siteName: siteConfig.name }),
+        },
       }));
     }
 

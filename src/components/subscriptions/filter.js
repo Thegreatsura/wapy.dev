@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { isThisMonth, addMonths, isBefore } from 'date-fns';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import { SubscriptionGetNextFuturePaymentDate } from '@/components/subscriptions/lib';
@@ -26,6 +27,7 @@ export const FilterPanel = ({
   filteredSubscriptions,
   setFilteredSubscriptions,
 }) => {
+  const t = useTranslations('components.filters');
   const [selectedCategories, setSelectedCategories] = useState(categories);
   const [selectedPaymentMethods, setSelectedPaymentMethods] = useState(paymentMethods);
   const [enabledFilter, setEnabledFilter] = useState(true);
@@ -93,11 +95,11 @@ export const FilterPanel = ({
       return (
           sub.categories?.length
           ? sub.categories.some(cat => selectedCategories[cat.name].status)
-          : selectedCategories['Uncategorized'].status
+          : selectedCategories[t('categories.uncategorized')].status
         ) && (
           sub.paymentMethods?.length
           ? sub.paymentMethods.some(pm => selectedPaymentMethods[pm.name].status)
-          : selectedPaymentMethods['Unspecified'].status
+          : selectedPaymentMethods[t('paymentMethods.unspecified')].status
         ) && (
           enabledFilter && disabledFilter ||
           (enabledFilter && sub.enabled) ||
@@ -118,7 +120,7 @@ export const FilterPanel = ({
     <>
       <ResponsiveDialog close>
         <ResponsiveDialogTrigger asChild>
-          <Button variant='outline' size='lg' className='px-4 cursor-pointer' title='Filter subscriptions'>
+          <Button variant='outline' size='lg' className='px-4 cursor-pointer' title={t('buttons.filter')}>
             <Icons.filter />
           </Button>
         </ResponsiveDialogTrigger>
@@ -126,10 +128,10 @@ export const FilterPanel = ({
           <ResponsiveDialogHeader className='text-left p-0 py-4 sm:py-4'>
             <div className='flex items-start justify-between'>
               <div>
-                <ResponsiveDialogTitle className='text-lg'>Subscription Filters</ResponsiveDialogTitle>
-                <ResponsiveDialogDescription className='text-sm'>Apply filters and find the subscriptions you need</ResponsiveDialogDescription>
+                <ResponsiveDialogTitle className='text-lg'>{t('title')}</ResponsiveDialogTitle>
+                <ResponsiveDialogDescription className='text-sm'>{t('description')}</ResponsiveDialogDescription>
               </div>
-              <Button variant='outline' size='icon' title='Reset filters' className='shrink-0 cursor-pointer' onClick={() => {
+              <Button variant='outline' size='icon' title={t('buttons.reset')} className='shrink-0 cursor-pointer' onClick={() => {
                   setEnabledFilter(true);
                   setDisabledFilter(false);
                   setThisMonthFilter(false);
@@ -147,27 +149,27 @@ export const FilterPanel = ({
             <div className='flex flex-col gap-4'>
               {/* Status Filter Section */}
               <div className='flex flex-col gap-2'>
-                <h3 className='text-sm font-medium'>Status</h3>
+                <h3 className='text-sm font-medium'>{t('status.title')}</h3>
                 <div className='flex gap-4'>
                   <Toggle
                     pressed={enabledFilter}
                     onPressedChange={() => setEnabledFilter(!enabledFilter)}
                     variant='outline'
                     className='gap-2 px-4 py-2 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                    title='Filter by active subscriptions'
+                    title={t('status.active.description')}
                   >
                     <div className='size-3 rounded-full bg-green-500' />
-                    Active
+                    {t('status.active.title')}
                   </Toggle>
                   <Toggle
                     pressed={disabledFilter}
                     onPressedChange={() => setDisabledFilter(!disabledFilter)}
                     variant='outline'
                     className='gap-2 px-4 py-2 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                    title='Filter by inactive subscriptions'
+                    title={t('status.inactive.description')}
                   >
                     <div className='size-3 rounded-full bg-red-500' />
-                    Inactive
+                    {t('status.inactive.title')}
                   </Toggle>
                 </div>
               </div>
@@ -175,7 +177,7 @@ export const FilterPanel = ({
               <Separator />
 
               <div className='flex flex-col gap-2'>
-                <h3 className='text-sm font-medium'>Payment Date</h3>
+                <h3 className='text-sm font-medium'>{t('paymentDate.title')}</h3>
                 <div className='flex gap-4'>
                   <Toggle
                     pressed={!thisMonthFilter && !next30DaysFilter}
@@ -185,9 +187,9 @@ export const FilterPanel = ({
                     }}
                     variant='outline'
                     className='gap-2 px-4 py-2 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                    title='Disable all payment date filters'
+                    title={t('paymentDate.all.description')}
                   >
-                    All
+                    {t('paymentDate.all.title')}
                   </Toggle>
                   <Toggle
                     pressed={thisMonthFilter}
@@ -197,9 +199,9 @@ export const FilterPanel = ({
                     }}
                     variant='outline'
                     className='gap-2 px-4 py-2 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                    title='Filter by this month'
+                    title={t('paymentDate.thisMonth.description')}
                   >
-                    This Month
+                    {t('paymentDate.thisMonth.title')}
                   </Toggle>
                   <Toggle
                     pressed={next30DaysFilter}
@@ -209,9 +211,9 @@ export const FilterPanel = ({
                     }}
                     variant='outline'
                     className='gap-2 px-4 py-2 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                    title='Filter by next 30 days'
+                    title={t('paymentDate.next30Days.description')}
                   >
-                    Next 30 Days
+                    {t('paymentDate.next30Days.title')}
                   </Toggle>
                 </div>
               </div>
@@ -222,25 +224,25 @@ export const FilterPanel = ({
                 <>
                   <div className='flex flex-col gap-2'>
                     <div className='flex justify-between items-center'>
-                      <h3 className='text-sm font-medium'>Currencies</h3>
+                      <h3 className='text-sm font-medium'>{t('currencies.title')}</h3>
                       <div className='flex gap-2'>
                         <Button
                           variant='ghost'
                           size='sm'
                           onClick={() => toggleAllCurrencies(true)}
                           className='h-8 px-3 text-xs cursor-pointer'
-                          title='Select all currencies'
+                          title={t('currencies.all.description')}
                         >
-                          Select All
+                          {t('selectAll')}
                         </Button>
                         <Button
                           variant='ghost'
                           size='sm'
                           onClick={() => toggleAllCurrencies(false)}
                           className='h-8 px-3 text-xs cursor-pointer'
-                          title='Clear all currencies'
+                          title={t('currencies.clear.description')}
                         >
-                          Select None
+                          {t('selectNone')}
                         </Button>
                       </div>
                     </div>
@@ -252,7 +254,7 @@ export const FilterPanel = ({
                           onPressedChange={() => toggleCurrency(currency)}
                           variant='outline'
                           className='text-xs gap-2 px-2 py-1 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                          title={`Filter by ${DefaultCurrencies[currency].name}`}
+                          title={t('currencies.filter', { currency: DefaultCurrencies[currency].name })}
                         >
                           <span>
                             {DefaultCurrencies[currency].symbol}
@@ -269,25 +271,25 @@ export const FilterPanel = ({
 
               <div className='flex flex-col gap-2'>
                 <div className='flex justify-between items-center'>
-                  <h3 className='text-sm font-medium'>Categories</h3>
+                  <h3 className='text-sm font-medium'>{t('categories.title')}</h3>
                   <div className='flex gap-2'>
                     <Button
                       variant='ghost'
                       size='sm'
                       onClick={() => toggleAllCategories(true)}
                       className='h-8 px-3 text-xs cursor-pointer'
-                      title='Select all categories'
+                      title={t('categories.all.description')}
                     >
-                      Select All
+                      {t('selectAll')}
                     </Button>
                     <Button
                       variant='ghost'
                       size='sm'
                       onClick={() => toggleAllCategories(false)}
                       className='h-8 px-3 text-xs cursor-pointer'
-                      title='Clear all categories'
+                      title={t('categories.clear.description')}
                     >
-                      Select None
+                      {t('selectNone')}
                     </Button>
                   </div>
                 </div>
@@ -301,7 +303,7 @@ export const FilterPanel = ({
                         onPressedChange={() => toggleCategory(category)}
                         variant='outline'
                         className='text-xs gap-2 px-2 py-1 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                        title={`Filter by ${category}`}
+                        title={t('categories.filterBy', { category })}
                       >
                         <span className='size-2 rounded-full' style={{
                           backgroundColor: selectedCategories[category].color,
@@ -314,25 +316,25 @@ export const FilterPanel = ({
 
               <div className='flex flex-col gap-2'>
                 <div className='flex justify-between items-center'>
-                  <h3 className='text-sm font-medium'>Payment Methods</h3>
+                  <h3 className='text-sm font-medium'>{t('paymentMethods.title')}</h3>
                   <div className='flex gap-2'>
                     <Button
                       variant='ghost'
                       size='sm'
                       onClick={() => toggleAllPaymentMethods(true)}
                       className='h-8 px-3 text-xs cursor-pointer'
-                      title='Select all payment methods'
+                      title={t('paymentMethods.all.description')}
                     >
-                      Select All
+                      {t('selectAll')}
                     </Button>
                     <Button
                       variant='ghost'
                       size='sm'
                       onClick={() => toggleAllPaymentMethods(false)}
                       className='h-8 px-3 text-xs cursor-pointer'
-                      title='Clear all payment methods'
+                      title={t('paymentMethods.clear.description')}
                     >
-                      Select None
+                      {t('selectNone')}
                     </Button>
                   </div>
                 </div>
@@ -346,7 +348,7 @@ export const FilterPanel = ({
                         onPressedChange={() => togglePaymentMethod(paymentMethod)}
                         variant='outline'
                         className='text-xs gap-2 px-2 py-1 h-auto cursor-pointer border-l-4 data-[state=on]:border-l-green-500'
-                        title={`Filter by ${paymentMethod}`}
+                        title={t('paymentMethods.filterBy', { method: paymentMethod })}
                       >
                         <LogoIcon icon={selectedPaymentMethods[paymentMethod].icon ? JSON.parse(selectedPaymentMethods[paymentMethod].icon) : false} placeholder className='size-4' />
                         {paymentMethod}

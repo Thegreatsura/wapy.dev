@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { useEventListener, useDebounceCallback } from 'usehooks-ts';
 import { Input } from '@/components/ui/input';
 
 const SearchBar = ( { value, onChange } ) => {
+  const t = useTranslations('components.searchBar');
   const inputRef = useRef();
   const [search, setSearch] = useState(value);
   const debouncedChangeHandler = useDebounceCallback( onChange, 500 );
@@ -27,7 +29,7 @@ const SearchBar = ( { value, onChange } ) => {
 
   return (
     <div className='relative w-full'>
-      <Input ref={ inputRef } type='search' value={ search } onChange={ onSearchChange } placeholder='Search...'
+      <Input ref={ inputRef } type='search' value={ search } onChange={ onSearchChange } placeholder={t('placeholder')}
         className='h-10 pr-12 [&::-webkit-search-cancel-button]:hidden'
       />
       <div className='absolute right-1.5 top-0 flex h-full items-center'>

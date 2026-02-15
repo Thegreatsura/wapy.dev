@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   FormItem,
   FormLabel,
@@ -10,9 +11,11 @@ import {
 import { IconPicker } from '@/components/ui/icon-picker';
 
 export const FormFieldLogo = ({ field }) => {
+  const t = useTranslations('components.subscriptions.form.fields.logo');
+
   return (
     <FormItem>
-      <FormLabel>Logo</FormLabel>
+      <FormLabel>{t('label')}</FormLabel>
       <FormControl>
         <div className='flex flex-col gap-1'>
           <IconPicker
@@ -22,7 +25,7 @@ export const FormFieldLogo = ({ field }) => {
         </div>
       </FormControl>
       <FormDescription>
-        Select a predefined icon or enter an URL
+        {t('description')}
       </FormDescription>
       <FormMessage />
     </FormItem>

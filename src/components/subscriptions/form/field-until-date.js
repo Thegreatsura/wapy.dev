@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { DateTimePicker } from '@/components/ui/datetime-picker';
 import {
   FormItem,
@@ -10,9 +11,11 @@ import {
 } from '@/components/ui/form';
 
 export const FormFieldUntilDate = ({ field }) => {
+  const t = useTranslations('components.subscriptions.form.fields.untilDate');
+
   return (
     <FormItem className='flex flex-col'>
-      <FormLabel>Valid Until</FormLabel>
+      <FormLabel>{t('label')}</FormLabel>
       <FormControl>
         <DateTimePicker
           min={new Date()}
@@ -23,7 +26,7 @@ export const FormFieldUntilDate = ({ field }) => {
         />
       </FormControl>
       <FormDescription>
-        Leave empty for an indefinite subscription
+        {t('description')}
       </FormDescription>
       <FormMessage />
     </FormItem>

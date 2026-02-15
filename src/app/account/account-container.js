@@ -2,10 +2,11 @@
 
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
-import { format, formatDistanceToNowStrict } from 'date-fns';
+import { format, differenceInHours, differenceInDays } from 'date-fns';
 import { useScrollLock } from 'usehooks-ts';
 import { useTheme } from 'next-themes';
 import { initializePaddle } from '@paddle/paddle-js';
+import { useTranslations, useFormatter, useNow } from 'next-intl';
 import { Label } from '@/components/ui/label';
 import {
   Card,
@@ -64,7 +65,7 @@ import {
   SchemaDiscordService,
   SchemaSlackService,
 } from './schema';
-import { DefaultCategories } from '@/config/categories';
+import { DefaultColors } from '@/config/colors';
 import { CurrencyFieldManager } from '@/components/subscriptions/form/field-currency';
 import { TimezoneFieldManager } from '@/components/subscriptions/form/field-timezone';
 import { NotificationsFieldManager } from '@/components/subscriptions/form/field-notifications';
@@ -74,6 +75,7 @@ import { paddleCheckSubscriptionCheckout, paddleCancelSubscription, paddleResume
 import { LogoIcon, IconPicker } from '@/components/ui/icon-picker';
 
 const TimezoneManager = ({ user }) => {
+  const t = useTranslations('pages.account.defaultSettings.timezone');
   const [selectedTimezone, setSelectedTimezone] = useState(user?.timezone);
   const [loading, setLoading] = useState(false);
 
@@ -83,12 +85,12 @@ const TimezoneManager = ({ user }) => {
       setSelectedTimezone(value);
       const { success } = await UserUpdateTimezone(value);
       if (success) {
-        toast.success('Timezone updated successfully');
+        toast.success(t('success'));
       } else {
-        toast.error('Failed to update timezone');
+        toast.error(t('error'));
       }
     } catch (error) {
-      toast.error('Failed to update timezone');
+      toast.error(t('error'));
     } finally {
       setLoading(false);
     }
@@ -96,13 +98,14 @@ const TimezoneManager = ({ user }) => {
 
   return (
     <div className='space-y-2'>
-      <Label>Timezone</Label>
+      <Label>{t('label')}</Label>
       <TimezoneFieldManager field={{ value: selectedTimezone, onChange: handleTimezoneChange }} loading={loading} />
     </div>
   );
 };
 
 const CurrencyManager = ({ user }) => {
+  const t = useTranslations('pages.account.defaultSettings.currency');
   const [selectedCurrency, setSelectedCurrency] = useState(user?.currency || 'EUR');
   const [loading, setLoading] = useState(false);
 
@@ -112,12 +115,12 @@ const CurrencyManager = ({ user }) => {
       setSelectedCurrency(currency);
       const { success } = await UserUpdateCurrency(currency);
       if (success) {
-        toast.success('Currency updated successfully');
+        toast.success(t('success'));
       } else {
-        toast.error('Failed to update currency');
+        toast.error(t('error'));
       }
     } catch (error) {
-      toast.error('Failed to update currency');
+      toast.error(t('error'));
     } finally {
       setLoading(false);
     }
@@ -125,19 +128,21 @@ const CurrencyManager = ({ user }) => {
 
   return (
     <div className='space-y-2'>
-      <Label>Currency</Label>
+      <Label>{t('label')}</Label>
       <CurrencyFieldManager field={{ value: selectedCurrency, onChange: handleCurrencyChange }} loading={loading} />
     </div>
   );
 };
 
 const DefaultSettings = ({ user }) => {
+  const t = useTranslations('pages.account.defaultSettings');
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Default Settings</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Configure your default settings for new subscriptions
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
@@ -149,6 +154,7 @@ const DefaultSettings = ({ user }) => {
 };
 
 const NotificationManager  = ({user, externalServices}) => {
+  const t = useTranslations('pages.account.notifications');
   const [loading, setLoading] = useState(false);
   const [notifications, setNotifications] = useState(user?.notifications);
 
@@ -156,15 +162,17 @@ const NotificationManager  = ({user, externalServices}) => {
     try {
       setLoading(true);
       const validated = SchemaUserNotifications.parse(notifications);
-      if (!validated) throw new Error('Invalid notifications data');
+      if (!validated) {
+        throw new Error('Invalid notifications data');
+      }
       const { success } = await UserUpdateNotifications(notifications);
       if (success) {
-        toast.success('Notification preferences saved');
+        toast.success(t('success'));
       } else {
-        toast.error('Failed to save notification preferences');
+        toast.error(t('error'));
       }
     } catch (error) {
-      toast.error('Failed to save notification preferences');
+      toast.error(t('error'));
     } finally {
       setLoading(false);
     }
@@ -180,19 +188,22 @@ const NotificationManager  = ({user, externalServices}) => {
         onClick={handleSave}
         className='w-full sm:w-auto'
         disabled={loading}
-        title='Save notification preferences'
+        title={t('saveButtonTitle')}
       >
         <Icons.save />
-        Save Changes
+        {t('saveButton')}
       </Button>
     </NotificationsFieldManager>
   );
 };
 
 const UserProfile = ({ user }) => {
+  const t = useTranslations('pages.account.profile');
+  const tCommon = useTranslations('common');
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(user.name || user.email.split('@')[0] || '');
   const [loading, setLoading] = useState(false);
+  const formatter = useFormatter();
 
   const handleSave = async () => {
     if (loading) return;
@@ -201,12 +212,12 @@ const UserProfile = ({ user }) => {
       const { success } = await UserUpdateName(name);
       if (success) {
         setIsEditing(false);
-        toast.success('Your name has been updated successfully.');
+        toast.success(t('success'));
       } else {
-        toast.error('Failed to update your name!');
+        toast.error(t('error'));
       }
     } catch (error) {
-      toast.error('Failed to update your name!');
+      toast.error(t('error'));
     } finally {
       setLoading(false);
     }
@@ -234,7 +245,7 @@ const UserProfile = ({ user }) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder='Enter your name'
+                  placeholder={t('namePlaceholder')}
                   className='w-full font-normal'
                   disabled={loading}
                 />
@@ -244,14 +255,14 @@ const UserProfile = ({ user }) => {
                     size='sm'
                     className='w-full sm:w-auto'
                     disabled={loading}
-                    title='Save'
+                    title={tCommon('save')}
                   >
                     {loading ? (
                       <Icons.spinner className='animate-spin' />
                     ) : (
                       <Icons.save />
                     )}
-                    Save
+                    {tCommon('save')}
                   </Button>
                   <Button
                     onClick={() => setIsEditing(false)}
@@ -259,36 +270,40 @@ const UserProfile = ({ user }) => {
                     size='sm'
                     className='w-full sm:w-auto'
                     disabled={loading}
-                    title='Cancel'
+                    title={tCommon('cancel')}
                   >
                     <Icons.x />
-                    Cancel
+                    {tCommon('cancel')}
                   </Button>
                 </div>
               </div>
             ) : (
               <div className='flex items-center justify-center sm:justify-start gap-2 w-full'>
                 <span className='line-clamp-1 break-all text-center sm:text-left'>
-                  {name || 'Add your name'}
+                  {name || t('addNamePrompt')}
                 </span>
                 <Button
                   variant='ghost'
                   size='sm'
                   onClick={() => setIsEditing(true)}
-                  title='Edit'
+                  title={tCommon('edit')}
                 >
                   <Icons.edit />
                 </Button>
               </div>
             )}
             <div className='flex flex-col gap-2 mt-2 w-full'>
-              <div className='text-sm text-muted-foreground inline-flex items-center gap-2 text-left'>
-                <Icons.mail className='size-4' />
+              <div className='text-sm text-muted-foreground flex items-center gap-2 text-left'>
+                <Icons.mail className='size-4 shrink-0' />
                 <span className='truncate'>{user.email}</span>
               </div>
-              <div className='text-sm text-muted-foreground inline-flex items-center gap-2 text-left'>
-                <Icons.calendar className='size-4' />
-                <span className='line-clamp-2 break-words'>Member since {format(new Date(user.createdAt), 'MMMM d, yyyy')}</span>
+              <div className='text-sm text-muted-foreground flex items-center gap-2 text-left'>
+                <Icons.calendar className='size-4 shrink-0' />
+                <span className='line-clamp-2 wrap-break-word'>
+                  {t('memberSince', {
+                    date: formatter.dateTime(user.createdAt, 'short'),
+                  })}
+                </span>
               </div>
             </div>
           </div>
@@ -314,6 +329,8 @@ const CategorySkeletons = () => (
 );
 
 const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
+  const t = useTranslations('pages.account.categories');
+  const tCommon = useTranslations('common');
   const [editedColor, setEditedColor] = useState(color);
   const [editedName, setEditedName] = useState(name);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -323,7 +340,11 @@ const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
       <div className='flex items-center gap-2 w-full'>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant='ghost' className='p-2' title='Select color'>
+            <Button
+              variant='ghost'
+              className='p-2'
+              title={t('selectColor')}
+            >
               <div
                 className='size-6 rounded-full'
                 style={{ backgroundColor: editedColor }}
@@ -332,7 +353,7 @@ const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
           </PopoverTrigger>
           <PopoverContent className='w-40'>
             <div className='grid grid-cols-3 gap-4'>
-              {Object.values(DefaultCategories).map((c, i) => (
+              {Object.values(DefaultColors).map((c, i) => (
                 <Button
                   key={i}
                   className={`size-8 rounded-full cursor-pointer hover:scale-110 transition-transform ${
@@ -349,7 +370,7 @@ const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
           value={editedName}
           onChange={(e) => setEditedName(e.target.value)}
           className='flex-1'
-          placeholder='Category name'
+          placeholder={t('namePlaceholder')}
         />
       </div>
       <div className='flex items-center gap-2 w-full sm:w-auto'>
@@ -358,7 +379,7 @@ const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
           variant='outline'
           size='icon'
           className='flex-1 sm:flex-none'
-          title='Cancel'
+          title={tCommon('cancel')}
         >
           <Icons.x className='size-4' />
         </Button>
@@ -366,7 +387,7 @@ const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
           onClick={() => onSave(editedName, editedColor)}
           size='icon'
           className='flex-1 sm:flex-none'
-          title='Save'
+          title={tCommon('save')}
         >
           <Icons.save className='size-4' />
         </Button>
@@ -375,7 +396,7 @@ const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
           variant='destructive'
           size='icon'
           className='flex-1 sm:flex-none'
-          title='Delete'
+          title={tCommon('delete')}
         >
           <Icons.trash className='size-4' />
         </Button>
@@ -383,25 +404,25 @@ const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
       <ResponsiveDialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <ResponsiveDialogContent>
           <ResponsiveDialogHeader>
-            <ResponsiveDialogTitle>Delete Category</ResponsiveDialogTitle>
+            <ResponsiveDialogTitle>{t('delete.title')}</ResponsiveDialogTitle>
             <ResponsiveDialogDescription className='text-left'>
-              Are you sure you want to delete this category? This action cannot be undone.
+              {t('delete.description')}
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
           <ResponsiveDialogFooter>
             <Button
               variant='outline'
               onClick={() => setDialogOpen(false)}
-              title='Cancel'
+              title={tCommon('cancel')}
             >
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button
               onClick={() => {setDialogOpen(false); onDelete();}}
               variant='destructive'
-              title='Delete'
+              title={tCommon('delete')}
             >
-              Delete
+              {tCommon('delete')}
             </Button>
           </ResponsiveDialogFooter>
         </ResponsiveDialogContent>
@@ -411,6 +432,7 @@ const CategoryItemEdit = ({ name, color, onCancel, onSave, onDelete }) => {
 };
 
 const CategoryItem = ({ category, onSave, onDelete, edit = false }) => {
+  const t = useTranslations('pages.account.categories');
   const [editingName, setEditingName] = useState(category.name);
   const [editingColor, setEditingColor] = useState(category.color);
   const [isEditing, setIsEditing] = useState(edit);
@@ -425,7 +447,7 @@ const CategoryItem = ({ category, onSave, onDelete, edit = false }) => {
   const handleSave = async (name, color) => {
     const validatedData = SchemaCategory.parse({ name: name, color: color });
     if (!validatedData) {
-      toast.error('Invalid category data');
+      toast.error(t('invalid'));
       return;
     }
 
@@ -480,10 +502,10 @@ const CategoryItem = ({ category, onSave, onDelete, edit = false }) => {
             variant='ghost'
             size='icon'
             onClick={handleDoubleClick}
-            title='Edit category'
+            title={t('edit')}
           >
             <Icons.edit />
-            <span className='sr-only'>Edit category</span>
+            <span className='sr-only'>{t('edit')}</span>
           </Button>
         </>
       )}
@@ -492,6 +514,8 @@ const CategoryItem = ({ category, onSave, onDelete, edit = false }) => {
 };
 
 const CategoryManager = ({ user }) => {
+  const t = useTranslations('pages.account.categories');
+  const tCommon = useTranslations('common');
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState(user.categories ? [...user.categories] : []);
 
@@ -501,10 +525,10 @@ const CategoryManager = ({ user }) => {
       await UserLoadDefaultCategories().then((defaultCategories) => {
         setCategories([...categories, ...defaultCategories]);
         setLoading(false);
-        toast.success('Default categories loaded successfully!');
+        toast.success(t('default.success'));
       });
     } catch (error) {
-      toast.error('Failed to create default categories!');
+      toast.error(t('default.error'));
     } finally {
       setLoading(false);
     }
@@ -520,10 +544,10 @@ const CategoryManager = ({ user }) => {
         });
       }
       if (isToast) {
-        toast.success('Category deleted successfully!');
+        toast.success(t('delete.success'));
       }
     } catch (error) {
-      toast.error('Failed to delete category!');
+      toast.error(t('delete.error'));
     }
   };
 
@@ -537,10 +561,10 @@ const CategoryManager = ({ user }) => {
           return c.id === updatedCategory.id ? updatedCategory : c;
         }));
       });
-      toast.success('Category saved successfully!');
+      toast.success(t('save.success'));
       return true;
     } catch (error) {
-      toast.error('Failed to save category!');
+      toast.error(t('save.error'));
     }
 
     return false;
@@ -558,9 +582,9 @@ const CategoryManager = ({ user }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Categories</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Manage your categories
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-2'>
@@ -570,13 +594,13 @@ const CategoryManager = ({ user }) => {
         ))}
       </CardContent>
       <CardFooter className='gap-2 flex-col sm:flex-row justify-start items-start sm:items-center'>
-        <Button disabled={loading} onClick={handleAdd} title='Add new category' className='w-full sm:w-auto'>
+        <Button disabled={loading} onClick={handleAdd} title={t('addButtonTitle')} className='w-full sm:w-auto'>
           <Icons.add />
-          Add
+          {tCommon('add')}
         </Button>
-        <Button disabled={loading} onClick={loadDefaultCategories} variant='outline' title='Load default categories' className='w-full sm:w-auto whitespace-normal h-auto min-h-9'>
+        <Button disabled={loading} onClick={loadDefaultCategories} variant='outline' title={t('default.load')} className='w-full sm:w-auto whitespace-normal h-auto min-h-9'>
           <Icons.categories />
-          Load Default Categories
+          {t('default.load')}
         </Button>
       </CardFooter>
     </Card>
@@ -599,6 +623,8 @@ const PaymentMethodSkeletons = () => (
 );
 
 const PaymentMethodItemEdit = ({ name, icon, onCancel, onSave, onDelete }) => {
+  const t = useTranslations('pages.account.paymentMethods');
+  const tCommon = useTranslations('common');
   const [editedIcon, setEditedIcon] = useState(icon);
   const [editedName, setEditedName] = useState(name);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -618,7 +644,7 @@ const PaymentMethodItemEdit = ({ name, icon, onCancel, onSave, onDelete }) => {
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
             className='flex-1'
-            placeholder='Payment method name'
+            placeholder={t('placeholder')}
           />
         </div>
         <div className='flex items-center gap-2 w-full sm:w-auto'>
@@ -627,7 +653,7 @@ const PaymentMethodItemEdit = ({ name, icon, onCancel, onSave, onDelete }) => {
             variant='outline'
             size='icon'
             className='flex-1 sm:flex-none'
-            title='Cancel'
+            title={tCommon('cancel')}
           >
             <Icons.x className='size-4' />
           </Button>
@@ -635,7 +661,7 @@ const PaymentMethodItemEdit = ({ name, icon, onCancel, onSave, onDelete }) => {
             onClick={() => onSave(editedName, editedIcon)}
             size='icon'
             className='flex-1 sm:flex-none'
-            title='Save'
+            title={tCommon('save')}
           >
             <Icons.save className='size-4' />
           </Button>
@@ -644,7 +670,7 @@ const PaymentMethodItemEdit = ({ name, icon, onCancel, onSave, onDelete }) => {
             variant='destructive'
             size='icon'
             className='flex-1 sm:flex-none'
-            title='Delete'
+            title={tCommon('delete')}
           >
             <Icons.trash className='size-4' />
           </Button>
@@ -652,25 +678,25 @@ const PaymentMethodItemEdit = ({ name, icon, onCancel, onSave, onDelete }) => {
         <ResponsiveDialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <ResponsiveDialogContent>
             <ResponsiveDialogHeader>
-              <ResponsiveDialogTitle>Delete Payment Method</ResponsiveDialogTitle>
+              <ResponsiveDialogTitle>{t('delete.title')}</ResponsiveDialogTitle>
               <ResponsiveDialogDescription className='text-left'>
-                Are you sure you want to delete this payment method? This action cannot be undone.
+                {t('delete.description')}
               </ResponsiveDialogDescription>
             </ResponsiveDialogHeader>
             <ResponsiveDialogFooter>
               <Button
                 variant='outline'
                 onClick={() => setDialogOpen(false)}
-                title='Cancel'
+                title={tCommon('cancel')}
               >
-                Cancel
+                {tCommon('cancel')}
               </Button>
               <Button
                 onClick={() => {setDialogOpen(false); onDelete();}}
                 variant='destructive'
-                title='Delete'
+                title={tCommon('delete')}
               >
-                Delete
+                {tCommon('delete')}
               </Button>
             </ResponsiveDialogFooter>
           </ResponsiveDialogContent>
@@ -681,6 +707,7 @@ const PaymentMethodItemEdit = ({ name, icon, onCancel, onSave, onDelete }) => {
 };
 
 const PaymentMethodItem = ({ paymentMethod, onSave, onDelete, edit = false }) => {
+  const t = useTranslations('pages.account.paymentMethods');
   const [editingName, setEditingName] = useState(paymentMethod.name);
   const [editingIcon, setEditingIcon] = useState(paymentMethod.icon);
   const [isEditing, setIsEditing] = useState(edit);
@@ -695,7 +722,7 @@ const PaymentMethodItem = ({ paymentMethod, onSave, onDelete, edit = false }) =>
   const handleSave = async (name, icon) => {
     const validatedData = SchemaPaymentMethod.parse({ name: name, icon: icon });
     if (!validatedData) {
-      toast.error('Invalid payment method data');
+      toast.error(t('invalid'));
       return;
     }
 
@@ -747,10 +774,10 @@ const PaymentMethodItem = ({ paymentMethod, onSave, onDelete, edit = false }) =>
             variant='ghost'
             size='icon'
             onClick={handleDoubleClick}
-            title='Edit payment method'
+            title={t('edit')}
           >
             <Icons.edit />
-            <span className='sr-only'>Edit payment method</span>
+            <span className='sr-only'>{t('edit')}</span>
           </Button>
         </>
       )}
@@ -759,6 +786,8 @@ const PaymentMethodItem = ({ paymentMethod, onSave, onDelete, edit = false }) =>
 };
 
 const PaymentMethodManager = ({ user }) => {
+  const t = useTranslations('pages.account.paymentMethods');
+  const tCommon = useTranslations('common');
   const [loading, setLoading] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState(user.paymentMethods ? [...user.paymentMethods] : []);
 
@@ -768,10 +797,10 @@ const PaymentMethodManager = ({ user }) => {
       await UserLoadDefaultPaymentMethods().then((defaultPaymentMethods) => {
         setPaymentMethods([...paymentMethods, ...defaultPaymentMethods]);
         setLoading(false);
-        toast.success('Default payment methods loaded successfully!');
+        toast.success(t('load.success'));
       });
     } catch (error) {
-      toast.error('Failed to create default payment methods!');
+      toast.error(t('load.error'));
     } finally {
       setLoading(false);
     }
@@ -787,10 +816,10 @@ const PaymentMethodManager = ({ user }) => {
         });
       }
       if (isToast) {
-        toast.success('Payment method deleted successfully!');
+        toast.success(t('delete.success'));
       }
     } catch (error) {
-      toast.error('Failed to delete payment method!');
+      toast.error(t('delete.error'));
     }
   };
 
@@ -804,10 +833,10 @@ const PaymentMethodManager = ({ user }) => {
           return c.id === updatedPaymentMethod.id ? updatedPaymentMethod : c;
         }));
       });
-      toast.success('Payment method saved successfully!');
+      toast.success(t('save.success'));
       return true;
     } catch (error) {
-      toast.error('Failed to save payment method!');
+      toast.error(t('save.error'));
     }
 
     return false;
@@ -825,9 +854,9 @@ const PaymentMethodManager = ({ user }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Payment Methods</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Manage your payment methods
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-2'>
@@ -837,13 +866,19 @@ const PaymentMethodManager = ({ user }) => {
         ))}
       </CardContent>
       <CardFooter className='gap-2 flex-col sm:flex-row justify-start items-start sm:items-center'>
-        <Button disabled={loading} onClick={handleAdd} title='Add new payment method' className='w-full sm:w-auto'>
+        <Button disabled={loading} onClick={handleAdd} title={t('add')} className='w-full sm:w-auto'>
           <Icons.add />
-          Add
+          {tCommon('add')}
         </Button>
-        <Button disabled={loading} onClick={loadDefaultPaymentMethods} variant='outline' title='Load default payment methods' className='w-full sm:w-auto whitespace-normal h-auto min-h-9'>
+        <Button
+          disabled={loading}
+          onClick={loadDefaultPaymentMethods}
+          variant='outline'
+          title={t('load.title')}
+          className='w-full sm:w-auto whitespace-normal h-auto min-h-9'
+        >
           <Icons.paymentMethods />
-          Load Default Payment Methods
+          {t('load.title')}
         </Button>
       </CardFooter>
     </Card>
@@ -851,16 +886,30 @@ const PaymentMethodManager = ({ user }) => {
 };
 
 const PaymentStatusDate = ({date}) => {
+  const formatter = useFormatter();
+  const now = useNow({
+    updateInterval: 1000 * 30,
+  });
+
   return (
     <div className='inline-flex items-center gap-1'>
       <Popover>
         <PopoverTrigger asChild>
           <span className='inline-flex items-center cursor-pointer'>
-            {formatDistanceToNowStrict(date, {addSuffix: true})}
+            {formatter.relativeTime(date, {
+              now: now,
+              unit: Math.abs(differenceInDays(date, now)) >= 1
+                ? 'day'
+                : Math.abs(differenceInHours(date, now)) >= 1
+                ? 'hour'
+                : undefined,
+            })}
           </span>
         </PopoverTrigger>
-        <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl break-words px-4 py-1'>
-          {format(date, 'dd MMMM yyyy, HH:mm')}
+        <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl wrap-break-word px-4 py-1'>
+          {formatter.dateTime(date, 'long', {
+            timeZone : Intl.DateTimeFormat().resolvedOptions().timeZone,
+          })}
         </PopoverContent>
       </Popover>
     </div>
@@ -868,14 +917,18 @@ const PaymentStatusDate = ({date}) => {
 };
 
 const PaymentStatusCard = ({ loading = false, status, children }) => {
+  const t = useTranslations('pages.account.subscriptionStatus');
+
   return (
     <Card>
       <CardHeader>
         <div className='flex items-start justify-between gap-2'>
           <div className='flex flex-col gap-1 text-left grow overflow-hidden'>
-            <CardTitle>Subscription Status</CardTitle>
+            <CardTitle>
+              {t('title')}
+            </CardTitle>
             <CardDescription>
-              Your subscription status
+              {t('description')}
             </CardDescription>
           </div>
           {loading && (
@@ -914,6 +967,7 @@ const PaymentStatusCard = ({ loading = false, status, children }) => {
 };
 
 const PaymentStatusTrial = ({ user, paddleStatus }) => {
+  const t = useTranslations('pages.account.subscriptionStatus.trial');
   const { resolvedTheme } = useTheme();
   const { lock, unlock } = useScrollLock({
     autoLock: false,
@@ -983,40 +1037,31 @@ const PaymentStatusTrial = ({ user, paddleStatus }) => {
       <CardContent className='flex flex-col gap-1'>
         {isActive ? (
           <>
-            <div className={cn(
-              'text-base font-medium',
-              {
-                'text-green-600 dark:text-green-500': status === 'green',
-                'text-orange-500': status === 'orange',
-                'text-red-500': status === 'red',
-              },
-            )}>
-              <span className='text-sm text-muted-foreground'>Your trial period ends</span >
-              {' '}
-              <PaymentStatusDate date={paddleStatus.nextPaymentAt} />
-              <span className='text-sm text-muted-foreground'>.</span >
+            <div className='text-sm text-muted-foreground'>
+              {t.rich('active', {
+                date: () => (
+                  <span className={cn(
+                    'text-base font-medium',
+                    {
+                      'text-green-600 dark:text-green-500': status === 'green',
+                      'text-orange-500': status === 'orange',
+                      'text-red-500': status === 'red',
+                    },
+                  )}>
+                    <PaymentStatusDate date={paddleStatus.nextPaymentAt} />
+                  </span>
+                ),
+              })}
             </div>
             <div className='text-sm text-muted-foreground'>
-              We will notify you
-              {' '}
-              {paddleStatus.remainingDays > 1 ? (
-                <>
-                  <span className='text-foreground'>1 day before</span>
-                  {' '}
-                  your trial ends.
-                </>
-              ) : (
-                <>
-                  <span className='text-foreground'>when</span>
-                  {' '}
-                  your trial ends.
-                </>
-              )}
+              {t.rich(paddleStatus.remainingDays > 1 ? 'notification.multipleDays' : 'notification.lastDay', {
+                highlight: (chunks) => <span className='text-foreground'>{chunks}</span>
+              })}
             </div>
           </>
         ) : (
           <div className='text-base font-medium text-red-500'>
-            Your trial period has ended!
+            {t('ended')}
           </div>
         )}
       </CardContent>
@@ -1027,7 +1072,7 @@ const PaymentStatusTrial = ({ user, paddleStatus }) => {
           ) : (
             <Icons.sparkles />
           )}
-          Ready to continue with us?
+          {t('subscribe')}
         </Button>
       </CardFooter>
     </PaymentStatusCard>
@@ -1035,6 +1080,9 @@ const PaymentStatusTrial = ({ user, paddleStatus }) => {
 };
 
 const PaymentStatusSubscription = ({ user, paddleStatus }) => {
+  const t = useTranslations('pages.account.subscriptionStatus.subscription');
+  const tCommon = useTranslations('common');
+
   const { resolvedTheme } = useTheme();
   const { lock, unlock } = useScrollLock({
     autoLock: false,
@@ -1115,16 +1163,18 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
         <>
           <PaymentStatusCard status='orange'>
             <CardContent className='flex flex-col gap-1'>
-              <div className='text-base font-medium text-orange-500'>
-                <span className='text-sm text-muted-foreground'>Your subscription is </span>
-                {paddleStatus.scheduledChange?.action === 'pause' ? 'paused' : 'cancelled'}
-                <span className='text-sm text-muted-foreground'> and will stop </span>
-                {' '}
-                <PaymentStatusDate date={paddleStatus.scheduledChange?.effectiveAt ? paddleStatus.scheduledChange?.effectiveAt : paddleStatus.nextPaymentAt} />
-                <span className='text-sm text-muted-foreground'>.</span>
+              <div className='text-sm text-muted-foreground'>
+                {t.rich(paddleStatus.scheduledChange?.action === 'pause' ? 'active.scheduled.pause' : 'active.scheduled.cancel', {
+                  status: (chunks) => <span className='text-base font-medium text-orange-500'>{chunks}</span>,
+                  date: () => (
+                    <span className='text-base font-medium text-orange-500'>
+                      <PaymentStatusDate date={paddleStatus.scheduledChange?.effectiveAt ? paddleStatus.scheduledChange?.effectiveAt : paddleStatus.nextPaymentAt} />
+                    </span>
+                  ),
+                })}
               </div>
               <div className='text-sm text-muted-foreground'>
-                We will notify you before your subscription ends.
+                {t('active.notification')}
               </div>
             </CardContent>
           </PaymentStatusCard>
@@ -1136,14 +1186,17 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
       <>
         <PaymentStatusCard status='green'>
           <CardContent className='flex flex-col gap-1'>
-            <div className='text-base font-medium text-green-600 dark:text-green-500'>
-              <span className='text-sm text-muted-foreground'>Your next payment is</span>
-              {' '}
-              <PaymentStatusDate date={paddleStatus.nextPaymentAt} />
-              <span className='text-sm text-muted-foreground'>.</span>
+            <div className='text-sm text-muted-foreground'>
+              {t.rich('active.nextPayment', {
+                date: () => (
+                  <span className='text-base font-medium text-green-600 dark:text-green-500'>
+                    <PaymentStatusDate date={paddleStatus.nextPaymentAt} />
+                  </span>
+                ),
+              })}
             </div>
             <div className='text-sm text-muted-foreground'>
-              We will notify you before your subscription ends.
+              {t('active.notification')}
             </div>
           </CardContent>
           {!paddleStatus.scheduledChange?.action && (
@@ -1154,7 +1207,7 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
                 ) : (
                   <Icons.x />
                 )}
-                Cancel Subscription
+                {t('cancel.button')}
               </Button>
             </CardFooter>
           )}
@@ -1163,30 +1216,30 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
         <ResponsiveDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
           <ResponsiveDialogContent>
             <ResponsiveDialogHeader>
-              <ResponsiveDialogTitle>Are you sure you want to cancel?</ResponsiveDialogTitle>
+              <ResponsiveDialogTitle>{t('cancel.dialog.title')}</ResponsiveDialogTitle>
               <ResponsiveDialogDescription className='text-left text-foreground'>
-                This action will cancel your subscription at the end of the current billing period. You will continue to have access until then.
+                {t('cancel.dialog.description')}
               </ResponsiveDialogDescription>
             </ResponsiveDialogHeader>
             <ResponsiveDialogFooter>
               <Button
                 variant='outline'
                 onClick={() => setShowCancelDialog(false)}
-                title='Cancel'
+                title={tCommon('cancel')}
                 disabled={disabled}
               >
-                Cancel
+                {tCommon('cancel')}
               </Button>
               <Button
                 onClick={cancelSubscription}
                 variant='destructive'
-                title='Confirm Cancellation'
+                title={t('cancel.confirmButton')}
                 disabled={disabled}
               >
                 {disabled && (
                   <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
                 )}
-                Confirm Cancellation
+                {t('cancel.confirmButton')}
               </Button>
             </ResponsiveDialogFooter>
           </ResponsiveDialogContent>
@@ -1200,7 +1253,7 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
       <PaymentStatusCard status='red'>
         <CardContent className='flex flex-col gap-1'>
           <div className='text-sm font-medium text-red-500'>
-            Your subscription is currently paused.
+            {t('paused.message')}
           </div>
         </CardContent>
         <CardFooter className='flex flex-col items-start gap-2'>
@@ -1210,7 +1263,7 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
             ) : (
               <Icons.arrowRight />
             )}
-            Resume Subscription
+            {t('paused.button')}
           </Button>
         </CardFooter>
       </PaymentStatusCard>
@@ -1222,12 +1275,12 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
       <CardContent className='flex flex-col gap-1'>
         {paddleStatus.status === PADDLE_STATUS_MAP.cancelled && (
           <div className='text-sm font-medium text-red-500'>
-            Your subscription has been cancelled.
+            {t('cancelled.message')}
           </div>
         )}
         {paddleStatus.status === PADDLE_STATUS_MAP.past_due && (
           <div className='text-sm font-medium text-red-500'>
-            Your payment is past due. Please update your payment method.
+            {t('pastDue.message')}
           </div>
         )}
       </CardContent>
@@ -1238,7 +1291,7 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
           ) : (
             <Icons.sparkles />
           )}
-          Reactivate Subscription
+          {t('cancelled.button')}
         </Button>
       </CardFooter>
     </PaymentStatusCard>
@@ -1246,20 +1299,28 @@ const PaymentStatusSubscription = ({ user, paddleStatus }) => {
 };
 
 const PaymentStatusFullAccess = () => {
+  const t = useTranslations('pages.account.subscriptionStatus.fullAccess');
+
   return (
     <PaymentStatusCard status='green'>
       <CardContent className='flex flex-col gap-1'>
-          <p className='text-sm text-muted-foreground'>Congratulations! You have full access to all features.</p>
+        <p className='text-sm text-muted-foreground'>
+          {t('message')}
+        </p>
       </CardContent>
     </PaymentStatusCard>
   );
 };
 
 const PaymentStatusBlocked = () => {
+  const t = useTranslations('pages.account.subscriptionStatus.blocked');
+
   return (
     <PaymentStatusCard status='red'>
       <CardContent className='flex flex-col gap-1'>
-        <p className='text-sm font-medium text-red-500'>Weird! You are blocked from using our service.</p>
+        <p className='text-sm font-medium text-red-500'>
+          {t('message')}
+        </p>
       </CardContent>
     </PaymentStatusCard>
   );
@@ -1294,11 +1355,10 @@ const PaymentStatusWrapper = ({ user, paddleStatus }) => {
   return (
     <PaymentStatusSubscription user={user} paddleStatus={paddleStatus} />
   );
-
-
 };
 
 const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
+  const t = useTranslations('pages.account.externalServices.ntfy');
   const [ntfyEnabled, setNtfyEnabled] = useState(ntfy?.enabled || false);
   const [ntfyServerUrl, setNtfyServerUrl] = useState(ntfy?.url || '');
   const [ntfyTopic, setNtfyTopic] = useState(ntfy?.topic || 'wapy-dev');
@@ -1312,13 +1372,13 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
         const { success } = await UserSaveNtfy({ enabled: false });
         if (success) {
           setNtfyEnabled(false);
-          toast.success('ntfy integration disabled.');
+          toast.success(t('toast.disable.success'));
           onUpdate?.({ enabled: false });
         } else {
-          toast.error('Failed to disable ntfy integration!');
+          toast.error(t('toast.disable.error'));
         }
       } catch (error) {
-        toast.error(error.message || 'Failed to disable ntfy integration!');
+        toast.error(t('toast.disable.error'));
       } finally {
         setNtfyLoading(false);
       }
@@ -1333,7 +1393,7 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
 
     try {
       if (!ntfyEnabled) {
-        throw new Error('ntfy integration is not enabled.');
+        throw new Error(t('toast.notEnabled'));
       }
 
       const result = SchemaNtfyService.safeParse({
@@ -1343,19 +1403,19 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
         ...(ntfyAccessToken ? { token: ntfyAccessToken } : {}),
       });
       if (!result.success) {
-        throw new Error('Invalid parameters! Cannot save the ntfy configuration.');
+        throw new Error(t('toast.invalidParams'));
       }
 
       const { success } = await UserSaveNtfy(result.data);
 
       if (success) {
-        toast.success('ntfy configuration saved successfully!');
+        toast.success(t('toast.save.success'));
         onUpdate?.(result.data);
       } else {
-        toast.error('Failed to save ntfy configuration!');
+        toast.error(t('toast.save.error'));
       }
     } catch (error) {
-      toast.error(error.message || 'Failed to save ntfy configuration!');
+      toast.error(t('toast.save.error'));
     } finally {
       setNtfyLoading(false);
     }
@@ -1366,7 +1426,7 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
 
     try {
       if (!ntfyEnabled) {
-        throw new Error('ntfy integration is not enabled.');
+        throw new Error(t('toast.notEnabled'));
       }
 
       const result = SchemaNtfyService.safeParse({
@@ -1376,18 +1436,18 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
         ...(ntfyAccessToken ? { token: ntfyAccessToken } : {}),
       });
       if (!result.success) {
-        throw new Error('Invalid parameters! Cannot send test notification.');
+        throw new Error(t('toast.testInvalidParams'));
       }
 
       const { success } = await UserTestNtfy(result.data);
 
       if (success) {
-        toast.success('Test ntfy notification sent!');
+        toast.success(t('toast.test.success'));
       } else {
-        toast.error('Failed to send test ntfy notification!');
+        toast.error(t('toast.test.error'));
       }
     } catch (error) {
-      toast.error(error.message || 'Failed to send test ntfy notification!');
+      toast.error(t('toast.test.error'));
     } finally {
       setNtfyLoading(false);
     }
@@ -1406,10 +1466,10 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
                   disabled={ntfyLoading}
                   className='shrink-0'
                 />
-                ntfy
+                {t('title')}
               </CardTitle>
               <CardDescription>
-                Receive notifications via ntfy.
+                {t('description')}
               </CardDescription>
             </div>
           </div>
@@ -1420,17 +1480,17 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
       {ntfyEnabled && (
         <CardContent className='grid gap-4'>
           <div className='grid gap-2'>
-            <Label htmlFor='ntfy-server-url'>Server URL</Label>
+            <Label htmlFor='ntfy-server-url'>{t('fields.serverUrl.label')}</Label>
             <Input
               id='ntfy-server-url'
               value={ntfyServerUrl}
               onChange={(e) => setNtfyServerUrl(e.target.value)}
-              placeholder='ntfy.sh or self-hosted URL'
+              placeholder={t('fields.serverUrl.placeholder')}
             />
           </div>
 
           <div className='grid gap-2'>
-            <Label htmlFor='ntfy-topic-name'>Topic Name</Label>
+            <Label htmlFor='ntfy-topic-name'>{t('fields.topic.label')}</Label>
             <Input
               id='ntfy-topic-name'
               value={ntfyTopic}
@@ -1440,13 +1500,13 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
           </div>
 
           <div className='grid gap-2'>
-            <Label htmlFor='ntfy-access-token'>Access Token (Optional)</Label>
+            <Label htmlFor='ntfy-access-token'>{t('fields.token.label')}</Label>
             <Input
               id='ntfy-access-token'
               type='password'
               value={ntfyAccessToken}
               onChange={(e) => setNtfyAccessToken(e.target.value)}
-              placeholder='Access Token'
+              placeholder={t('fields.token.placeholder')}
             />
           </div>
 
@@ -1457,7 +1517,7 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
               ) : (
                 <Icons.save className='mr-2' />
               )}
-              Save ntfy
+              {t('buttons.save')}
             </Button>
             <Button onClick={handleTest} variant='secondary' disabled={ntfyLoading} className='w-full text-left sm:w-auto'>
               {ntfyLoading ? (
@@ -1465,7 +1525,7 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
               ) : (
                 <Icons.send className='mr-2' />
               )}
-              Test ntfy
+              {t('buttons.test')}
             </Button>
           </div>
         </CardContent>
@@ -1475,6 +1535,7 @@ const ExternalServiceNtfy = ( {ntfy, onUpdate} ) => {
 };
 
 const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
+  const t = useTranslations('pages.account.externalServices.webhook');
   const [webhookEnabled, setWebhookEnabled] = useState(webhook?.enabled || false);
   const [webhookUrl, setWebhookUrl] = useState(webhook?.url || '');
   const [webhookLoading, setWebhookLoading] = useState(false);
@@ -1486,13 +1547,13 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
         const { success } = await UserSaveWebhook({ enabled: false });
         if (success) {
           setWebhookEnabled(false);
-          toast.success('Webhook integration disabled.');
+          toast.success(t('toast.disable.success'));
           onUpdate?.({ enabled: false });
         } else {
-          toast.error('Failed to disable webhook integration!');
+          toast.error(t('toast.disable.error'));
         }
       } catch (error) {
-        toast.error(error.message || 'Failed to disable webhook integration!');
+        toast.error(t('toast.disable.error'));
       } finally {
         setWebhookLoading(false);
       }
@@ -1507,7 +1568,7 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
 
     try {
       if (!webhookEnabled) {
-        throw new Error('Webhook integration is not enabled.');
+        throw new Error(t('toast.notEnabled'));
       }
 
       const result = SchemaWebhookService.safeParse({
@@ -1515,19 +1576,19 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
         url: webhookUrl,
       });
       if (!result.success) {
-        throw new Error('Invalid parameters! Cannot save the webhook configuration.');
+        throw new Error(t('toast.invalidParams'));
       }
 
       const { success } = await UserSaveWebhook(result.data);
 
       if (success) {
-        toast.success('Webhook configuration saved successfully!');
+        toast.success(t('toast.save.success'));
         onUpdate?.(result.data);
       } else {
-        toast.error('Failed to save webhook configuration!');
+        toast.error(t('toast.save.error'));
       }
     } catch (error) {
-      toast.error(error.message || 'Failed to save webhook configuration!');
+      toast.error(t('toast.save.error'));
     } finally {
       setWebhookLoading(false);
     }
@@ -1538,7 +1599,7 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
 
     try {
       if (!webhookEnabled) {
-        throw new Error('Webhook integration is not enabled.');
+        throw new Error(t('toast.notEnabled'));
       }
 
       const result = SchemaWebhookService.safeParse({
@@ -1546,18 +1607,18 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
         url: webhookUrl,
       });
       if (!result.success) {
-        throw new Error('Invalid parameters! Cannot send test notification.');
+        throw new Error(t('toast.testInvalidParams'));
       }
 
       const { success } = await UserTestWebhook(result.data);
 
       if (success) {
-        toast.success('Test webhook notification sent!');
+        toast.success(t('toast.test.success'));
       } else {
-        toast.error('Failed to send test webhook notification!');
+        toast.error(t('toast.test.error'));
       }
     } catch (error) {
-      toast.error(error.message || 'Failed to send test webhook notification!');
+      toast.error(t('toast.test.error'));
     } finally {
       setWebhookLoading(false);
     }
@@ -1576,10 +1637,10 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
                   disabled={webhookLoading}
                   className='shrink-0'
                 />
-                Webhook
+                {t('title')}
               </CardTitle>
               <CardDescription>
-                Receive notifications via webhook.
+                {t('description')}
               </CardDescription>
             </div>
           </div>
@@ -1590,12 +1651,12 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
       {webhookEnabled && (
         <CardContent className='grid gap-4'>
           <div className='grid gap-2'>
-            <Label htmlFor='webhook-server-url'>Server URL</Label>
+            <Label htmlFor='webhook-server-url'>{t('fields.url.label')}</Label>
             <Input
               id='webhook-server-url'
               value={webhookUrl}
               onChange={(e) => setWebhookUrl(e.target.value)}
-              placeholder='Webhook server URL'
+              placeholder={t('fields.url.placeholder')}
             />
           </div>
 
@@ -1606,7 +1667,7 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
               ) : (
                 <Icons.save className='mr-2' />
               )}
-              Save webhook
+              {t('buttons.save')}
             </Button>
             <Button onClick={handleTest} variant='secondary' disabled={webhookLoading} className='w-full text-left sm:w-auto'>
               {webhookLoading ? (
@@ -1614,7 +1675,7 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
               ) : (
                 <Icons.send className='mr-2' />
               )}
-              Test webhook
+              {t('buttons.test')}
             </Button>
           </div>
         </CardContent>
@@ -1624,6 +1685,7 @@ const ExternalServiceWebhook = ( {webhook, onUpdate} ) => {
 };
 
 const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
+  const t = useTranslations('pages.account.externalServices.discord');
   const [discordEnabled, setDiscordEnabled] = useState(discord?.enabled || false);
   const [discordUrl, setDiscordUrl] = useState(discord?.url || '');
   const [discordLoading, setDiscordLoading] = useState(false);
@@ -1635,13 +1697,13 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
         const { success } = await UserSaveDiscord({ enabled: false });
         if (success) {
           setDiscordEnabled(false);
-          toast.success('Discord integration disabled.');
+          toast.success(t('toast.disable.success'));
           onUpdate?.({ enabled: false });
         } else {
-          toast.error('Failed to disable Discord integration!');
+          toast.error(t('toast.disable.error'));
         }
       } catch (error) {
-        toast.error(error.message || 'Failed to disable Discord integration!');
+        toast.error(t('toast.disable.error'));
       } finally {
         setDiscordLoading(false);
       }
@@ -1656,7 +1718,7 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
 
     try {
       if (!discordEnabled) {
-        throw new Error('Discord integration is not enabled.');
+        throw new Error(t('toast.notEnabled'));
       }
 
       const result = SchemaDiscordService.safeParse({
@@ -1664,19 +1726,19 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
         url: discordUrl,
       });
       if (!result.success) {
-        throw new Error('Invalid parameters! Cannot save the Discord configuration.');
+        throw new Error(t('toast.invalidParams'));
       }
 
       const { success } = await UserSaveDiscord(result.data);
 
       if (success) {
-        toast.success('Discord configuration saved successfully!');
+        toast.success(t('toast.save.success'));
         onUpdate?.(result.data);
       } else {
-        toast.error('Failed to save Discord configuration!');
+        toast.error(t('toast.save.error'));
       }
     } catch (error) {
-      toast.error(error.message || 'Failed to save Discord configuration!');
+      toast.error(t('toast.save.error'));
     } finally {
       setDiscordLoading(false);
     }
@@ -1687,7 +1749,7 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
 
     try {
       if (!discordEnabled) {
-        throw new Error('Discord integration is not enabled.');
+        throw new Error(t('toast.notEnabled'));
       }
 
       const result = SchemaDiscordService.safeParse({
@@ -1695,18 +1757,18 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
         url: discordUrl,
       });
       if (!result.success) {
-        throw new Error('Invalid parameters! Cannot send test notification.');
+        throw new Error(t('toast.testInvalidParams'));
       }
 
       const { success } = await UserTestDiscord(result.data);
 
       if (success) {
-        toast.success('Test Discord notification sent!');
+        toast.success(t('toast.test.success'));
       } else {
-        toast.error('Failed to send test Discord notification!');
+        toast.error(t('toast.test.error'));
       }
     } catch (error) {
-      toast.error(error.message || 'Failed to send test Discord notification!');
+      toast.error(t('toast.test.error'));
     } finally {
       setDiscordLoading(false);
     }
@@ -1725,10 +1787,10 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
                   disabled={discordLoading}
                   className='shrink-0'
                 />
-                Discord
+                {t('title')}
               </CardTitle>
               <CardDescription>
-                Receive notifications via Discord.
+                {t('description')}
               </CardDescription>
             </div>
           </div>
@@ -1739,12 +1801,12 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
       {discordEnabled && (
         <CardContent className='grid gap-4'>
           <div className='grid gap-2'>
-            <Label htmlFor='discord-server-url'>Server URL</Label>
+            <Label htmlFor='discord-server-url'>{t('fields.url.label')}</Label>
             <Input
               id='discord-server-url'
               value={discordUrl}
               onChange={(e) => setDiscordUrl(e.target.value)}
-              placeholder='Discord server URL'
+              placeholder={t('fields.url.placeholder')}
             />
           </div>
 
@@ -1755,7 +1817,7 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
               ) : (
                 <Icons.save className='mr-2' />
               )}
-              Save Discord
+              {t('buttons.save')}
             </Button>
             <Button onClick={handleTest} variant='secondary' disabled={discordLoading} className='w-full text-left sm:w-auto'>
               {discordLoading ? (
@@ -1763,7 +1825,7 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
               ) : (
                 <Icons.send className='mr-2' />
               )}
-              Test Discord
+              {t('buttons.test')}
             </Button>
           </div>
         </CardContent>
@@ -1773,6 +1835,7 @@ const ExternalServiceDiscord = ( {discord, onUpdate} ) => {
 };
 
 const ExternalServiceSlack = ( {slack, onUpdate} ) => {
+  const t = useTranslations('pages.account.externalServices.slack');
   const [slackEnabled, setSlackEnabled] = useState(slack?.enabled || false);
   const [slackUrl, setSlackUrl] = useState(slack?.url || '');
   const [slackLoading, setSlackLoading] = useState(false);
@@ -1784,13 +1847,13 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
         const { success } = await UserSaveSlack({ enabled: false });
         if (success) {
           setSlackEnabled(false);
-          toast.success('Slack integration disabled.');
+          toast.success(t('toast.disable.success'));
           onUpdate?.({ enabled: false });
         } else {
-          toast.error('Failed to disable Slack integration!');
+          toast.error(t('toast.disable.error'));
         }
       } catch (error) {
-        toast.error(error.message || 'Failed to disable Slack integration!');
+        toast.error(t('toast.disable.error'));
       } finally {
         setSlackLoading(false);
       }
@@ -1805,7 +1868,7 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
 
     try {
       if (!slackEnabled) {
-        throw new Error('Slack integration is not enabled.');
+        throw new Error(t('toast.notEnabled'));
       }
 
       const result = SchemaSlackService.safeParse({
@@ -1813,19 +1876,19 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
         url: slackUrl,
       });
       if (!result.success) {
-        throw new Error('Invalid parameters! Cannot save the Slack configuration.');
+        throw new Error(t('toast.invalidParams'));
       }
 
       const { success } = await UserSaveSlack(result.data);
 
       if (success) {
-        toast.success('Slack configuration saved successfully!');
+        toast.success(t('toast.save.success'));
         onUpdate?.(result.data);
       } else {
-        toast.error('Failed to save Slack configuration!');
+        toast.error(t('toast.save.error'));
       }
     } catch (error) {
-      toast.error(error.message || 'Failed to save Slack configuration!');
+      toast.error(t('toast.save.error'));
     } finally {
       setSlackLoading(false);
     }
@@ -1836,7 +1899,7 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
 
     try {
       if (!slackEnabled) {
-        throw new Error('Slack integration is not enabled.');
+        throw new Error(t('toast.notEnabled'));
       }
 
       const result = SchemaSlackService.safeParse({
@@ -1844,18 +1907,18 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
         url: slackUrl,
       });
       if (!result.success) {
-        throw new Error('Invalid parameters! Cannot send test notification.');
+        throw new Error(t('toast.testInvalidParams'));
       }
 
       const { success } = await UserTestSlack(result.data);
 
       if (success) {
-        toast.success('Test Slack notification sent!');
+        toast.success(t('toast.test.success'));
       } else {
-        toast.error('Failed to send test Slack notification!');
+        toast.error(t('toast.test.error'));
       }
     } catch (error) {
-      toast.error(error.message || 'Failed to send test Slack notification!');
+      toast.error(t('toast.test.error'));
     } finally {
       setSlackLoading(false);
     }
@@ -1874,10 +1937,10 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
                   disabled={slackLoading}
                   className='shrink-0'
                 />
-                Slack
+                {t('title')}
               </CardTitle>
               <CardDescription>
-                Receive notifications via Slack.
+                {t('description')}
               </CardDescription>
             </div>
           </div>
@@ -1888,12 +1951,12 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
       {slackEnabled && (
         <CardContent className='grid gap-4'>
           <div className='grid gap-2'>
-            <Label htmlFor='slack-server-url'>Server URL</Label>
+            <Label htmlFor='slack-server-url'>{t('fields.url.label')}</Label>
             <Input
               id='slack-server-url'
               value={slackUrl}
               onChange={(e) => setSlackUrl(e.target.value)}
-              placeholder='Slack server URL'
+              placeholder={t('fields.url.placeholder')}
             />
           </div>
 
@@ -1904,7 +1967,7 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
               ) : (
                 <Icons.save className='mr-2' />
               )}
-              Save Slack
+              {t('buttons.save')}
             </Button>
             <Button onClick={handleTest} variant='secondary' disabled={slackLoading} className='w-full text-left sm:w-auto'>
               {slackLoading ? (
@@ -1912,7 +1975,7 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
               ) : (
                 <Icons.send className='mr-2' />
               )}
-              Test Slack
+              {t('buttons.test')}
             </Button>
           </div>
         </CardContent>
@@ -1922,12 +1985,14 @@ const ExternalServiceSlack = ( {slack, onUpdate} ) => {
 };
 
 const ExternalServices = ({ externalServices, onUpdate }) => {
+  const t = useTranslations('pages.account.externalServices');
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>External Services</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Configure integrations with external services
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-6'>
@@ -1973,6 +2038,7 @@ const ExternalServices = ({ externalServices, onUpdate }) => {
 };
 
 const ExportActions = () => {
+  const t = useTranslations('pages.account.dataExport');
   const [loading, setLoading] = useState(false);
 
   const handleExport = useCallback(async () => {
@@ -1989,20 +2055,20 @@ const ExportActions = () => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-      toast.success('Data exported successfully!');
+      toast.success(t('toast.success'));
     } catch (error) {
-      toast.error('Failed to export data');
+      toast.error(t('toast.error'));
     } finally {
       setLoading(false);
     }
-  }, [UserExportData, setLoading]);
+  }, [UserExportData, setLoading, t]);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Data Export</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Download a copy of your subscriptions, categories, payment methods and settings
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
@@ -2011,14 +2077,14 @@ const ExportActions = () => {
           variant='outline'
           disabled={loading}
           className='w-full sm:w-auto'
-          title='Export your data'
+          title={t('button')}
         >
           {loading ? (
             <Icons.spinner className='mr-2 size-4 animate-spin' />
           ) : (
             <Icons.download className='mr-2 size-4' />
           )}
-          Export Data
+          {t('button')}
         </Button>
       </CardContent>
     </Card>

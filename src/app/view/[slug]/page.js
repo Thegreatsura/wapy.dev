@@ -1,5 +1,6 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { useAuthServer } from '@/lib/auth-server';
 import { withAuth } from '@/lib/with-auth';
@@ -30,16 +31,20 @@ const PageSubscriptionView = async ({ params }) => {
 export default withAuth(PageSubscriptionView);
 
 export async function generateMetadata({ params }) {
+  const t = await getTranslations('pages.view.meta');
+  const tNotFound = await getTranslations('pages.notFound.meta');
   const {isAuthenticated, getUserId} = await useAuthServer();
+
   if (!isAuthenticated()) {
     return {
-      title: 'Unauthorized',
+      title: t('unauthorized'),
     };
   }
 
   const subscriptionId = (await params).slug;
   const subscription = await SubscriptionGet(subscriptionId, getUserId());
+
   return {
-    title: subscription?.name ? `View ${subscription.name}` : 'Not Found',
+    title: subscription?.name ? t('view', { name: subscription.name }) : tNotFound('title'),
   };
 }

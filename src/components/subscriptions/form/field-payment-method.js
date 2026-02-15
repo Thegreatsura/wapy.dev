@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -27,6 +26,7 @@ import {
 import { LogoIcon } from '@/components/ui/icon-picker';
 
 export const PaymentMethodFieldManager = ({ field, paymentMethods }) => {
+  const t = useTranslations('components.subscriptions.form.fields.paymentMethod');
   const [open, setOpen] = useState(false);
   const [currentPaymentMethods, setCurrentPaymentMethods] = useState(paymentMethods);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(field.value || []);
@@ -53,7 +53,7 @@ export const PaymentMethodFieldManager = ({ field, paymentMethods }) => {
         className='text-sm text-muted-foreground bg-muted'
         onSelect={onSelect}
       >
-        Create new payment method &quot;{value}&quot;
+        {t('create', { value })}
       </CommandItem>
     );
   };
@@ -98,7 +98,7 @@ export const PaymentMethodFieldManager = ({ field, paymentMethods }) => {
           >
             {selectedPaymentMethod.length === 0 && (
               <span className='truncate'>
-                Select payment method
+                {t('placeholder')}
               </span>
             )}
             {selectedPaymentMethod.length !== 0 && (
@@ -110,13 +110,13 @@ export const PaymentMethodFieldManager = ({ field, paymentMethods }) => {
             <Icons.down className='ml-2 size-4 shrink-0 opacity-50' />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className='p-0 w-[300px] sm:w-[512px]' align='start'>
+        <PopoverContent className='p-0 w-75 sm:w-lg' align='start'>
           <Command loop>
             <CommandInput
               ref={inputRef}
               value={inputValue}
               onValueChange={setInputValue}
-              placeholder='Search payment method...'
+              placeholder={t('search')}
             />
             <CommandList>
               <CommandGroup>
@@ -153,9 +153,11 @@ export const PaymentMethodFieldManager = ({ field, paymentMethods }) => {
 }
 
 export const FormFieldPaymentMethod = ({ field, paymentMethods }) => {
+  const t = useTranslations('components.subscriptions.form.fields.paymentMethod');
+
   return (
     <FormItem className='flex-1 truncate space-y-2'>
-      <FormLabel>Payment Method</FormLabel>
+      <FormLabel>{t('label')}</FormLabel>
       <FormControl>
         <PaymentMethodFieldManager field={field} paymentMethods={paymentMethods} />
       </FormControl>

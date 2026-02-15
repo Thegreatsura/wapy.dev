@@ -3,16 +3,10 @@
 import { withAuth } from '@/lib/with-auth';
 import { AccountSettings } from './account-container';
 import { paddleGetSession } from '@/lib/paddle/status';
+import { getTranslations } from 'next-intl/server';
 
 const PageAccount = async () => {
   const { user, paddleStatus } = await paddleGetSession();
-
-  // const paddleCustomer = await paddleGetCustomer(user.id);
-  // console.log('paddleCustomer', paddleCustomer);
-  // const paddleSubscriptions = await paddleGetSubscriptions();
-  // console.log('paddleSubscriptions', paddleSubscriptions);
-  // const paddleSubscription = await paddleGetLatestSubscription();
-  // console.log('paddleSubscription', paddleSubscription);
 
   return (
     <div className='container flex flex-col items-center justify-center gap-6 text-center'>
@@ -27,7 +21,9 @@ const PageAccount = async () => {
 export default withAuth(PageAccount);
 
 export async function generateMetadata() {
+  const t = await getTranslations('pages.account.meta');
   return {
-    title: 'Account',
+    title: t('title'),
+    description: t('description'),
   };
 };

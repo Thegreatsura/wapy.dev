@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
 import timezones from 'google-timezones-json';
 import { cn } from '@/lib/utils';
 import {
@@ -26,8 +27,29 @@ import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 
 export const TimezoneFieldManager = ({ field, loading = false }) => {
+  const t = useTranslations('components.subscriptions.form.fields.timezone');
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const selectedTimezone = timezones[field.value];
+
+  // Get localized timezone name using Intl API
+  const getLocalizedTimezoneName = useMemo(() => {
+    return (timezoneName) => {
+      try {
+        const formatter = new Intl.DateTimeFormat(locale, {
+          timeZone: timezoneName,
+          timeZoneName: 'long'
+        });
+
+        const parts = formatter.formatToParts(new Date());
+        const timeZonePart = parts.find(part => part.type === 'timeZoneName');
+
+        return timeZonePart?.value || timezones[timezoneName] || timezoneName;
+      } catch (error) {
+        return timezones[timezoneName] || timezoneName;
+      }
+    };
+  }, [locale]);
 
   const handleTimezoneChange = async (name) => {
     setOpen(false);
@@ -47,10 +69,10 @@ export const TimezoneFieldManager = ({ field, loading = false }) => {
             {selectedTimezone ? (
               <>
                 <span className='text-primary truncate max-w-full'>{field.value}</span>
-                <span className='hidden sm:inline text-xs truncate flex-1 max-w-full'>{selectedTimezone}</span>
+                <span className='hidden sm:inline text-xs truncate flex-1 max-w-full'>{getLocalizedTimezoneName(field.value)}</span>
               </>
             ) : (
-              <span>Select timezone</span>
+              <span>{t('placeholder')}</span>
             )}
           </div>
           {loading
@@ -59,18 +81,21 @@ export const TimezoneFieldManager = ({ field, loading = false }) => {
           }
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='p-0 w-[300px] sm:w-[512px]' align='start'>
+      <PopoverContent className='p-0 w-75 sm:w-lg' align='start'>
         <Command filter={(name, search) => {
           const timezone = timezones[name];
           if (!timezone) return false;
 
           const searchLower = search.toLowerCase();
+          const localizedName = getLocalizedTimezoneName(name).toLowerCase();
+
           return name.toLowerCase().includes(searchLower) ||
-                  timezone.toLowerCase().includes(searchLower);
+                  timezone.toLowerCase().includes(searchLower) ||
+                  localizedName.includes(searchLower);
         }}>
-          <CommandInput placeholder='Search timezone...' />
+          <CommandInput placeholder={t('search')} />
           <CommandList>
-            <CommandEmpty>No results found!</CommandEmpty>
+            <CommandEmpty>{t('noResults')}</CommandEmpty>
             <CommandGroup>
               {Object.entries(timezones).map(([name, value]) => (
                 <CommandItem
@@ -81,7 +106,7 @@ export const TimezoneFieldManager = ({ field, loading = false }) => {
                   disabled={loading}
                 >
                   <span className='truncate max-w-full'>{name}</span>
-                  <span className='text-muted-foreground text-xs truncate flex-1 max-w-full'>{value}</span>
+                  <span className='text-muted-foreground text-xs truncate flex-1 max-w-full'>{getLocalizedTimezoneName(name)}</span>
                   <Icons.check
                     className={cn(
                       'ml-auto',
@@ -99,9 +124,11 @@ export const TimezoneFieldManager = ({ field, loading = false }) => {
 };
 
 export const FormFieldTimezone = ({ field }) => {
+  const t = useTranslations('components.subscriptions.form.fields.timezone');
+
   return (
     <FormItem className='flex-1 truncate space-y-2'>
-      <FormLabel>Timezone</FormLabel>
+      <FormLabel>{t('label')}</FormLabel>
       <div className='flex'>
         <FormControl>
           <TimezoneFieldManager field={field} />

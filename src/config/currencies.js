@@ -5,6 +5,7 @@ export const DefaultCurrencies = {
   CAD: { symbol: 'C$', name: 'Canadian Dollar', position: 'before' },
   CHF: { symbol: 'Fr', name: 'Swiss Franc', position: 'before' },
   CNY: { symbol: '¥', name: 'Chinese Yuan', position: 'before' },
+  COP: { symbol: 'Col$', name: 'Colombian Peso', position: 'before'},
   CZK: { symbol: 'Kč', name: 'Czech Republic Koruna', position: 'after' },
   DKK: { symbol: 'kr', name: 'Danish Krone', position: 'after' },
   EUR: { symbol: '€', name: 'Euro', position: 'before' },

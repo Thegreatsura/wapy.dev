@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/input';
 import {
   FormItem,
@@ -9,9 +10,11 @@ import {
 } from '@/components/ui/form';
 
 export const FormFieldUrl = ({ field }) => {
+  const t = useTranslations('components.subscriptions.form.fields.url');
+
   return (
     <FormItem className='flex flex-col'>
-      <FormLabel>URL</FormLabel>
+      <FormLabel>{t('label')}</FormLabel>
       <FormControl>
         <Input
           type='url'

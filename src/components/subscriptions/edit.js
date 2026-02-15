@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button'
 import {
@@ -47,6 +48,8 @@ import { toZonedTime, fromZonedTime } from 'date-fns-tz';
 import { Icons } from '@/components/icons';
 
 export const SubscriptionEdit = ({ user, subscription = undefined }) =>  {
+  const t = useTranslations('components.subscriptions.edit');
+  const tCommon = useTranslations('common');
   const [dialogOpen, setDialogOpen] = useState(false);
   const form = useForm({
     resolver: zodResolver(SchemaSubscriptionEdit),
@@ -77,18 +80,18 @@ export const SubscriptionEdit = ({ user, subscription = undefined }) =>  {
     values.paymentDate = fromZonedTime(values.paymentDate, values.timezone);
     const subscription = await SubscriptionActionEdit(values);
     if (!subscription) {
-      toast.error('Interesting, cannot create subscription!');
+      toast.error(t('toast.create.error'));
     } else {
-      toast.success('Subscription created successfully!');
+      toast.success(t('toast.create.success'));
     }
   }
 
   async function onDelete() {
     const result = await SubscriptionActionDelete(subscription.id);
     if (result) {
-      toast.success('Subscription deleted successfully!');
+      toast.success(t('toast.delete.success'));
     } else {
-      toast.error('Failed to delete subscription!');
+      toast.error(t('toast.delete.error'));
     }
   }
 
@@ -107,7 +110,7 @@ export const SubscriptionEdit = ({ user, subscription = undefined }) =>  {
                     onCheckedChange={field.onChange}
                   />
                   <FormLabel className='inline-flex flex-row gap-2'>
-                    <h3 className='text-lg font-semibold'>Subscription Details</h3>
+                    <h3 className='text-lg font-semibold'>{t('sections.details')}</h3>
                   </FormLabel>
                 </div>
               </FormControl>
@@ -209,7 +212,7 @@ export const SubscriptionEdit = ({ user, subscription = undefined }) =>  {
 
         <Accordion type='single' collapsible className='w-full'>
           <AccordionItem value='advanced'>
-            <AccordionTrigger>Advanced Settings</AccordionTrigger>
+            <AccordionTrigger>{t('sections.advanced')}</AccordionTrigger>
             <AccordionContent>
               <div className='flex flex-col gap-6 m-1'>
                 <FormField
@@ -246,7 +249,7 @@ export const SubscriptionEdit = ({ user, subscription = undefined }) =>  {
             className='w-full sm:w-auto'
           >
             <Icons.save />
-            {subscription ? 'Update Subscription' : 'Create Subscription'}
+            {subscription ? t('title.update') : t('title.create')}
           </Button>
           {subscription?.id && (
             <Button
@@ -256,7 +259,7 @@ export const SubscriptionEdit = ({ user, subscription = undefined }) =>  {
               onClick={() => setDialogOpen(true)}
             >
               <Icons.trash />
-              Delete Subscription
+              {t('deleteDialog.title')}
             </Button>
           )}
         </div>
@@ -264,9 +267,9 @@ export const SubscriptionEdit = ({ user, subscription = undefined }) =>  {
       <ResponsiveDialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <ResponsiveDialogContent>
           <ResponsiveDialogHeader>
-            <ResponsiveDialogTitle>Delete Subscription</ResponsiveDialogTitle>
+            <ResponsiveDialogTitle>{t('deleteDialog.title')}</ResponsiveDialogTitle>
             <ResponsiveDialogDescription className='text-left'>
-              Are you sure you want to delete this subscription? This action cannot be undone.
+              {t('deleteDialog.description')}
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
           <ResponsiveDialogFooter>
@@ -274,13 +277,13 @@ export const SubscriptionEdit = ({ user, subscription = undefined }) =>  {
               variant='outline'
               onClick={() => setDialogOpen(false)}
             >
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button
               onClick={() => {setDialogOpen(false); onDelete();}}
               variant='destructive'
             >
-              Delete
+              {tCommon('delete')}
             </Button>
           </ResponsiveDialogFooter>
         </ResponsiveDialogContent>

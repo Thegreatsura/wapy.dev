@@ -34,12 +34,12 @@ export const SendNtfy = async (ntfy, data) => {
       {
         method: 'POST',
         headers: {
-          'Icon': `${siteConfig.url}/icons/icon-192.png`,
+          'Icon': `https://www.wapy.dev/icons/icon-192.png`,
           ...(ntfy?.token ? { 'Authorization': `Bearer ${ntfy.token}` } : {}),
         },
         body: JSON.stringify({
           topic: ntfy?.topic || 'wapy-dev',
-          tags: ['Wapy.dev'],
+          tags: [siteConfig.name, 'subscription-reminder'],
           priority: 3,
           click: siteConfig.url,
           ...data,
@@ -59,37 +59,39 @@ export const SendDiscord = async (discord, data) => {
     return false;
   }
 
+  const translations = data.translations || {};
+
   const payload = {
     username: siteConfig.name,
-    avatar_url: `${siteConfig.url}/icons/icon-192.png`,
-    content: `💡 **${siteConfig.name} Subscription Reminder**`,
+    avatar_url: `https://www.wapy.dev/icons/icon-192.png`,
+    content: `💡 **${translations.header}**`,
     embeds: [
       {
         title: data.title,
         description: data.message,
         color: 121256,
         thumbnail: {
-          url: `${siteConfig.url}/icons/icon-192.png`,
+          url: `https://www.wapy.dev/icons/icon-192.png`,
         },
         provider: {
-          name: 'Wapy.dev',
+          name: siteConfig.name,
           url: siteConfig.url,
         },
         fields: [
           ...(data.markAsPaidUrl
             ? [{
-            name: 'Done with the payment?',
-            value: `[Click here to mark it paid ✅](${data.markAsPaidUrl})`,
+            name: translations.paymentQuestion,
+            value: `[${translations.markAsPaid} ✅](${data.markAsPaidUrl})`,
             }]
             : []
           ),
           {
-            name: 'View Details',
-            value: `[Visit Dashboard 🔗](${siteConfig.url})`,
+            name: translations.viewDetails,
+            value: `[${translations.visitDashboard} 🔗](${siteConfig.url})`,
           },
         ],
         footer: {
-          text: `Sent by ${siteConfig.name}`,
+          text: translations.footer,
         }
       },
     ],
@@ -106,15 +108,16 @@ export const SendSlack = async (slack, data) => {
     return false;
   }
 
-  const url123 = 'https://www.wapy.dev'
+  const translations = data.translations || {};
+
   const payload = {
-    text: `${siteConfig.name} Subscription Reminder\n${data.title}\n${data.message}`,
+    text: `${translations.header}\n${data.title}\n${data.message}`,
     blocks: [
       {
         type: 'header',
         text: {
           type: 'plain_text',
-          text: `${siteConfig.name} Subscription Reminder 💡`,
+          text: `${translations.header} 💡`,
         },
       },
       {
@@ -125,7 +128,7 @@ export const SendSlack = async (slack, data) => {
         },
         accessory: {
           type: 'image',
-          image_url: `${url123}/icons/icon-192.png`,
+          image_url: `https://www.wapy.dev/icons/icon-192.png`,
           alt_text: siteConfig.name,
         },
       },
@@ -138,7 +141,7 @@ export const SendSlack = async (slack, data) => {
                   type: 'button',
                   text: {
                     type: 'plain_text',
-                    text: '💰 Mark as Paid',
+                    text: `💰 ${translations.markAsPaid}`,
                   },
                   url: data.markAsPaidUrl,
                   style: 'primary',
@@ -149,9 +152,9 @@ export const SendSlack = async (slack, data) => {
             type: 'button',
             text: {
               type: 'plain_text',
-              text: '🔗 Visit Dashboard',
+              text: `🔗 ${translations.visitDashboard}`,
             },
-            url: url123,
+            url: siteConfig.url,
           },
         ],
       },
@@ -160,7 +163,7 @@ export const SendSlack = async (slack, data) => {
         elements: [
           {
             type: 'mrkdwn',
-            text: `Sent by *${siteConfig.name}*`,
+            text: translations.footer,
           },
         ],
       },

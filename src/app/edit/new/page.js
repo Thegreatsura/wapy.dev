@@ -1,5 +1,6 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import { withAuth } from '@/lib/with-auth';
 import { SubscriptionEdit } from '@/components/subscriptions/edit';
 import { paddleGetSession } from '@/lib/paddle/status';
@@ -20,7 +21,9 @@ const PageNewSubscription = async () => {
 export default withAuth(PageNewSubscription);
 
 export async function generateMetadata() {
+  const t = await getTranslations('pages.edit.meta');
+
   return {
-    title: 'New Subscription',
+    title: t('new'),
   };
 };

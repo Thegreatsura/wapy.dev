@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import {
@@ -14,29 +15,31 @@ import {
 import { siteConfig } from '@/components/config';
 
 export const PricingTable = () => {
+  const t = useTranslations('components.pricingTable');
+
   return (
     <div className='container mx-auto'>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
         <Card className='relative overflow-hidden border-2 border-primary bg-gray-100 dark:bg-gray-900/50 sm:col-span-1 md:col-span-2 flex flex-col'>
           <CardHeader>
-            <CardTitle className='text-2xl font-bold'>Enjoy</CardTitle>
+            <CardTitle className='text-2xl font-bold'>{t('enjoy.title')}</CardTitle>
             <CardDescription className='text-sm text-foreground'>
-              Perfect for a hassle-free experience
+              {t('enjoy.description')}
             </CardDescription>
             <div>
               <span className='text-4xl font-bold'>€1.5</span>
-              <span className='text-sm text-muted-foreground'> +tax/month</span>
+              <span className='text-sm text-muted-foreground'> {t('enjoy.period')}</span>
             </div>
           </CardHeader>
           <CardContent className='flex flex-col gap-2 text-left grow'>
             <div className='grid md:grid-cols-2 gap-2'>
               {[
-                'Unlimited Subscriptions',
-                'Email & Push Notifications',
-                'Reports & Insights',
-                'Premium Support',
-                'First Month Free',
-                'Priority Feature Requests'
+                t('enjoy.features.unlimited'),
+                t('enjoy.features.notifications'),
+                t('enjoy.features.reports'),
+                t('enjoy.features.support'),
+                t('enjoy.features.firstMonth'),
+                t('enjoy.features.priority')
               ].map((feature) => (
                 <div key={feature} className='flex items-center gap-2'>
                   <Icons.check className='h-5 w-5 text-primary' />
@@ -48,7 +51,7 @@ export const PricingTable = () => {
           <CardFooter className='flex justify-center items-end'>
             <Button size='lg' className='w-full md:w-auto' asChild>
               <Link href='/login'>
-                Get Started
+                {t('enjoy.button')}
                 <Icons.arrowRight className='ml-2 h-4 w-4' />
               </Link>
             </Button>
@@ -57,21 +60,21 @@ export const PricingTable = () => {
 
         <Card className='relative overflow-hidden border-2 hover:border-primary/50 transition-all md:col-span-1 flex flex-col'>
           <CardHeader>
-            <CardTitle className='text-2xl font-bold'>Self Hosted</CardTitle>
+            <CardTitle className='text-2xl font-bold'>{t('selfHosted.title')}</CardTitle>
             <CardDescription className='text-sm'>
-              Perfect for self-hosters
+              {t('selfHosted.description')}
             </CardDescription>
             <div>
-              <span className='text-4xl font-bold'>Free</span>
-              <span className='text-sm text-muted-foreground'> forever</span>
+              <span className='text-4xl font-bold'>{t('selfHosted.price')}</span>
+              <span className='text-sm text-muted-foreground'> {t('selfHosted.period')}</span>
             </div>
           </CardHeader>
           <CardContent className='flex flex-col gap-2 text-left grow'>
             <>
               {[
-                'Your Infrastructure',
-                'Source Code Access',
-                'Community Support'
+                t('selfHosted.features.infrastructure'),
+                t('selfHosted.features.sourceCode'),
+                t('selfHosted.features.community')
               ].map((feature) => (
                 <div key={feature} className='flex items-center gap-2'>
                   <Icons.check className='h-5 w-5 text-primary' />
@@ -84,7 +87,7 @@ export const PricingTable = () => {
             <Button variant='outline' size='lg' className='w-full' asChild>
               <Link href={siteConfig.links.github} target='_blank' rel='noopener noreferrer'>
                 <Icons.github className='mr-2 h-4 w-4' />
-                View on GitHub
+                {t('selfHosted.button')}
               </Link>
             </Button>
           </CardFooter>

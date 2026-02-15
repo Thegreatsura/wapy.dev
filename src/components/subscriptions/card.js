@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, Fragment } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations, useFormatter, useLocale, useNow } from 'next-intl';
 import Link from 'next/link';
 import * as DateFNS from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -30,23 +31,57 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
-import { getCycleLabel, getPaymentCount, formatPrice } from '@/components/subscriptions/utils';
+import { getPaymentCount, formatPrice } from '@/components/subscriptions/utils';
 
-const SubscriptionDate = ({date, timezone, text}) => {
+const SubscriptionDate = ({date, timezone, text, className}) => {
+  const t = useTranslations('components.subscriptions.card');
+  const formatter = useFormatter();
+  const locale = useLocale();
+  const now = useNow({
+    updateInterval: 1000 * 30,
+  });
+
+  const getTimezoneName = (timezone) => {
+    try {
+      const timezoneName = new Intl.DateTimeFormat(locale, {
+        timeZone: timezone,
+        timeZoneName: 'long'
+      })
+        .formatToParts(new Date())
+        .find(part => part.type === 'timeZoneName')?.value;
+
+      return timezoneName || timezone;
+    } catch {
+      return timezone;
+    }
+  };
+
   return (
-    <div className='inline-flex items-center gap-1'>
+    <div className={cn('inline-flex items-center gap-1', className)}>
       <Popover>
         <PopoverTrigger asChild>
           <span className='inline-flex items-center cursor-pointer'>
-            {text ? text : DateFNS.formatDistanceToNowStrict(date, {addSuffix: true})}
+            {text ? text : formatter.relativeTime(date, {now: now})}
           </span>
         </PopoverTrigger>
-        <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl break-words px-4 py-1'>
-          {DateFNS.format(date, 'dd MMMM yyyy, HH:mm')}
+        <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl wrap-break-word px-4 py-1'>
+          {formatter.dateTime(date, {
+            year: 'numeric',
+            month: 'long',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
           {!DateFNS.isEqual(toZonedTime(date, timezone), date) &&
             <span className='text-xs'>
               <br/>
-              {timezone} Timezone: {DateFNS.format(toZonedTime(date, timezone), 'dd MMMM yyyy, HH:mm')}
+              {t('timezone', { timezone: getTimezoneName(timezone) })}: {formatter.dateTime(toZonedTime(date, timezone), {
+                year: 'numeric',
+                month: 'long',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
             </span>
           }
         </PopoverContent>
@@ -56,22 +91,25 @@ const SubscriptionDate = ({date, timezone, text}) => {
 };
 
 const SubscriptionPaymentDate = ({ subscription }) => {
+  const t = useTranslations('components.subscriptions.card.paymentDate');
+
   if (!subscription.enabled) {
     return null;
   }
 
   const isPast = DateFNS.isPast(subscription.paymentDate);
   return (
-    <div className={cn({'text-red-500': isPast})}>
-      <span className='text-sm text-muted-foreground'>{isPast ? 'Should have been paid' : 'Will be paid'}</span>
-      {' '}
-      <SubscriptionDate date={subscription.paymentDate} timezone={subscription.timezone} />
-      <span className='text-sm text-muted-foreground'>.</span>
+    <div className={cn('text-sm text-muted-foreground', {'text-red-500': isPast})}>
+      {t.rich(isPast ? 'past' : 'future', {
+        date: () => <SubscriptionDate date={subscription.paymentDate} timezone={subscription.timezone} className='text-base text-foreground' />
+      })}
     </div>
   );
 };
 
 const SubscriptionMarkAsPaid = ({ subscription }) => {
+  const t = useTranslations('components.subscriptions.card.markAsPaid');
+  const tCommon = useTranslations('common');
   const router = useRouter();
   const [altOptExpanded, setAltOptExpanded] = useState(false);
   const [altOptStep, setAltOptStep] = useState('initial');
@@ -94,10 +132,10 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
     const result = await SubscriptionActionMarkAsPaidSession(subscription.id);
     if (result) {
       // Force a revalidation of this component
-      toast.success('Subscription marked as paid!');
+      toast.success(t('toast.success'));
       router.refresh();
     } else {
-      toast.error('Error marking subscription as paid');
+      toast.error(t('toast.error'));
     }
   };
 
@@ -109,13 +147,13 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
       const result = await SubscriptionActionMarkAsPaidSessionWithPrice(subscription.id, altOptPrice);
       if (result) {
         altOptReset();
-        toast.success('Subscription marked as paid with custom price!');
+        toast.success(t('toast.custom.success'));
         router.refresh();
       } else {
-        toast.error('Error marking subscription as paid with custom price');
+        toast.error(t('toast.custom.error'));
       }
     } catch (error) {
-      toast.error('Failed to update!');
+      toast.error(t('toast.failed'));
     } finally {
       setLoading(false);
     }
@@ -127,13 +165,13 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
       const result = await SubscriptionActionMarkAsPaidSessionNoPrice(subscription.id, altOptPrice);
       if (result) {
         altOptReset();
-        toast.success('Subscription marked as paid without payment!');
+        toast.success(t('toast.noPrice.success'));
         router.refresh();
       } else {
-        toast.error('Error marking subscription as paid without payment');
+        toast.error(t('toast.noPrice.error'));
       }
     } catch (error) {
-      toast.error('Failed to update!');
+      toast.error(t('toast.failed'));
     } finally {
       setLoading(false);
     }
@@ -147,19 +185,29 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
 
   return (
     <>
-      <div>
-        <span className='text-sm text-muted-foreground'>Did you pay this?</span>
-        {' '}
-        <Button variant='link' className='underline p-0 h-auto cursor-pointer' title='Mark As Paid' onClick={markAsPaid}>
-          Mark as paid
-        </Button>
-        {' '}
-        <span className='text-sm text-muted-foreground'>or see</span>
-        {' '}
-        <Button variant='link' className='underline p-0 h-auto cursor-pointer' title='Mark As Paid' onClick={() => altOptExpanded ? altOptReset() : setAltOptExpanded(true)}>
-          other options
-        </Button>
-        {'.'}
+      <div className='text-sm text-muted-foreground'>
+        {t.rich('question', {
+          action: (chunk) => (
+            <Button
+              variant='link'
+              className='underline p-0 h-auto cursor-pointer'
+              title={chunk}
+              onClick={markAsPaid}
+            >
+              {chunk}
+            </Button>
+          ),
+          options: (chunk) => (
+            <Button
+              variant='link'
+              className='underline p-0 h-auto cursor-pointer'
+              title={chunk}
+              onClick={() => altOptExpanded ? altOptReset() : setAltOptExpanded(true)}
+            >
+              {chunk}
+            </Button>
+          )
+        })}
       </div>
       {altOptExpanded && (
         <div>
@@ -173,10 +221,10 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
                       className='p-0 h-auto cursor-pointer'
                       onClick={() => setAltOptStep('customPrice')}
                     >
-                      Paid a different amount?
+                      {t('customPrice.title')}
                     </Button>
                     <p className='text-xs text-muted-foreground'>
-                      Use this if you paid more or less than usual
+                      {t('customPrice.description')}
                     </p>
                   </div>
                 </div>
@@ -186,17 +234,19 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
                     className='p-0 h-auto cursor-pointer'
                     onClick={() => setAltOptStep('noPrice')}
                   >
-                    Just mark as paid!
+                    {t('noPrice.title')}
                   </Button>
                   <p className='text-xs text-muted-foreground'>
-                    Use this to skip this payment without recording an amount
+                    {t('noPrice.description')}
                   </p>
                 </div>
               </>
             )}
             {altOptStep === 'customPrice' && (
               <div className='space-y-2'>
-                <p className='text-sm font-medium text-foreground'>Enter the amount you paid:</p>
+                <p className='text-sm font-medium text-foreground'>
+                  {t('customPrice.prompt')}
+                </p>
                 <Input
                   ref={customPriceInputRef}
                   type='number'
@@ -209,7 +259,7 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
                 />
                 <div className='flex justify-end gap-2'>
                   <Button variant='outline' size='sm' onClick={altOptReset}>
-                    Cancel
+                    {tCommon('cancel')}
                   </Button>
                   <Button
                     size='sm'
@@ -219,7 +269,7 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
                     {loading ? (
                       <Icons.spinner className='animate-spin' />
                     ) : (
-                      'Confirm'
+                      tCommon('confirm')
                     )}
                   </Button>
                 </div>
@@ -227,13 +277,15 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
             )}
             {altOptStep === 'noPrice' && (
               <div className='space-y-2'>
-                <p className='text-sm font-medium text-foreground'>Mark as paid without tracking the amount?</p>
+                <p className='text-sm font-medium text-foreground'>
+                  {t('noPrice.prompt')}
+                </p>
                 <p className='text-xs text-muted-foreground'>
-                  This will not record a payment amount.
+                  {t('noPrice.warning')}
                 </p>
                 <div className='flex justify-end gap-2'>
                   <Button variant='outline' size='sm' onClick={altOptReset}>
-                    Cancel
+                    {tCommon('cancel')}
                   </Button>
                   <Button
                     size='sm'
@@ -243,7 +295,7 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
                     {loading ? (
                       <Icons.spinner className='animate-spin' />
                     ) : (
-                      'Confirm'
+                      tCommon('confirm')
                     )}
                   </Button>
                 </div>
@@ -257,6 +309,9 @@ const SubscriptionMarkAsPaid = ({ subscription }) => {
 };
 
 const SubscriptionIsNotified = ({ subscription, externalServices }) => {
+  const t = useTranslations('components.subscriptions.card.notifications');
+  const formatter = useFormatter();
+
   const isNtfySettingsEnabled = externalServices?.ntfy?.enabled && externalServices?.ntfy?.url;
   const isWebhookSettingsEnabled = externalServices?.webhook?.enabled && externalServices?.webhook?.url;
   const isDiscordSettingsEnabled = externalServices?.discord?.enabled && externalServices?.discord?.url;
@@ -268,48 +323,53 @@ const SubscriptionIsNotified = ({ subscription, externalServices }) => {
       (type !== 'NTFY' || isNtfySettingsEnabled) &&
       (type !== 'DISCORD' || isDiscordSettingsEnabled) &&
       (type !== 'SLACK' || isSlackSettingsEnabled)
-    );
-    const nextNotificationIsRepeat = subscription.nextNotificationDetails?.isRepeat ? true : false;
+    ) || [];
 
     if (nextNotificationDetails.length !== 0) {
-      return (
-        <div>
-          <span className='text-sm text-muted-foreground'>
-            {nextNotificationIsRepeat
-              ? 'You will be reminded'
-              : 'You will be notified'
-            }
-            {' '}
+      const nextNotificationIsRepeat = subscription.nextNotificationDetails?.isRepeat ? true : false;
+      const isSoon = DateFNS.isPast(subscription.nextNotificationTime);
+
+      const translatedChannels = nextNotificationDetails.map((type) => {
+        const lower = type.toLowerCase();
+        const label = [
+          'push',
+          'email',
+          'webhook',
+          'ntfy',
+          'discord',
+          'slack'
+        ].find(k => lower.includes(k)) || lower;
+
+        return (
+          <span key={label} className='text-base text-foreground'>
+            {t(`types.${label}`)}
           </span>
-          <SubscriptionDate date={subscription.nextNotificationTime} timezone={subscription.timezone} text={DateFNS.isPast(subscription.nextNotificationTime) ? 'soon' : undefined} />
-          {nextNotificationDetails.map((type, index) => {
-            const isLast = index === nextNotificationDetails.length - 1;
-            const separator =
-              index === 0
-                ? ' via '
-                : isLast
-                ? ' and '
-                : ', ';
+        );
+      });
 
-            let label = '';
-            if (type.toLowerCase().includes('push')) label = 'notification';
-            if (type.toLowerCase().includes('email')) label = 'email';
-            if (type.toLowerCase().includes('webhook')) label = 'webhook';
-            if (type.toLowerCase().includes('ntfy')) label = 'ntfy';
-            if (type.toLowerCase().includes('discord')) label = 'discord';
-            if (type.toLowerCase().includes('slack')) label = 'slack';
+      const channelList = formatter.list(translatedChannels, {
+        type: 'conjunction',
+        style: 'long'
+      });
 
-            return (
-              <div key={type} className='inline'>
-                <span className='text-sm text-muted-foreground'>{separator}</span>
-                <span>{label}</span>
-              </div>
-            );
+      return (
+        <div className='text-sm text-muted-foreground'>
+          {t.rich(nextNotificationIsRepeat
+            ? isSoon
+              ? 'willBeRemindedSoon'
+              : 'willBeRemindedAt'
+            : isSoon
+              ? 'willBeNotifiedSoon'
+              : 'willBeNotifiedAt', {
+            date: () => (
+              <SubscriptionDate
+                date={subscription.nextNotificationTime}
+                timezone={subscription.timezone}
+                className='text-base text-foreground'
+              />
+            ),
+            channels: channelList
           })}
-          {nextNotificationIsRepeat && (
-            <span className='text-sm text-muted-foreground'>{' '}again</span>
-          )}
-          <span className='text-muted-foreground'>.</span>
         </div>
       );
     }
@@ -317,12 +377,19 @@ const SubscriptionIsNotified = ({ subscription, externalServices }) => {
 
   return (
     <div>
-      <span className='text-sm text-muted-foreground'>You won&apos;t be notified.</span>
+      <span className='text-sm text-muted-foreground'>
+        {t('wontBeNotified')}
+      </span>
     </div>
   );
 };
 
 const SubscriptionPaymentCount = ({ subscription }) => {
+  const t = useTranslations('components.subscriptions.card.paymentCount');
+  const tCard = useTranslations('components.subscriptions.card');
+  const formatter = useFormatter();
+  const locale = useLocale();
+
   if (!subscription.untilDate || !subscription.enabled) {
     return null;
   }
@@ -336,39 +403,77 @@ const SubscriptionPaymentCount = ({ subscription }) => {
   if (paymentCount === 0) {
     return (
       <div>
-        <span className='text-sm text-muted-foreground'>Congratulations! You have paid all.</span>
+        <span className='text-sm text-muted-foreground'>
+          {t('congratulations')}
+        </span>
       </div>
     );
   }
 
+  // Get localized timezone name
+  const getTimezoneName = (timezone) => {
+    try {
+      const timezoneName = new Intl.DateTimeFormat(locale, {
+        timeZone: timezone,
+        timeZoneName: 'long',
+      })
+        .formatToParts(new Date())
+        .find(part => part.type === 'timeZoneName')?.value;
+
+      return timezoneName || timezone;
+    } catch {
+      return timezone;
+    }
+  };
+
+  const dateUntil = subscription.untilDate;
+  const zonedUntil = toZonedTime(subscription.untilDate, subscription.timezone);
+
   return (
-    <div>
-      <span className='text-sm text-muted-foreground'>You will pay this</span>
-      {' '}
-      <Popover>
-        <PopoverTrigger asChild>
-          <div className='inline-flex cursor-pointer'>
-            {paymentCount} {paymentCount === 1 ? 'more time' : 'times'}
-            <span className='text-muted-foreground'>.</span>
-          </div>
-        </PopoverTrigger>
-        <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl break-words px-4 py-1'>
-          Until
-          {' '}
-          {DateFNS.format(subscription.untilDate, 'dd MMMM yyyy, HH:mm')}
-          {!DateFNS.isEqual(toZonedTime(subscription.untilDate, subscription.timezone), subscription.untilDate) &&
-            <span className='text-xs'>
-              <br/>
-              {subscription.timezone} Timezone: {DateFNS.format(toZonedTime(subscription.untilDate, subscription.timezone), 'dd MMMM yyyy, HH:mm')}
-            </span>
-          }
-        </PopoverContent>
-      </Popover>
+    <div className='text-sm text-muted-foreground'>
+      {t.rich('remaining', {
+        count: paymentCount,
+        trigger: (chunks) => (
+          <Popover>
+            <PopoverTrigger asChild>
+              <span className='inline-flex cursor-pointer text-base text-foreground'>
+                {chunks}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent className='bg-foreground text-background text-sm w-auto max-w-xl px-4 py-1'>
+              {t('until', {
+                date: formatter.dateTime(dateUntil, {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric'
+                })
+              })}
+              {!DateFNS.isEqual(zonedUntil, dateUntil) &&
+                <span className='text-xs'>
+                  <br/>
+                  {tCard('timezone', { timezone: getTimezoneName(subscription.timezone) })}: {formatter.dateTime(zonedUntil, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </span>
+              }
+            </PopoverContent>
+          </Popover>
+        )
+      })}
     </div>
   );
 };
 
 const SubscriptionPaymentMethods = ({ subscription }) => {
+  const t = useTranslations('components.subscriptions.card.paymentMethods');
+  const formatter = useFormatter();
+
   if (!subscription.enabled) {
     return null;
   }
@@ -379,35 +484,32 @@ const SubscriptionPaymentMethods = ({ subscription }) => {
     return null;
   }
 
-  return (
-    <div>
-      <span className='text-sm text-muted-foreground'>This will be paid</span>
-      {' '}
-      {paymentMethods.map((paymentMethod, index) => {
-        const isLast = index === paymentMethods.length - 1;
-        const separator =
-          index === 0
-            ? ' via '
-            : isLast
-            ? ' and '
-            : ', ';
+  const methodElements = paymentMethods.map((paymentMethod, index) => (
+    <div key={`${paymentMethod.name}-${index}`} className='inline-flex gap-1 items-center align-bottom'>
+      <LogoIcon
+        icon={paymentMethod.icon ? JSON.parse(paymentMethod.icon) : false}
+        className='size-5'
+      />
+      <span className='text-base text-foreground'>{paymentMethod.name}</span>
+    </div>
+  ));
 
-        return (
-          <Fragment key={`pm-${index}`}>
-            <span className='text-sm text-muted-foreground'>{separator}</span>
-            <div key={paymentMethod.name} className='inline-flex gap-1 align-bottom items-center'>
-              <LogoIcon icon={paymentMethod.icon ? JSON.parse(paymentMethod.icon) : false} className='size-5' />
-              <span>{paymentMethod.name}</span>
-            </div>
-          </Fragment>
-        );
+  const list = formatter.list(methodElements, {
+    type: 'conjunction',
+    style: 'long'
+  });
+
+  return (
+    <div className='text-sm text-muted-foreground'>
+      {t.rich('paidVia', {
+        methods: list
       })}
-      <span className='text-muted-foreground'>.</span>
     </div>
   );
 };
 
 const SubscriptionPastPaymentCount = ({ subscription }) => {
+  const t = useTranslations('components.subscriptions.card.pastPayments');
   const paymentCount = subscription?._count?.pastPayments || 0;
 
   if (paymentCount === 0) {
@@ -415,28 +517,59 @@ const SubscriptionPastPaymentCount = ({ subscription }) => {
   }
 
   return (
-    <div>
-      <span className='text-sm text-muted-foreground'>You have made</span>
-      {' '}
-      {paymentCount} {paymentCount === 1 ? 'payment' : 'payments'}
-      {' '}
-      <span className='text-sm text-muted-foreground'>so far.</span>
+    <div className='text-sm text-muted-foreground'>
+      {t.rich('count', {
+        count: paymentCount,
+        highlight: (chunks) => (
+          <span className='text-base text-foreground'>
+            {chunks}
+          </span>
+        )
+      })}
+    </div>
+  );
+};
+
+const NotificationIcon = ({ type, isEnabled, IconComponent, isVisible = true }) => {
+  const t = useTranslations('components.subscriptions.card.actions');
+
+  if (!isVisible) {
+    return null;
+  }
+
+  const title = isEnabled
+    ? t('notificationEnabled', { type })
+    : t('notificationDisabled', { type });
+
+  return (
+    <div title={title}>
+      <IconComponent
+        className={cn(
+          'size-5',
+          {'text-green-500': isEnabled},
+          {'text-red-500 opacity-50': !isEnabled}
+        )}
+      />
     </div>
   );
 };
 
 export const SubscriptionCard = ({ subscription, externalServices }) => {
+  const t = useTranslations('components.subscriptions.card');
+  const tCommon = useTranslations('common');
+  const tCycle = useTranslations('components.subscriptions.cycles');
+  const tNotifications = useTranslations('components.subscriptions.form.fields.notifications.types');
   const parsedIcon = subscription.logo ? JSON.parse(subscription.logo) : false;
   const categories = subscription.categories || [];
   const isPushEnabled = subscription.enabled && subscription.notifications.some(notification => notification.type.includes('PUSH'));
   const isEmailEnabled = subscription.enabled && subscription.notifications.some(notification => notification.type.includes('EMAIL'));
-  const isNtfySettingsEnabled = externalServices?.ntfy?.enabled && externalServices?.ntfy?.url;
+  const isNtfySettingsEnabled = !!(externalServices?.ntfy?.enabled && externalServices?.ntfy?.url);
   const isNtfyEnabled = subscription.enabled && isNtfySettingsEnabled && subscription.notifications.some(notification => notification.type.includes('NTFY'));
-  const isWebhookSettingsEnabled = externalServices?.webhook?.enabled && externalServices?.webhook?.url;
+  const isWebhookSettingsEnabled = !!(externalServices?.webhook?.enabled && externalServices?.webhook?.url);
   const isWebHookEnabled = subscription.enabled && isWebhookSettingsEnabled && subscription.notifications.some(notification => notification.type.includes('WEBHOOK'));
-  const isDiscordSettingsEnabled = externalServices?.discord?.enabled && externalServices?.discord?.url;
+  const isDiscordSettingsEnabled = !!(externalServices?.discord?.enabled && externalServices?.discord?.url);
   const isDiscordEnabled = subscription.enabled && isDiscordSettingsEnabled && subscription.notifications.some(notification => notification.type.includes('DISCORD'));
-  const isSlackSettingsEnabled = externalServices?.slack?.enabled && externalServices?.slack?.url;
+  const isSlackSettingsEnabled = !!(externalServices?.slack?.enabled && externalServices?.slack?.url);
   const isSlackEnabled = subscription.enabled && isSlackSettingsEnabled && subscription.notifications.some(notification => notification.type.includes('SLACK'));
 
   return (
@@ -445,12 +578,18 @@ export const SubscriptionCard = ({ subscription, externalServices }) => {
         <div className='flex items-start justify-between gap-2'>
           <div className='flex flex-col gap-1 text-left grow overflow-hidden'>
             <div className='inline-flex items-center gap-2'>
-              <CardTitle className='text-2xl truncate'><Link href={`/view/${subscription.id}`}>{subscription.name}</Link></CardTitle>
+              <CardTitle className='text-2xl truncate'>
+                <Link href={`/view/${subscription.id}`}>
+                  {subscription.name}
+                </Link>
+              </CardTitle>
             </div>
             <div className='w-full text-sm text-muted-foreground truncate'>
-              <span className='font-medium text-lg text-foreground'>{formatPrice(subscription.price, subscription.currency)}</span>
+              <span className='font-medium text-lg text-foreground'>
+                {formatPrice(subscription.price, subscription.currency)}
+              </span>
               <span className='ml-1'>
-                / {getCycleLabel(subscription.cycle)}
+                / {tCycle(subscription.cycle.time, { count: subscription.cycle.every })}
               </span>
             </div>
           </div>
@@ -477,7 +616,7 @@ export const SubscriptionCard = ({ subscription, externalServices }) => {
           ) : (
             <>
               <div className='text-sm text-muted-foreground'>
-                This subscription is inactive.
+                {t('actions.inactive')}
               </div>
               <SubscriptionPastPaymentCount subscription={subscription} />
             </>
@@ -510,83 +649,59 @@ export const SubscriptionCard = ({ subscription, externalServices }) => {
         <Separator />
         <div className='flex items-center justify-between gap-2 w-full'>
           <div className='flex items-center gap-3'>
-            <div title={`Push notifications are ${isPushEnabled ? 'enabled' : 'disabled'}`}>
-              <Icons.bellRing className={
-                cn(
-                  'size-5',
-                  {'text-green-500': isPushEnabled},
-                  {'text-red-500 opacity-50': !isPushEnabled}
-                )
-              }/>
-            </div>
-            <div title={`Email notifications are ${isEmailEnabled ? 'enabled' : 'disabled'}`}>
-              <Icons.mail className={
-                cn(
-                  'size-5',
-                  {'text-green-500': isEmailEnabled},
-                  {'text-red-500 opacity-50': !isEmailEnabled}
-                )
-              }/>
-            </div>
-            {isNtfySettingsEnabled && (
-              <div title={`Ntfy notifications are ${isNtfyEnabled ? 'enabled' : 'disabled'}`}>
-                <Icons.ntfy className={
-                  cn(
-                    'size-5',
-                    {'text-green-500': isNtfyEnabled},
-                    {'text-red-500 opacity-50': !isNtfyEnabled}
-                  )
-                }/>
-              </div>
-            )}
-            {isWebhookSettingsEnabled && (
-              <div title={`Webhook notifications are ${isWebHookEnabled ? 'enabled' : 'disabled'}`}>
-                <Icons.webhook className={
-                  cn(
-                    'size-5',
-                    {'text-green-500': isWebHookEnabled},
-                    {'text-red-500 opacity-50': !isWebHookEnabled}
-                  )
-                }/>
-              </div>
-            )}
-            {isDiscordSettingsEnabled && (
-              <div title={`Discord notifications are ${isDiscordEnabled ? 'enabled' : 'disabled'}`}>
-                <Icons.discord className={
-                  cn(
-                    'size-5',
-                    {'text-green-500': isDiscordEnabled},
-                    {'text-red-500 opacity-30': !isDiscordEnabled}
-                  )
-                }/>
-              </div>
-            )}
-            {isSlackSettingsEnabled && (
-              <div title={`Slack notifications are ${isSlackEnabled ? 'enabled' : 'disabled'}`}>
-                <Icons.slack className={
-                  cn(
-                    'size-5',
-                    {'text-green-500': isSlackEnabled},
-                    {'text-red-500 opacity-30': !isSlackEnabled}
-                  )
-                }/>
-              </div>
-            )}
-            { subscription.url && (
+            <NotificationIcon
+              type={tNotifications('push.label')}
+              isEnabled={isPushEnabled}
+              IconComponent={Icons.bellRing}
+            />
+            <NotificationIcon
+              type={tNotifications('email.label')}
+              isEnabled={isEmailEnabled}
+              IconComponent={Icons.mail}
+            />
+            <NotificationIcon
+              type={tNotifications('ntfy.label')}
+              isEnabled={isNtfyEnabled}
+              isVisible={isNtfySettingsEnabled}
+              IconComponent={Icons.ntfy}
+            />
+            <NotificationIcon
+              type={tNotifications('webhook.label')}
+              isEnabled={isWebHookEnabled}
+              isVisible={isWebhookSettingsEnabled}
+              IconComponent={Icons.webhook}
+            />
+            <NotificationIcon
+              type={tNotifications('discord.label')}
+              isEnabled={isDiscordEnabled}
+              isVisible={isDiscordSettingsEnabled}
+              IconComponent={Icons.discord}
+            />
+            <NotificationIcon
+              type={tNotifications('slack.label')}
+              isEnabled={isSlackEnabled}
+              isVisible={isSlackSettingsEnabled}
+              IconComponent={Icons.slack}
+            />
+            {subscription.url && (
               <>
                 <Separator orientation='vertical' className='h-5' />
-                <Link href={subscription.url} title={`Link to ${subscription.url}`} className='text-sm text-muted-foreground truncate flex items-center gap-1 shrink-0' target='_blank'>
+                <Link
+                  href={subscription.url}
+                  title={t('actions.link', { url: subscription.url })}
+                  className='text-sm text-muted-foreground truncate flex items-center gap-1 shrink-0' target='_blank'
+                >
                   <Icons.link className='size-4' />
-                  <span className='sr-only'>Link to {subscription.url}</span>
+                  <span className='sr-only'>{t('actions.link', { url: subscription.url })}</span>
                 </Link>
               </>
             )}
           </div>
           <div className='flex items-center'>
             <Button variant='outline' size='sm' className='text-muted-foreground' asChild>
-              <Link href={`/edit/${subscription.id}`} title='Edit Subscription'>
-                <Icons.edit /> Edit
-                <span className='sr-only'>Edit Subscription {subscription.name}</span>
+              <Link href={`/edit/${subscription.id}`} title={t('actions.edit', { name: subscription.name })}>
+                <Icons.edit /> {tCommon('edit')}
+                <span className='sr-only'>{t('actions.edit', { name: subscription.name })}</span>
               </Link>
             </Button>
           </div>

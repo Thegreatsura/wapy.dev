@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Icons } from '@/components/icons';
@@ -33,6 +34,7 @@ import { PushNotificationCheckEndpoint } from '@/components/notifications/action
 import { UserSubscriptionSendTestNotification } from '@/lib/notifications';
 
 export const NotificationStatusManager = () => {
+  const t = useTranslations('components.subscriptions.form.fields.notifications');
   const [hasPushSubscription, setHasPushSubscription] = useState(true);
   const {
     setShowNotificationModal,
@@ -62,12 +64,12 @@ export const NotificationStatusManager = () => {
       setTesting(true);
       const { success } = await UserSubscriptionSendTestNotification();
       if (success) {
-        toast.success('Push notification sent! Check your device(s).');
+        toast.success(t('toast.success'));
       } else {
-        toast.error('Failed to send test push notification! Make sure notifications are enabled and configured correctly.');
+        toast.error(t('toast.error'));
       }
     } catch (error) {
-      toast.error('Failed to send test push notification!');
+      toast.error(t('toast.error'));
     } finally {
       setTesting(false);
     }
@@ -76,35 +78,66 @@ export const NotificationStatusManager = () => {
   return (
     <p className='text-sm text-muted-foreground'>
       {notificationsStatus === 'denied' && (
-        <span className='text-destructive'>Push notifications are blocked on this device. Please enable them in your browser settings.</span>
+        <span className='text-destructive'>{t('status.denied')}</span>
       )}
       {notificationsStatus === 'default' && (
-        <>
-          <span className='text-orange-400'>Push notifications are not enabled on this device.</span>
-          {' '}
-          <Button variant='link' type='button' onClick={() => setShowNotificationModal(true)} className='text-orange-400 p-0 h-auto inline-flex'>Would you like to enable it?</Button>
-        </>
+        <span className='text-orange-400'>
+          {t.rich('status.default', {
+            link: (chunks) => (
+              <Button
+                variant='link'
+                type='button'
+                onClick={() => setShowNotificationModal(true)}
+                className='text-orange-400 p-0 h-auto inline-flex'
+              >
+                {chunks}
+              </Button>
+            )
+          })}
+        </span>
       )}
       {notificationsStatus === 'granted' && !hasPushSubscription && (
-        <>
-          <span className='text-orange-400'>Push notification permission is granted but it is not properly configured.</span>
-          {' '}
-          <Button variant='link' type='button' onClick={() => setShowNotificationModal(true)} className='text-orange-400 p-0 h-auto inline-flex underline cursor-pointer'>Would you like to enable it?</Button>
-        </>
+        <span className='text-orange-400'>
+          {t.rich('status.grantedNotConfigured', {
+            link: (chunks) => (
+              <Button
+                variant='link'
+                type='button'
+                onClick={() => setShowNotificationModal(true)}
+                className='text-orange-400 p-0 h-auto inline-flex underline cursor-pointer'
+              >
+                {chunks}
+              </Button>
+            )
+          })}
+        </span>
       )}
       {notificationsStatus === 'granted' && hasPushSubscription && (
-        <>
-          <span>Push notifications are enabled for this device. Would you like to send a</span>
-          {' '}
-          <Button variant='link' disabled={testing} type='button' onClick={() => sendTestPushNotification()} className='p-0 h-auto inline-flex cursor-pointer'>test push notification{testing && (<Icons.spinner className='animate-spin' />)}</Button>
-          <span>?</span>
-        </>
+        <span>
+          {t.rich('status.grantedConfigured', {
+            link: (chunks) => (
+              <Button
+                variant='link'
+                disabled={testing}
+                type='button'
+                onClick={() => sendTestPushNotification()}
+                className='p-0 h-auto inline-flex cursor-pointer'
+              >
+                {chunks}
+                {testing && <Icons.spinner className='animate-spin ml-1' />}
+              </Button>
+            )
+          })}
+        </span>
       )}
     </p>
   );
 };
 
 export const NotificationsFieldManager = ({ field, externalServices, isLoading = false, children }) => {
+  const t = useTranslations('components.subscriptions.form.fields.notifications');
+  const tCommon = useTranslations('common');
+
   const convertTime = (time, due) => {
     if (time === 'INSTANT') return 'INSTANT';
     if (time === 'MINUTES' && due === 15) return '15_MINUTES';
@@ -124,21 +157,21 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
   const [deleteDialogIndex, setDeleteDialogIndex] = useState(-1);
 
   const timeOptions = {
-    INSTANT: 'At Payment Date',
-    '15_MINUTES': '15 minutes before',
-    '1_HOUR': '1 hour before',
-    '2_HOURS': '2 hours before',
-    '1_DAY': '1 day before',
-    '2_DAYS': '2 days before',
-    '1_WEEK': '1 week before',
-    CUSTOM: 'Custom',
+    INSTANT: t('timeOptions.instant'),
+    '15_MINUTES': t('timeOptions.15minutes'),
+    '1_HOUR': t('timeOptions.1hour'),
+    '2_HOURS': t('timeOptions.2hours'),
+    '1_DAY': t('timeOptions.1day'),
+    '2_DAYS': t('timeOptions.2days'),
+    '1_WEEK': t('timeOptions.1week'),
+    CUSTOM: t('timeOptions.custom'),
   };
 
   const unitOptions = {
-    MINUTES: { label: 'Minute', min: 15 },
-    HOURS: { label: 'Hour', min: 1 },
-    DAYS: { label: 'Day', min: 1 },
-    WEEKS: { label: 'Week', min: 1 }
+    MINUTES: { min: 15 },
+    HOURS: { min: 1 },
+    DAYS: { min: 1 },
+    WEEKS: { min: 1 }
   };
 
   const isWhenUsed = (when) => {
@@ -241,9 +274,9 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Notifications</CardTitle>
+          <CardTitle>{t('title')}</CardTitle>
           <CardDescription>
-            Configure the default notifications for your subscriptions
+            {t('description')}
           </CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
@@ -252,7 +285,7 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
             <div key={index} className='flex flex-col gap-4 p-4 border rounded-md'>
               <div className='flex items-start gap-4'>
                 <div className='flex flex-col gap-2 flex-1'>
-                  <Label>Via</Label>
+                  <Label>{t('via')}</Label>
                   <ToggleGroup
                     type='multiple'
                     value={notification.type}
@@ -261,16 +294,16 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
                   >
                     <ToggleGroupItem
                       value='PUSH'
-                      aria-label='Toggle push'
-                      title='Push Notifications'
+                      aria-label={t('types.push.ariaLabel')}
+                      title={t('types.push.label')}
                       className='data-[state=on]:bg-primary data-[state=on]:text-primary-foreground border'
                     >
                       <Icons.bellRing/>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value='EMAIL'
-                      aria-label='Toggle email'
-                      title='Email Notifications'
+                      aria-label={t('types.email.ariaLabel')}
+                      title={t('types.email.label')}
                       className='data-[state=on]:bg-primary data-[state=on]:text-primary-foreground border'
                     >
                       <Icons.mail/>
@@ -278,8 +311,8 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
                     {externalServices?.webhook?.enabled && (
                       <ToggleGroupItem
                         value='WEBHOOK'
-                        aria-label='Toggle webhook'
-                        title='Webhook Notifications'
+                        aria-label={t('types.webhook.ariaLabel')}
+                        title={t('types.webhook.label')}
                         className='data-[state=on]:bg-primary data-[state=on]:text-primary-foreground border'
                       >
                         <Icons.webhook/>
@@ -288,8 +321,8 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
                     {externalServices?.ntfy?.enabled && (
                       <ToggleGroupItem
                         value='NTFY'
-                        aria-label='Toggle ntfy'
-                        title='ntfy Notifications'
+                        aria-label={t('types.ntfy.ariaLabel')}
+                        title={t('types.ntfy.label')}
                         className='data-[state=on]:bg-primary data-[state=on]:text-primary-foreground border'
                       >
                         <Icons.ntfy/>
@@ -298,8 +331,8 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
                     {externalServices?.discord?.enabled && (
                       <ToggleGroupItem
                         value='DISCORD'
-                        aria-label='Toggle Discord'
-                        title='Discord Notifications'
+                        aria-label={t('types.discord.ariaLabel')}
+                        title={t('types.discord.label')}
                         className='data-[state=on]:bg-primary data-[state=on]:text-primary-foreground border'
                       >
                         <Icons.discord/>
@@ -308,8 +341,8 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
                     {externalServices?.slack?.enabled && (
                       <ToggleGroupItem
                         value='SLACK'
-                        aria-label='Toggle Slack'
-                        title='Slack Notifications'
+                        aria-label={t('types.slack.ariaLabel')}
+                        title={t('types.slack.label')}
                         className='data-[state=on]:bg-primary data-[state=on]:text-primary-foreground border'
                       >
                         <Icons.slack/>
@@ -329,13 +362,13 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
                 </Button>
               </div>
               <div className='flex flex-col gap-2'>
-                <Label>When to Notify</Label>
+                <Label>{t('whenToNotify')}</Label>
                 <Select
                   value={notification.when}
                   onValueChange={(value) => handleWhenChange(index, value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder='Select when to notify' />
+                    <SelectValue placeholder={t('whenPlaceholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(timeOptions).map(([key, label]) => (
@@ -368,12 +401,12 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
                       className='flex-1 w-32'
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder='Unit' />
+                        <SelectValue placeholder={t('unitPlaceholder')} />
                       </SelectTrigger>
                       <SelectContent>
                         {Object.entries(unitOptions).map(([key, option]) => (
                           <SelectItem key={key} value={key}>
-                            {`${option.label}${notification.due > 1 ? 's' : ''}`}
+                            {t(`units.${key.toLowerCase()}`, { count: notification.due })}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -393,19 +426,19 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
             type='button'
           >
             <Icons.add className='mr-2 size-4' />
-            Add Notification
+            {t('addNotification')}
           </Button>
           {children}
         </CardFooter>
       </Card>
       <ResponsiveDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <ResponsiveDialogContent className='sm:max-w-[425px]'>
+        <ResponsiveDialogContent className='sm:max-w-106.25'>
           <ResponsiveDialogHeader>
             <ResponsiveDialogTitle className='flex items-center gap-2'>
-              Confirm Delete
+              {t('deleteDialog.title')}
             </ResponsiveDialogTitle>
             <ResponsiveDialogDescription className='flex items-start'>
-              Are you sure you want to remove this notification template?
+              {t('deleteDialog.description')}
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
           <ResponsiveDialogFooter>
@@ -414,14 +447,14 @@ export const NotificationsFieldManager = ({ field, externalServices, isLoading =
               onClick={() => setDeleteDialogOpen(false)}
               type='button'
             >
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button
               onClick={() => {setDeleteDialogOpen(false); handleRemove(deleteDialogIndex);}}
               variant='destructive'
               type='button'
             >
-              Delete
+              {tCommon('delete')}
             </Button>
           </ResponsiveDialogFooter>
         </ResponsiveDialogContent>

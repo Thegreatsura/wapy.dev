@@ -1,12 +1,13 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import { useAuthServer } from '@/lib/auth-server';
 import webpush from 'web-push';
 import { prisma } from '@/lib/prisma';
 import { mailFrom, mailSend } from '@/lib/mail';
 import { siteConfig } from '@/components/config';
 
-export const UserSubscriptionSendNotification = async (subscription, title, message, markAsPaidUrl, isPaymentDueNow) => {
+export const UserSubscriptionSendNotification = async (subscription, title, message, markAsPaidUrl, isPaymentDueNow, translations = {}) => {
   return subscription.user.push.map(async push => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -28,12 +29,12 @@ export const UserSubscriptionSendNotification = async (subscription, title, mess
               badge: isPaymentDueNow ? '/icons/icon-notification-now.png' : '/icons/icon-notification-upcoming.png',
             },
             markAsPaid: {
-              title: 'Mark as Paid',
+              title: translations.markAsPaid || 'Mark as Paid',
               icon: '/icons/icon-notification-mark-as-paid.png',
               url: markAsPaidUrl,
             },
             dismiss: {
-              title: 'Dismiss',
+              title: translations.dismiss || 'Dismiss',
               icon: '/icons/icon-notification-dismiss.png',
             },
           }),
@@ -91,12 +92,19 @@ export const UserSubscriptionSendTestNotification = async () => {
   }
 
   try {
-  const promises = await UserSubscriptionSendNotification(
+    const t = await getTranslations({ locale: user.language || 'en', namespace: 'components.notifications.push' });
+    const tPayment = await getTranslations({ locale: user.language || 'en', namespace: 'notifications.subscription.payment' });
+
+    const promises = await UserSubscriptionSendNotification(
       { user: user },
-      `${siteConfig.name} Test Notification`,
-      `This is a test notification from ${siteConfig.name}. If you are seeing this, it means push notifications are working correctly!`,
+      t('test.title', { siteName: siteConfig.name }),
+      t('test.message', { siteName: siteConfig.name }),
       '',
-      true
+      true,
+      {
+        markAsPaid: tPayment('markAsPaid'),
+        dismiss: tPayment('dismiss'),
+      }
     );
 
     const results = await Promise.allSettled(promises);
@@ -108,7 +116,7 @@ export const UserSubscriptionSendTestNotification = async () => {
   }
 }
 
-export const UserSubscriptionSendEmail = async (subscription, title, message, markAsPaidUrl) => {
+export const UserSubscriptionSendEmail = async (subscription, title, message, markAsPaidUrl, translations = {}) => {
   return new Promise(async (resolve, reject) => {
     try {
       await mailSend({
@@ -121,18 +129,18 @@ export const UserSubscriptionSendEmail = async (subscription, title, message, ma
               <tr>
                 <td align="center" style="padding: 1rem 2rem;">
                   <div style="max-width: 400px; background-color: #ffffff; padding: 1rem; text-align: left;">
-                    <h2 style="margin: 1rem 0; color: #000000;">Payment Reminder</h2>
+                    <h2 style="margin: 1rem 0; color: #000000;">${translations.header || 'Payment Reminder'}</h2>
                     <p>${message}</p>
                     <p>
-                      <a href="${markAsPaidUrl}">Mark as Paid!</a>
+                      <a href="${markAsPaidUrl}">${translations.markAsPaid || 'Mark as Paid'}</a>
                       <span style="margin: 0 0.1rem;">|</span>
-                      <a href="${siteConfig.url}/">View Details</a>
+                      <a href="${siteConfig.url}/">${translations.viewDetails || 'View Details'}</a>
                     </p>
-                    <p>This is a friendly reminder email from ${siteConfig.name}.</p>
-                    <p>Thanks,<br>${siteConfig.from}</p>
+                    <p>${translations.footer || `This is a friendly reminder email from ${siteConfig.name}.`}</p>
+                    <p>${translations.thanks || 'Thanks'},<br>${siteConfig.from}</p>
                   </div>
                   <div style="max-width: 400px; color: #999999; text-align: center;">
-                    <p style="padding-bottom: 0.5rem;">Made with ♥ by <a href="${siteConfig.url}" target="_blank">${siteConfig.name}</a></p>
+                    <p style="padding-bottom: 0.5rem;">${translations.madeBy || `Made with ♥ by <a href="${siteConfig.url}" target="_blank">${siteConfig.name}</a>`}</p>
                     <div style="text-align: center;">
                       <img src="${siteConfig.url}/icon.png" alt="${siteConfig.from}" style="width: 96px;">
                     </div>
@@ -142,7 +150,7 @@ export const UserSubscriptionSendEmail = async (subscription, title, message, ma
             </table>
           </body>
         `,
-        text: `${title}\n\n${message}\n\nThis is a friendly reminder email from ${siteConfig.name}.\n\nView details at: ${siteConfig.url}/\n\nThanks,\n${siteConfig.name}`,
+        text: `${title}\n\n${message}\n\n${translations.footer || `This is a friendly reminder email from ${siteConfig.name}.`}\n\nView details at: ${siteConfig.url}/\n\n${translations.thanks || 'Thanks'},\n${siteConfig.name}`,
       });
       resolve();
     } catch (error) {
